@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor "User" as user
+participant ":System" as sys
+
+user -> sys: Click Home Page navbar button
+user <-- sys: Show Home Page Screen
+
+@enduml

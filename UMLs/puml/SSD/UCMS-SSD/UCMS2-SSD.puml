@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor "User" as user
+participant ":System" as sys
+
+user -> sys: Click Home Page navbar button
+user <-- sys: Show Home Page Screen
+
+user -> sys: Click in Create Button
+user <-- sys: User is sent to Create Room Screen
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor "User" as user
+participant ":System" as sys
+
+user -> sys: Click leaderboard navbar button
+user <-- sys: Show Leaderboard Screen
+
+user -> sys: Click a game to delete
+user <-- sys: Deletes the game
+
+@enduml

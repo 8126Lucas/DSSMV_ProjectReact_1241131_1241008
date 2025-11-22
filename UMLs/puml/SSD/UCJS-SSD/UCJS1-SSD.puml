@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor "User" as user
+participant ":System" as sys
+
+user -> sys: Click join button
+user <-- sys: Show Join Room Screen
+
+user -> sys: Input room code
+user <-- sys: Shows room code
+
+@enduml

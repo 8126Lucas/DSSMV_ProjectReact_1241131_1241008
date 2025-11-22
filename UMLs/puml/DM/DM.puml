@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class MainScreen {}
+
+class LeaderboardScreen {}
+
+class SettingsScreen {}
+
+class JoinRoomScreen {}
+
+class CreateRoomScreen {}
+
+@enduml

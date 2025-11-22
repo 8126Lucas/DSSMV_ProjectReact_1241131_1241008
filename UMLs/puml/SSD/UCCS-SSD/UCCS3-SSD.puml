@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Actor "User" as user
+participant ":System" as sys
+
+user -> sys: Click create button
+user <-- sys: Show Create Room Screen
+
+user -> sys: Chooses the questions category
+user <-- sys: Shows questions category
+
+@enduml

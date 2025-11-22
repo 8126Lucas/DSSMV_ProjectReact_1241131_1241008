@@ -1,0 +1,65 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+left to right direction
+title Use Case Diagram
+
+actor "User" as usms
+rectangle "Main Screen" {
+    usecase "1. Join gaming session" as UCMS1
+    usecase "2. Create gaming room" as UCMS2
+    usecase "3. See user's top 3 scores" as UCMS3
+    usecase "4. See user profile overview" as UCMS4
+}
+usms --> UCMS1
+usms --> UCMS2
+usms --> UCMS3
+usms --> UCMS4
+
+actor "User" as uslb
+rectangle "Leaderboard Screen" {
+    usecase "1. See user's 25 highest scores" as UCLB1
+    usecase "2. Delete played game" as UCLB2
+}
+uslb --> UCLB1
+uslb --> UCLB2
+
+actor "User" as usss
+rectangle "Settings Screen" {
+    usecase "1. Change profile picture" as UCSS1
+    usecase "2. Change nickname" as UCSS2
+    usecase "3. Copy token to clipboard" as UCSS3
+    usecase "4. Change app theme" as UCSS4
+    usecase "5. Export user data" as UCSS5
+    usecase "6. Logout" as UCSS6
+}
+usss --> UCSS1
+usss --> UCSS2
+usss --> UCSS3
+usss --> UCSS4
+usss --> UCSS5
+usss --> UCSS6
+
+actor "User" as usjs
+rectangle "Join Room Screen" {
+    usecase "1. Input room code" as UCJS1
+    usecase "2. Join room" as UCJS2
+}
+usjs --> UCJS1
+usjs --> UCJS2
+
+
+actor "User" as uscs
+rectangle "Create Room Screen" {
+    usecase "1. Click to generate room" as UCCS1
+    usecase "2. Choose number of questions" as UCCS2
+    usecase "3. Choose question's category" as UCCS3
+    usecase "4. Choose question's difficulty" as UCCS4
+    usecase "5. Choose question type" as UCCS5
+}
+uscs --> UCCS1
+uscs --> UCCS2
+uscs --> UCCS3
+uscs --> UCCS4
+uscs --> UCCS5
+
+@enduml
