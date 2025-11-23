@@ -36,7 +36,7 @@ const Countdown = (props: CountdownProps) => {
     }, [countdown]);
     return (
         <View style={styles.clock_container}>
-            <Animated.Text style={[{fontSize: 20, color: text_color}, animated_final_countdown]}>{countdown}</Animated.Text>
+            <Animated.Text style={[{color: text_color}, styles.countdown_text, animated_final_countdown]}>{countdown}</Animated.Text>
         </View>
     );
 };
@@ -58,6 +58,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    countdown_text: {
+        position: 'absolute',
+        textAlign: 'center',
+        verticalAlign: 'middle',
+        lineHeight: 50,
+        fontSize: 20,
+    }
 });
 
 export default CountdownClock;
