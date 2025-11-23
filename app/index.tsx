@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import CountdownClock from "@/components/CountdownClock";
+import AppButton from "@/components/AppButton";
 
 export default function Index() {
   return (
@@ -11,6 +12,8 @@ export default function Index() {
       }}
     >
       <CountdownClock/>
+      <AppButton title="Join" />
+      <AppButton title="Create" />
     </View>
   );
 }
