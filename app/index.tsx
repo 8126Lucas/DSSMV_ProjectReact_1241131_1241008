@@ -5,16 +5,20 @@ import {Colors} from "@/constants/theme";
 import ProfileOverview from "@/components/homepage/ProfileOverview";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useRouter} from "expo-router";
+import {useState} from "react";
+import CreateRoomOverlay from "@/components/homepage/CreateRoomOverlay";
 
 export default function HomePageScreen() {
     const router = useRouter();
+    const [crVisible, setCRVisible] = useState(false);
 
     return (
         <View style={styles.wrapper}>
+            <CreateRoomOverlay crVisible={crVisible} setCRVisible={setCRVisible} />
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                 <ProfileOverview/>
                 <AppButton title={"Join"} color={Colors.default.green} onPress={() => router.navigate("./join_room")}/>
-                <AppButton title={"Create"} color={Colors.default.webstormBlue} onPress={() => router.navigate("./create_room")}/>
+                <AppButton title={"Create"} color={Colors.default.webstormBlue} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
             <Navbar/>
         </View>
