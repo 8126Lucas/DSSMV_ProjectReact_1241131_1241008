@@ -63,21 +63,6 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 10,
     },
-
-    // Estilo do Texto
-    modalText: {
-        color: 'white', // O texto deve ser branco para contraste
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-
-    // Estilo do Botão
-    buttonClose: {
-        backgroundColor: '#333', // Botão cinza escuro para fechar
-        borderRadius: 5,
-        padding: 10,
-        marginTop: 10,
-    },
     textStyle: {
         color: 'white',
         fontWeight: 'bold',
