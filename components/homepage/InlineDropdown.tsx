@@ -4,17 +4,21 @@ import RNPickerSelect, {Item} from 'react-native-picker-select';
 
 
 interface InlineDropdownProps {
+    title: string;
     options: Item[];
 }
 
-const InlineDropdown = ({options}: InlineDropdownProps) => {
+const InlineDropdown = ({title, options}: InlineDropdownProps) => {
     return (
-        <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
-            items={options}
-        />
+        <View style={styles.container}>
+            <Text style={styles.text}>{title}</Text>
+            <RNPickerSelect
+                onValueChange={(value) => console.log(value)}
+                items={options}
+                style={pickerSelectStyles}
+            />
+        </View>
     );
-
 
     //return (
     //    <View style={styles.container}>
@@ -35,11 +39,30 @@ const InlineDropdown = ({options}: InlineDropdownProps) => {
     //);
 }
 
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        color: 'black',
+        backgroundColor: '#00000000',
+    },
+    inputAndroid: {
+        fontSize: 16,
+        color: 'black',
+        backgroundColor: '#00000000',
+    },
+    viewContainer: {
+        borderWidth: 1,
+        borderColor: '#000000',
+        borderRadius: 8,
+        marginTop: 5,
+    }
+});
+
 const styles = StyleSheet.create({
     container: {
         position: 'relative',
         width: Dimensions.get("screen").width * 0.7,
-        height: Dimensions.get("screen").width * 0.7,
+        marginBottom: 20,
     },
     dropdown: {
         padding: 10,
@@ -48,6 +71,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
+        textAlign: 'left',
     },
     item: {
         padding: 10,
