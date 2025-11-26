@@ -2,7 +2,12 @@ import * as ExpoImagePicker from "expo-image-picker";
 import {useState} from "react";
 import {Alert, Image, StyleSheet, TouchableOpacity} from "react-native";
 
-export default function ImagePicker() {
+interface ImagePickerProps {
+    width: number;
+    height: number;
+}
+
+export default function ImagePicker({width, height}: ImagePickerProps) {
     const [image, setImage] = useState<string | null>(null);
     const pickImage = async () => {
         const permission_result = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -20,8 +25,8 @@ export default function ImagePicker() {
         }
     };
     return (
-        <TouchableOpacity style={styles.profile_image_container} onPress={() => pickImage()}>
-            {image && <Image source={{ uri: image }} style={styles.profile_image_style} />}
+        <TouchableOpacity style={[styles.profile_image_container, {maxWidth: width, maxHeight: height, borderRadius: width/2}]} onPress={() => pickImage()}>
+            {image && <Image source={{ uri: image }} style={[styles.profile_image_style, {width: width, height: height, borderRadius: width/2}]} />}
         </TouchableOpacity>
     );
 }
@@ -29,19 +34,15 @@ export default function ImagePicker() {
 const styles = StyleSheet.create({
     profile_image_container: {
         flex: 1,
-        maxWidth: 80,
-        maxHeight: 80,
         borderColor: "black",
-        borderRadius: 80/2,
         borderWidth: 2,
         justifyContent: "center",
         alignItems: "center",
+        aspectRatio: 1,
     },
     profile_image_style: {
-        width: 80,
-        height: 80,
         borderColor: "black",
-        borderRadius: 80/2,
         borderWidth: 2,
+        aspectRatio: 1,
     },
 });

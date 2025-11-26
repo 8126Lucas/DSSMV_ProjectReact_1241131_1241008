@@ -11,12 +11,12 @@ import JoinRoomOverlay from "@/components/homepage/JoinRoomOverlay";
 
 export default function HomePageScreen() {
     const router = useRouter();
-    const [crVisible, setCRVisible] = useState(false);
+    const [cr_visible, setCRVisible] = useState(false);
     const [jrVisible, setJRVisible] = useState(false);
 
     return (
         <View style={styles.wrapper}>
-            <CreateRoomOverlay crVisible={crVisible} setCRVisible={setCRVisible} />
+            <CreateRoomOverlay cr_visible={cr_visible} setCRVisible={setCRVisible} />
             <JoinRoomOverlay jrVisible={jrVisible} setJRVisible={setJRVisible} />
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                 <ProfileOverview/>
@@ -34,6 +34,7 @@ export default function HomePageScreen() {
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
+        backgroundColor: Colors.light.backgroundColor,
     },
     container: {
         flex: 1,

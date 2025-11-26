@@ -1,15 +1,37 @@
 import {View, StyleSheet, Modal, Text, Dimensions, Pressable} from "react-native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {Colors} from "@/constants/theme";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import {Item} from "react-native-picker-select";
+import AppButton from "@/components/homepage/AppButton";
 
 interface CreateRoomOverlayProps {
-    crVisible: boolean;
+    cr_visible: boolean;
     setCRVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateRoomOverlay = ({crVisible, setCRVisible}: CreateRoomOverlayProps) => {
+function generateRoomToken(): string {
+    return Math.floor(Math.random() * (999999 - 1 + 1) + 1).toString().padStart(6, '0');
+}
+
+function generateTriviaURL(qn: string, cc: string, dc: string, tc: string): string {
+    let api_url: string = 'https://opentdb.com/api.php?';
+    if(qn !== null) {
+        api_url += `ammount=${qn}`;
+        if(cc !== null && cc !== '0') {
+            api_url += `&category=${cc}`;
+        }
+        if(dc !== null && dc !== '0') {
+            api_url += `&difficulty=${dc}`;
+        }
+        if(tc !== null && tc !== '0') {
+            api_url += `&type=${tc}`;
+        }
+    }
+    return api_url;
+}
+
+const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
     const number_options = Array.from({length: 50}, (_, i) => ({
         label: `${i + 1}`,value: `${i + 1}`
     }));
@@ -50,19 +72,26 @@ const CreateRoomOverlay = ({crVisible, setCRVisible}: CreateRoomOverlayProps) =>
         {label: 'Any Type', value: '0'},
         {label: 'Multiple Choice', value: 'multiple'},
         {label: 'True/False', value: 'boolean'},
-    ]
+    ];
+
+    const [room_token, setRoomToken] = useState("");
+    useEffect(() => {
+        if (cr_visible) {setRoomToken(generateRoomToken());}
+    }, [cr_visible]);
     return (
         <Modal
             animationType={"fade"}
             transparent={true}
-            visible={crVisible}
+            visible={cr_visible}
             onRequestClose={() => setCRVisible(false)}>
             <Pressable style={styles.root} onPress={() => setCRVisible(false)}>
                 <Pressable style={styles.container} onPress={() => setCRVisible(true)}>
+                    <Text style={styles.title}>Room Code: #{room_token}</Text>
                     <InlineDropdown title={'Number of Questions:'} options={number_options}/>
                     <InlineDropdown title={'Select Category:'} options={category_options}/>
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options}/>
                     <InlineDropdown title={'Select Type:'} options={type_options}/>
+                    <AppButton title={"Create"} color={Colors.default.webstormBlue}/>
                 </Pressable>
             </Pressable>
         </Modal>
@@ -90,10 +119,11 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 10,
     },
-    textStyle: {
-        color: 'white',
+    title: {
+        fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        marginBottom: 30,
     },
 });
 

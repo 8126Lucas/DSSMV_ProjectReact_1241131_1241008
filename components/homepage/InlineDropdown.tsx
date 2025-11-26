@@ -19,24 +19,6 @@ const InlineDropdown = ({title, options}: InlineDropdownProps) => {
             />
         </View>
     );
-
-    //return (
-    //    <View style={styles.container}>
-    //        <TouchableOpacity style={styles.dropdown} onPress={toggleDropdown}>
-    //            <Text style={styles.text}>{selected_option}</Text>
-    //        </TouchableOpacity>
-    //        {is_visible && (
-    //            <FlatList
-    //                data={options}
-    //                keyExtractor={(item) => item}
-    //                renderItem={({item}) => (
-    //                    <TouchableOpacity onPress={() => selectOption(item)}>
-    //                        <Text style={styles.item}>{item}</Text>
-    //                    </TouchableOpacity>
-    //                )}/>
-    //        )}
-    //    </View>
-    //);
 }
 
 const pickerSelectStyles = StyleSheet.create({
@@ -55,6 +37,10 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: '#000000',
         borderRadius: 8,
         marginTop: 5,
+        color: '#000'
+    },
+    placeholder: {
+        color: 'black',
     }
 });
 
@@ -66,7 +52,7 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         padding: 10,
-        backgroundColor: '#ccc',
+        backgroundColor: '#fff',
         borderRadius: 5,
     },
     text: {
@@ -75,7 +61,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: 10,
-        backgroundColor: '#fff',
+        backgroundColor: '#ccc',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },

@@ -7,7 +7,7 @@ const ProfileOverview = () => {
 
     return (
         <View style={styles.container}>
-            <ImagePicker/>
+            <ImagePicker width={80} height={80}/>
             <View style={styles.user_info_container}>
                 <Text style={styles.user_info_text}>Name: </Text>
                 <Text style={styles.user_info_text}>Played Games: </Text>
@@ -21,13 +21,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         padding: 10,
+        height: 100,
     },
     profile_image_container: {
         flex: 1,
         maxWidth: 80,
         maxHeight: 80,
         borderColor: "black",
-        borderRadius: 80/2,
+        borderRadius: 80,
         borderWidth: 2,
         justifyContent: "center",
         alignItems: "center",

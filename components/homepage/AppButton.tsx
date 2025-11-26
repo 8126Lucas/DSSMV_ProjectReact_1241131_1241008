@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet, ColorValue} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet, ColorValue, Dimensions} from 'react-native';
 import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 
 type AppButtonProps = {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 24,
         paddingVertical: 12,
         paddingHorizontal: 24,
-        minWidth: 200,
+        width: Dimensions.get("screen").width * 0.75,
         alignItems: 'center',
         marginTop: 20,
         borderRadius: 60,

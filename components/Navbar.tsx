@@ -16,7 +16,7 @@ const Navbar = () => {
                 <Text style={styles.button_text}>Home</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./settings")}>
                 <Ionicons name="settings-sharp" size={16} color="white" />
                 <Text style={styles.button_text}>Settings</Text>
             </TouchableOpacity>
