@@ -6,7 +6,7 @@ import {router} from "expo-router";
 const Navbar = () => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/leaderboard/leaderboard")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./leaderboard")}>
                 <FontAwesome6 name="trophy" size={14} color="white" />
                 <Text style={styles.button_text}>Leaderboard</Text>
             </TouchableOpacity>

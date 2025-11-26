@@ -4,6 +4,7 @@ import {Colors} from "@/constants/theme";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import {Item} from "react-native-picker-select";
 import AppButton from "@/components/homepage/AppButton";
+import {router} from "expo-router";
 
 interface CreateRoomOverlayProps {
     cr_visible: boolean;
@@ -91,7 +92,9 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={'Select Category:'} options={category_options}/>
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options}/>
                     <InlineDropdown title={'Select Type:'} options={type_options}/>
-                    <AppButton title={"Create"} color={Colors.default.webstormBlue}/>
+                    <AppButton title={"Create"} color={Colors.default.webstormBlue} onPress={() => {
+                        router.navigate("./waiting_room");
+                        setCRVisible(false);}}/>
                 </Pressable>
             </Pressable>
         </Modal>
