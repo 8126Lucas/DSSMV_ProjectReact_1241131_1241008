@@ -5,14 +5,43 @@ import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import AppButton from "@/components/homepage/AppButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useState, useEffect} from "react";
+
+
+const setAsyncUsername = async (value: string) => {
+    await AsyncStorage.setItem('username', value);
+};
+const getAsyncUsername = async () => {
+    return await AsyncStorage.getItem('username');
+}
 
 export default function SettingsScreen() {
+    const [username, setUsername] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUsername = async () => {
+            const stored_username = await getAsyncUsername();
+            setUsername(stored_username);
+        };
+        fetchUsername();
+    }, []);
+
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                 <ImagePicker width={200} height={200}/>
                 <View style={styles.user_token_container}>
-                    <TextInput style={styles.title} placeholder={'Username'} underlineColorAndroid="black" textContentType={'username'}/>
+                    <TextInput
+                        style={styles.title}
+                        placeholder={username || 'Username'}
+                        underlineColorAndroid="black"
+                        textContentType={'username'}
+                        onSubmitEditing={event => {
+                            setAsyncUsername(event.nativeEvent.text);
+                            setUsername(event.nativeEvent.text);
+                        }}
+                    />
                     <TouchableOpacity style={styles.clipboard_button}>
                         <FontAwesome6 name="clipboard" size={30} color="white" />
                     </TouchableOpacity>

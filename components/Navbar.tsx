@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: 70,
         verticalAlign: "middle",
+        gap: 5,
     },
     button_text: {
         textTransform: 'uppercase',
