@@ -1,5 +1,5 @@
 import {View, Image, StyleSheet, ImageURISource, Text} from "react-native";
-import {FontFamily, Fonts, FontSize} from "@/constants/theme";
+import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect} from "react";
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         maxWidth: 80,
         maxHeight: 80,
-        borderColor: "black",
+        borderColor: Colors.light.border,
         borderRadius: 80,
         borderWidth: 2,
         justifyContent: "center",

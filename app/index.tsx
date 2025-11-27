@@ -23,8 +23,8 @@ export default function HomePageScreen() {
                 <View style={styles.sneaklbContainer}>
                     <Text style={styles.sneaklbText}>Leaderboard Status</Text>
                 </View>
-                <AppButton title={"Join"} color={Colors.default.green} onPress={() => setJRVisible(true)}/>
-                <AppButton title={"Create"} color={Colors.default.webstormBlue} onPress={() => setCRVisible(true)}/>
+                <AppButton title={"Join"} color={Colors.default.primaryAction1} onPress={() => setJRVisible(true)}/>
+                <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
             <Navbar/>
         </View>
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
-        backgroundColor: Colors.light.backgroundColor,
+        borderColor: Colors.light.border,
+        backgroundColor: Colors.light.surface,
         borderRadius: 10,
         marginVertical: 10,
     },
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: Colors.light.text,
     },
 });

@@ -19,7 +19,7 @@ const AppButton = ({ title, color, onPress }: AppButtonProps) => {
 const styles = StyleSheet.create({
     button: {
         borderWidth: 3,
-        borderColor: Colors.dark.backgroundColor,
+        borderColor: Colors.light.border,
         marginHorizontal: 24,
         paddingVertical: 12,
         paddingHorizontal: 24,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         color: Colors.light.text,
         fontSize: FontSize.large,
         fontWeight: 'bold',
-        textTransform: 'uppercase', 
+        textTransform: 'uppercase',
     },
 });
 

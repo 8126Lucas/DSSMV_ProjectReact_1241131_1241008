@@ -7,17 +7,17 @@ const Navbar = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("./leaderboard")}>
-                <FontAwesome6 name="trophy" size={14} color="white" />
+                <FontAwesome6 name="trophy" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Leaderboard</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/")}>
-                <FontAwesome6 name="house-chimney" size={14} color="white" />
+                <FontAwesome6 name="house-chimney" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Home</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("./settings")}>
-                <Ionicons name="settings-sharp" size={16} color="white" />
+                <Ionicons name="settings-sharp" size={16} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Settings</Text>
             </TouchableOpacity>
         </View>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 70,
-        backgroundColor: Colors.dark.backgroundColor,
+        backgroundColor: Colors.light.text,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     button_text: {
         textTransform: 'uppercase',
-        color: "white",
+        color: Colors.light.backgroundColor,
         textAlign: "center",
         fontFamily: FontFamily.body,
         fontSize: FontSize.small,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: 50,
         width: 1,
-        backgroundColor: "white",
+        backgroundColor: Colors.light.backgroundColor,
         margin: 5,
     },
 });

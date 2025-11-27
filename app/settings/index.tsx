@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Navbar from "@/components/Navbar";
 import {Colors, FontFamily, FontSize} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
@@ -16,8 +16,24 @@ const getAsyncUsername = async () => {
     return await AsyncStorage.getItem('username');
 }
 
+
+
 export default function SettingsScreen() {
     const [username, setUsername] = useState<string | null>(null);
+    const [dark_mode, setDarkMode] = useState(false);
+
+    const toggleAppMode = () => {
+        setDarkMode(previous_state => !previous_state);
+    };
+
+    useEffect(()=>{
+        if (dark_mode) {
+            Appearance.setColorScheme("dark");
+        }
+        else {
+            Appearance.setColorScheme("light");
+        }
+    },[dark_mode]);
 
     useEffect(() => {
         const fetchUsername = async () => {
@@ -35,7 +51,7 @@ export default function SettingsScreen() {
                     <TextInput
                         style={styles.title}
                         placeholder={username || 'Username'}
-                        underlineColorAndroid="black"
+                        underlineColorAndroid={Colors.light.text}
                         textContentType={'username'}
                         onSubmitEditing={event => {
                             setAsyncUsername(event.nativeEvent.text);
@@ -43,12 +59,12 @@ export default function SettingsScreen() {
                         }}
                     />
                     <TouchableOpacity style={styles.clipboard_button}>
-                        <FontAwesome6 name="clipboard" size={30} color="white" />
+                        <FontAwesome6 name="clipboard" size={30} color={Colors.light.backgroundColor} />
                     </TouchableOpacity>
                 </View>
-                <AppButton title={'Theme'} color={Colors.light.backgroundColor}/>
+                <AppButton title={'Theme'} color={Colors.light.backgroundColor} onPress={toggleAppMode}/>
                 <AppButton title={'Export Data'} color={Colors.light.backgroundColor}/>
-                <AppButton title={'Logout'} color={Colors.default.red}/>
+                <AppButton title={'Logout'} color={Colors.default.primaryAction2}/>
             </SafeAreaView>
             <Navbar/>
         </View>
@@ -73,6 +89,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginEnd: 5,
+        color: Colors.light.text
     },
     user_token_container: {
         alignItems: 'center',
@@ -81,7 +98,7 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     clipboard_button: {
-        backgroundColor: "black",
+        backgroundColor: Colors.light.text,
         padding: 4,
         borderRadius: 100,
         aspectRatio: 1,

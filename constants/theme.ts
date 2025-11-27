@@ -2,18 +2,29 @@ import {Platform} from "react-native";
 
 export const Colors = {
     default: {
-        green: "#4F8A3F",
-        webstormBlue: "#007EFF",
-        red: "#D10700",
-        gold: '#FFD700'
+        correct: "#4F8A3F",
+        incorrect: "#D10700",
+        gold: '#FFD700',
+        primaryAction1: "#56C7DB",
+        primaryAction2: "#DC402D",
+        primaryAction3: "#DBD653",
+        primaryAction4: "#7055DB",
+        player1Color: "#A766D9",
+        player2Color: "#FF9900",
     },
     light: {
-        backgroundColor: '#DDDDDD',
-        text: '#000000'
+        backgroundColor: "#FFFFFF",
+        surface: '#EEEEEE',
+        text: '#000000',
+        secondaryText: '#333333',
+        border: '#666666',
     },
     dark: {
-        backgroundColor: '#111111',
+        backgroundColor: "#111111",
+        surface: '#1A1A1A',
         text: "#FFFFFF",
+        secondaryText: '#BBBBBB',
+        border: '#333333',
     },
 };
 
