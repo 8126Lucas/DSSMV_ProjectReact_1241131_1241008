@@ -11,7 +11,7 @@ const Navbar = () => {
                 <Text style={styles.button_text}>Leaderboard</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./home")}>
                 <FontAwesome6 name="house-chimney" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Home</Text>
             </TouchableOpacity>

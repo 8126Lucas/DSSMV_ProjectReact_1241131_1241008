@@ -9,37 +9,59 @@ import {
     KeyboardAvoidingView,
     Platform, TouchableWithoutFeedback, Keyboard
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 import {Colors} from "@/constants/theme";
 import AppButton from "@/components/homepage/AppButton";
+import {createClient} from "@supabase/supabase-js";
+import {router} from "expo-router";
 
 interface JoinRoomOverlayProps {
     jrVisible: boolean;
     setJRVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const supabase = createClient(
+    process.env.EXPO_PUBLIC_SUPABASE_URL,
+    process.env.EXPO_PUBLIC_SUPABASE_API,
+);
+
+function joinRoom(room_token: string): void {
+    const channel = supabase.channel(`room:game-${room_token}`, {
+        config: {
+            private: true,
+        }
+    });
+    channel.subscribe();
+}
+
 const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
+    const [typed_token, setTypedToken] = useState("");
+
     return (
         <Modal
             animationType={"fade"}
             transparent={true}
             visible={jrVisible}
             onRequestClose={() => setJRVisible(false)}>
-
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                 <Pressable style={styles.root} onPress={() => setJRVisible(false)}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View style={styles.container} onStartShouldSetResponder={() => true}>
-
                             <View style={styles.inputGroup}>
                                 <Text style={styles.title}>Join Room</Text>
-
                                 <TextInput style={styles.input} placeholder="ENTER ROOM CODE" returnKeyType="done"
                                            keyboardType={Platform.OS === 'ios' ? "numbers-and-punctuation" : "numeric"} maxLength={6}
-                                           placeholderTextColor={Colors.dark.backgroundColor}/>
+                                           placeholderTextColor={Colors.dark.backgroundColor}
+                                            onChangeText={event => setTypedToken(event)}/>
                             </View>
-
-                            <AppButton title="Join Room" color={Colors.default.primaryAction1} onPress={() => setJRVisible(false)}/>
+                            <AppButton title="Join Room" color={Colors.default.primaryAction1} onPress={() => {
+                                joinRoom(typed_token);
+                                router.navigate({
+                                    pathname: './game_test',
+                                    params: {room_token: typed_token},
+                                })
+                                setJRVisible(false);
+                            }}/>
                         </View>
                     </TouchableWithoutFeedback>
                 </Pressable>

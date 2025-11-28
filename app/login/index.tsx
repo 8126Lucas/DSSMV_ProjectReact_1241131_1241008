@@ -2,7 +2,7 @@ import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 import * as Crypto from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {router} from "expo-router";
@@ -10,10 +10,17 @@ import {router} from "expo-router";
 const handleGenerateToken = async () => {
     const token = Crypto.randomUUID();
     await AsyncStorage.setItem('user_token', token);
-    router.navigate("/")
+    router.navigate("./home")
 };
 
+const handleTokenInput = async (token: string) => {
+    await AsyncStorage.setItem('user_token', token);
+    router.navigate("./home");
+}
+
 export default function LoginScreen() {
+    const [input_token, setInputToken] = useState("");
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.wrapper}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -38,12 +45,13 @@ export default function LoginScreen() {
                             <Text style={styles.generate_subtitle}>Put your existing token to access your data.</Text>
 
                             <TextInput style={styles.input} placeholder="Token UUID" returnKeyType="done"
-                                       placeholderTextColor={Colors.dark.secondaryText}/>
+                                       placeholderTextColor={Colors.dark.secondaryText}
+                                        onSubmitEditing={event => setInputToken(event.nativeEvent.text)}/>
 
                             <Text style={styles.generate_title3}>Format: 550e8400-e29b-41d4-a716-446655440000</Text>
 
-                            <TouchableOpacity style={styles.button_view}>
-                                <Text style={styles.generate_title2}>Generate New Token</Text>
+                            <TouchableOpacity style={styles.button_view} onPress={() => handleTokenInput(input_token)}>
+                                <Text style={styles.generate_title2}>Login With My Token</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

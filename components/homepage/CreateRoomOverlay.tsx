@@ -5,6 +5,7 @@ import InlineDropdown from "@/components/homepage/InlineDropdown";
 import {Item} from "react-native-picker-select";
 import AppButton from "@/components/homepage/AppButton";
 import {router} from "expo-router";
+import {createClient} from "@supabase/supabase-js";
 
 interface CreateRoomOverlayProps {
     cr_visible: boolean;
@@ -32,8 +33,18 @@ function generateTriviaURL(qn: string, cc: string, dc: string, tc: string): stri
     return api_url;
 }
 
-function createRoom(): void {
+const supabase = createClient(
+    process.env.EXPO_PUBLIC_SUPABASE_URL,
+    process.env.EXPO_PUBLIC_SUPABASE_API,
+);
 
+function createRoom(room_token: string): void {
+    const channel = supabase.channel(`room:game-${room_token}`, {
+        config: {
+            private: true,
+        }
+    });
+    channel.subscribe();
 }
 
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
@@ -97,8 +108,13 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options}/>
                     <InlineDropdown title={'Select Type:'} options={type_options}/>
                     <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
-                        router.navigate("./waiting_room");
-                        setCRVisible(false);}}/>
+                        setCRVisible(false);
+                        router.navigate({
+                            pathname: './game_test',
+                            params: {room_token: room_token},
+                        });
+                        createRoom(room_token);
+                    }}/>
                 </Pressable>
             </Pressable>
         </Modal>

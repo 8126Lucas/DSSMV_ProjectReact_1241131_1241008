@@ -14,7 +14,7 @@ export default function WaitingRoomScreen () {
                     <ActivityIndicator size="large" color={Colors.dark.backgroundColor} style={{transform: [{scale: 3}]}}/>
                 </View>
 
-                <AppButton title={"Cancel"} color={Colors.default.primaryAction2} onPress={() => router.navigate("/")}/>
+                <AppButton title={"Cancel"} color={Colors.default.primaryAction2} onPress={() => router.navigate("./home")}/>
             </SafeAreaView>
         </View>
 

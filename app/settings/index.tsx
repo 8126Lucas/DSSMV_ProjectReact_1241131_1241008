@@ -8,6 +8,7 @@ import AppButton from "@/components/homepage/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect} from "react";
 import * as Clipboard from "expo-clipboard";
+import {router} from "expo-router";
 
 const setAsyncUsername = async (value: string) => {
     await AsyncStorage.setItem('username', value);
@@ -70,7 +71,7 @@ export default function SettingsScreen() {
                 </View>
                 <AppButton title={'Theme'} color={Colors.light.backgroundColor} onPress={toggleAppMode}/>
                 <AppButton title={'Export Data'} color={Colors.light.backgroundColor}/>
-                <AppButton title={'Logout'} color={Colors.default.primaryAction2}/>
+                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.navigate('./login')}/>
             </SafeAreaView>
             <Navbar/>
         </View>
