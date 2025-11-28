@@ -1,4 +1,4 @@
-import {Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Navbar from "@/components/Navbar";
 import {Colors, FontFamily, FontSize} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
@@ -7,7 +7,7 @@ import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import AppButton from "@/components/homepage/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect} from "react";
-
+import * as Clipboard from "expo-clipboard";
 
 const setAsyncUsername = async (value: string) => {
     await AsyncStorage.setItem('username', value);
@@ -16,7 +16,13 @@ const getAsyncUsername = async () => {
     return await AsyncStorage.getItem('username');
 }
 
-
+const getAsyncToken = async() => {
+    const token_to_copy = await AsyncStorage.getItem('user_token');
+    if (token_to_copy != null) {
+        await Clipboard.setStringAsync(token_to_copy);
+        Alert.alert('Copied!', 'Your Token ' + token_to_copy + ' has been copied to your clipboard.');
+    }
+};
 
 export default function SettingsScreen() {
     const [username, setUsername] = useState<string | null>(null);
@@ -58,7 +64,7 @@ export default function SettingsScreen() {
                             setUsername(event.nativeEvent.text);
                         }}
                     />
-                    <TouchableOpacity style={styles.clipboard_button}>
+                    <TouchableOpacity style={styles.clipboard_button} onPress={getAsyncToken} >
                         <FontAwesome6 name="clipboard" size={30} color={Colors.light.backgroundColor} />
                     </TouchableOpacity>
                 </View>

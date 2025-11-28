@@ -1,10 +1,10 @@
-import { Text, View, StyleSheet } from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import Navbar from "@/components/Navbar";
 import AppButton from "@/components/homepage/AppButton";
 import {Colors} from "@/constants/theme";
 import ProfileOverview from "@/components/homepage/ProfileOverview";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {useRouter} from "expo-router";
+import {router, useRouter} from "expo-router";
 import {useState} from "react";
 import CreateRoomOverlay from "@/components/homepage/CreateRoomOverlay";
 import JoinRoomOverlay from "@/components/homepage/JoinRoomOverlay";
@@ -25,6 +25,7 @@ export default function HomePageScreen() {
                 </View>
                 <AppButton title={"Join"} color={Colors.default.primaryAction1} onPress={() => setJRVisible(true)}/>
                 <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => setCRVisible(true)}/>
+                <AppButton title={"Login Teste"} color={Colors.default.primaryAction4} onPress={() => router.navigate("./login")}/>
             </SafeAreaView>
             <Navbar/>
         </View>
