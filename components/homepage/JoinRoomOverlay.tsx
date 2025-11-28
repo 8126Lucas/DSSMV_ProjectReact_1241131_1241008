@@ -39,7 +39,7 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
                                            placeholderTextColor={Colors.dark.backgroundColor}/>
                             </View>
 
-                            <AppButton title="Join Room" color={Colors.default.green} onPress={() => setJRVisible(false)}/>
+                            <AppButton title="Join Room" color={Colors.default.primaryAction1} onPress={() => setJRVisible(false)}/>
                         </View>
                     </TouchableWithoutFeedback>
                 </Pressable>

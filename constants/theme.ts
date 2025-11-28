@@ -20,7 +20,7 @@ export const Colors = {
         border: '#666666',
     },
     dark: {
-        backgroundColor: "#111111",
+        backgroundColor: "#1E1A1B",
         surface: '#1A1A1A',
         text: "#FFFFFF",
         secondaryText: '#BBBBBB',

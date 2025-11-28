@@ -32,6 +32,10 @@ function generateTriviaURL(qn: string, cc: string, dc: string, tc: string): stri
     return api_url;
 }
 
+function createRoom(): void {
+
+}
+
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
     const number_options = Array.from({length: 50}, (_, i) => ({
         label: `${i + 1}`,value: `${i + 1}`
@@ -92,7 +96,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={'Select Category:'} options={category_options}/>
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options}/>
                     <InlineDropdown title={'Select Type:'} options={type_options}/>
-                    <AppButton title={"Create"} color={Colors.default.webstormBlue} onPress={() => {
+                    <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
                         router.navigate("./waiting_room");
                         setCRVisible(false);}}/>
                 </Pressable>
