@@ -6,14 +6,15 @@ import RNPickerSelect, {Item} from 'react-native-picker-select';
 interface InlineDropdownProps {
     title: string;
     options: Item[];
+    updateValue: (value: string | null) => void;
 }
 
-const InlineDropdown = ({title, options}: InlineDropdownProps) => {
+const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{title}</Text>
             <RNPickerSelect
-                onValueChange={(value) => console.log(value)}
+                onValueChange={(value: string | null): void => updateValue(value)}
                 items={options}
                 style={pickerSelectStyles}
             />

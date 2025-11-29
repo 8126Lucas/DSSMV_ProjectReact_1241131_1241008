@@ -28,8 +28,8 @@ export default function LoginScreen() {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <Image style={styles.img} source={require('@/assets/images/icon.png')} />
 
-                        <Text style={styles.text}>Welcome to {"\n"} Challengers</Text>
-                        <Text style={styles.subtext}>Generate an unique token or put your existing token {"\n"} to access your data.</Text>
+                        <Text style={styles.text}>Welcome to Challengers</Text>
+                        <Text style={styles.subtext}>Generate an unique token or put your existing token to access your data.</Text>
 
                         <View style={styles.generate_view}>
                             <Text style={styles.generate_title}>New Token</Text>
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     },
     generate_view: {
       width: Dimensions.get('window').width * 0.9,
-      height: Dimensions.get('window').height * 0.22,
       borderRadius: 30,
       alignSelf: 'center',
       borderWidth: 2,
@@ -106,7 +105,6 @@ const styles = StyleSheet.create({
     },
     put_token_view: {
         width: Dimensions.get('window').width * 0.9,
-        height: Dimensions.get('window').height * 0.3,
         borderRadius: 30,
         alignSelf: 'center',
         borderWidth: 2,

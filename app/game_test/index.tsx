@@ -10,11 +10,8 @@ const supabase = createClient(
 );
 
 const GameScreen = () => {
-    // 1. Obtém o token (PIN) dos parâmetros da rota
     const { room_token } = useLocalSearchParams();
     const roomToken = typeof room_token === 'string' ? room_token : '';
-
-    // Estados
     const [channel, setChannel] = useState<RealtimeChannel | null>(null);
     const [scores, setScores] = useState({ player1: 0, player2: 0 });
     const [isPlayer1, setIsPlayer1] = useState(false); // Assumimos que o primeiro a conectar-se é o P1
@@ -39,12 +36,13 @@ const GameScreen = () => {
 
         // Cria/Adere ao canal privado
         const currentChannel = supabase.channel(`room:game-${roomToken}`, {
-            config: { private: true }
+            config: { private: false }
         });
 
         // Listener para mensagens de broadcast (atualização de score)
         currentChannel.on('broadcast', { event: 'SCORE_UPDATE' }, (payload) => {
             // Atualiza os scores no dispositivo local com os scores recebidos do broadcast
+            console.log(payload);
             setScores(payload.payload.newScores);
         });
 

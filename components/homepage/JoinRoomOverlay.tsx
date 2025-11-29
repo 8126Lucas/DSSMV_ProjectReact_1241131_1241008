@@ -14,24 +14,21 @@ import {Colors} from "@/constants/theme";
 import AppButton from "@/components/homepage/AppButton";
 import {createClient} from "@supabase/supabase-js";
 import {router} from "expo-router";
+import {supabase_client} from "@/hooks/supabaseClient";
 
 interface JoinRoomOverlayProps {
     jrVisible: boolean;
     setJRVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const supabase = createClient(
-    process.env.EXPO_PUBLIC_SUPABASE_URL,
-    process.env.EXPO_PUBLIC_SUPABASE_API,
-);
-
-function joinRoom(room_token: string): void {
-    const channel = supabase.channel(`room:game-${room_token}`, {
-        config: {
-            private: true,
-        }
+function joinRoom(typed_token: string): void {
+    router.navigate({
+        pathname: './waiting_room',
+        params: {
+            room_token: typed_token,
+            user_type: 'guest',
+        },
     });
-    channel.subscribe();
 }
 
 const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
@@ -55,12 +52,8 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
                                             onChangeText={event => setTypedToken(event)}/>
                             </View>
                             <AppButton title="Join Room" color={Colors.default.primaryAction1} onPress={() => {
-                                joinRoom(typed_token);
-                                router.navigate({
-                                    pathname: './game_test',
-                                    params: {room_token: typed_token},
-                                })
                                 setJRVisible(false);
+                                joinRoom(typed_token);
                             }}/>
                         </View>
                     </TouchableWithoutFeedback>

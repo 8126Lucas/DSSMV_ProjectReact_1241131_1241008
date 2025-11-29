@@ -1,4 +1,4 @@
-import {View, StyleSheet, Modal, Text, Dimensions, Pressable} from "react-native";
+import {View, StyleSheet, Modal, Text, Dimensions, Pressable, Alert} from "react-native";
 import React, {useState, useEffect} from "react";
 import {Colors} from "@/constants/theme";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
@@ -6,6 +6,7 @@ import {Item} from "react-native-picker-select";
 import AppButton from "@/components/homepage/AppButton";
 import {router} from "expo-router";
 import {createClient} from "@supabase/supabase-js";
+import {requestTrivia} from "@/hooks/requestTrivia";
 
 interface CreateRoomOverlayProps {
     cr_visible: boolean;
@@ -16,10 +17,10 @@ function generateRoomToken(): string {
     return Math.floor(Math.random() * (999999 - 1 + 1) + 1).toString().padStart(6, '0');
 }
 
-function generateTriviaURL(qn: string, cc: string, dc: string, tc: string): string {
+function generateTriviaURL(qn: string | null, cc: string | null, dc: string | null, tc: string | null): string {
     let api_url: string = 'https://opentdb.com/api.php?';
     if(qn !== null) {
-        api_url += `ammount=${qn}`;
+        api_url += `amount=${qn}`;
         if(cc !== null && cc !== '0') {
             api_url += `&category=${cc}`;
         }
@@ -30,6 +31,9 @@ function generateTriviaURL(qn: string, cc: string, dc: string, tc: string): stri
             api_url += `&type=${tc}`;
         }
     }
+    else {
+        Alert.alert("INVALID NUMBER OF QUESTIONS", "To create a game room, please insert a valid number of questions.")
+    }
     return api_url;
 }
 
@@ -39,12 +43,13 @@ const supabase = createClient(
 );
 
 function createRoom(room_token: string): void {
-    const channel = supabase.channel(`room:game-${room_token}`, {
-        config: {
-            private: true,
-        }
+    router.navigate({
+        pathname: './waiting_room',
+        params: {
+            room_token: room_token,
+            user_type: 'host',
+        },
     });
-    channel.subscribe();
 }
 
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
@@ -89,6 +94,10 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         {label: 'Multiple Choice', value: 'multiple'},
         {label: 'True/False', value: 'boolean'},
     ];
+    const [question_number, setQuestionNumber] = useState<string | null>(null);
+    const [question_category, setQuestionCategory] = useState<string | null>(null);
+    const [question_difficulty, setQuestionDifficulty] = useState<string | null>(null);
+    const [question_type, setQuestionType] = useState<string | null>(null);
 
     const [room_token, setRoomToken] = useState("");
     useEffect(() => {
@@ -103,16 +112,14 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
             <Pressable style={styles.root} onPress={() => setCRVisible(false)}>
                 <Pressable style={styles.container} onPress={() => setCRVisible(true)}>
                     <Text style={styles.title}>Room Code: #{room_token}</Text>
-                    <InlineDropdown title={'Number of Questions:'} options={number_options}/>
-                    <InlineDropdown title={'Select Category:'} options={category_options}/>
-                    <InlineDropdown title={'Select Difficulty:'} options={difficulty_options}/>
-                    <InlineDropdown title={'Select Type:'} options={type_options}/>
+                    <InlineDropdown title={'Number of Questions:'} options={number_options} updateValue={(value: string | null) => setQuestionNumber(value)}/>
+                    <InlineDropdown title={'Select Category:'} options={category_options} updateValue={(value: string | null) => setQuestionCategory(value)}/>
+                    <InlineDropdown title={'Select Difficulty:'} options={difficulty_options} updateValue={(value: string | null) => setQuestionDifficulty(value)}/>
+                    <InlineDropdown title={'Select Type:'} options={type_options} updateValue={(value: string | null) => setQuestionType(value)}/>
                     <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
                         setCRVisible(false);
-                        router.navigate({
-                            pathname: './game_test',
-                            params: {room_token: room_token},
-                        });
+                        let trivia_url: string = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
+                        requestTrivia(trivia_url);
                         createRoom(room_token);
                     }}/>
                 </Pressable>
@@ -123,14 +130,15 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
 
 const styles = StyleSheet.create({
     root: {
+        width: '100%',
+        height: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000050'
+        backgroundColor: '#00000050',
     },
     container: {
         width: Dimensions.get("window").width * 0.8,
-        height: Dimensions.get("window").height * 0.8,
         backgroundColor: Colors.light.backgroundColor,
         borderRadius: 20,
         padding: 30,
