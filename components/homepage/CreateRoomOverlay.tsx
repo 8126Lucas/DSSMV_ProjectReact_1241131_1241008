@@ -6,7 +6,7 @@ import {Item} from "react-native-picker-select";
 import AppButton from "@/components/homepage/AppButton";
 import {router} from "expo-router";
 import {createClient} from "@supabase/supabase-js";
-import {requestTrivia} from "@/hooks/requestTrivia";
+import {requestTrivia, TriviaResponse} from "@/hooks/requestTrivia";
 
 interface CreateRoomOverlayProps {
     cr_visible: boolean;
@@ -37,19 +37,23 @@ function generateTriviaURL(qn: string | null, cc: string | null, dc: string | nu
     return api_url;
 }
 
-const supabase = createClient(
-    process.env.EXPO_PUBLIC_SUPABASE_URL,
-    process.env.EXPO_PUBLIC_SUPABASE_API,
-);
-
-function createRoom(room_token: string): void {
-    router.navigate({
-        pathname: './waiting_room',
-        params: {
-            room_token: room_token,
-            user_type: 'host',
-        },
-    });
+async function createRoom(room_token: string, trivia: Promise<TriviaResponse | null>): Promise<void> {
+    trivia.then(trivia_data => {
+        if(trivia_data) {
+            router.navigate({
+                pathname: './waiting_room',
+                params: {
+                    room_token: room_token,
+                    trivia: JSON.stringify(trivia_data),
+                    user_type: 'host',
+                },
+            });
+        } else {
+            console.error('No trivia data available');
+        }
+    }).catch(error => {
+        console.error('Error fetching trivia:', error);
+    })
 }
 
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
@@ -119,8 +123,8 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
                         setCRVisible(false);
                         let trivia_url: string = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
-                        requestTrivia(trivia_url);
-                        createRoom(room_token);
+                        let trivia = requestTrivia(trivia_url);
+                        createRoom(room_token, trivia);
                     }}/>
                 </Pressable>
             </Pressable>

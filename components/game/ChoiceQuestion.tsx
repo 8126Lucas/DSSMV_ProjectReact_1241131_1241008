@@ -6,22 +6,30 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/CountdownClock";
 
 interface ChoiceQuestionProps {
-
+    difficulty: string;
+    category: string;
+    question: string;
+    correct_answer: string;
+    incorrect_answers: string[];
+    answers: string[];
+    question_i: number;
+    size: number;
 }
 
-class ChoiceQuestionScreen extends Component {
+class ChoiceQuestionScreen extends Component<ChoiceQuestionProps> {
     constructor(props: ChoiceQuestionProps) {
         super(props);
     }
 
     render() {
+
        return (
            <View style={styles.wrapper}>
                <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                    <View style={styles.header}>
-                       <Text style={styles.category_text}>Category</Text>
+                       <Text style={styles.category_text}> {this.props.category} </Text>
                        <View style={styles.bottom_row}>
-                           <Text style={styles.questions_text}>1/N Questions</Text>
+                           <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
                            <View style={styles.countdown_container}>
                                <CountdownClock/>
                            </View>
@@ -29,21 +37,21 @@ class ChoiceQuestionScreen extends Component {
                    </View>
 
                    <View style={styles.question_container}>
-                        <Text style={styles.question_text}>Question</Text>
+                        <Text style={styles.question_text}>{this.props.question}</Text>
                    </View>
 
                    <View style={styles.answers_container}>
                         <TouchableOpacity style={styles.row_views}>
-                            <Text style={styles.answers_text}>Answer 1</Text>
+                            <Text style={styles.answers_text}>{this.props.answers[0]}</Text>
                         </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>Answer 1</Text>
+                           <Text style={styles.answers_text}>{this.props.answers[1]}</Text>
                        </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>Answer 1</Text>
+                           <Text style={styles.answers_text}>{this.props.answers[2]}</Text>
                        </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>Answer 1</Text>
+                           <Text style={styles.answers_text}>{this.props.answers[3]}</Text>
                        </TouchableOpacity>
                    </View>
 

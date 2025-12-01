@@ -5,10 +5,15 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/CountdownClock";
 
 interface BooleanQuestionProps {
-
+    difficulty: string;
+    category: string;
+    question: string;
+    correct_answer: string;
+    question_i: number;
+    size: number;
 }
 
-class BooleanQuestion extends Component {
+class BooleanQuestion extends Component<BooleanQuestionProps> {
     constructor(props: BooleanQuestionProps) {
         super(props);
     }
@@ -17,9 +22,9 @@ class BooleanQuestion extends Component {
         return (
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <View style={styles.topbar}>
-                    <Text style={styles.category_text}>Category</Text>
+                    <Text style={styles.category_text}>{this.props.category}</Text>
                     <View style={styles.bottom_row}>
-                        <Text style={styles.questions_text}>1/N Questions</Text>
+                        <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
                         <View style={styles.countdown_container}>
                             <CountdownClock/>
                         </View>
@@ -27,7 +32,7 @@ class BooleanQuestion extends Component {
                 </View>
 
                 <View style={styles.question_container}>
-                    <Text style={styles.question_text}>QuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestionQuestion</Text>
+                    <Text style={styles.question_text}>{this.props.question}</Text>
                 </View>
 
                 <View style={styles.answer_container}>

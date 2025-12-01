@@ -12,6 +12,7 @@ import {useEffect} from "react";
 
 export default function WaitingRoomScreen () {
     const room_token = useLocalSearchParams();
+    const trivia = useLocalSearchParams();
     const user_type = useLocalSearchParams();
 
     useEffect(() => {
@@ -24,8 +25,11 @@ export default function WaitingRoomScreen () {
                 const presence_count = Object.keys(presence_state).length;
                 if(presence_count >= 2) {
                     router.navigate({
-                        pathname: './game_test',
-                        params: { room_token: room_token.room_token },
+                        pathname: './game',
+                        params: {
+                            room_token: room_token.room_token,
+                            trivia: trivia.trivia,
+                        },
                     });
                 }
             }
@@ -33,7 +37,6 @@ export default function WaitingRoomScreen () {
             .subscribe(async (status) => {
                 if (status === 'SUBSCRIBED') {
                     console.log('Subscrito à sala de espera');
-                    // O host rastreia a sua presença
                     await game_room.track({
                         user_id: `${user_type.user_type}`,
                         role: `${user_type.user_type}`,
