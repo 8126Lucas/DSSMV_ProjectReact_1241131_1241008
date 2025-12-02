@@ -1,10 +1,54 @@
 import {Component} from "react";
-import {useLocalSearchParams} from "expo-router";
 import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
+import {supabase_client} from "@/hooks/supabaseClient";
+import {ActivityIndicator} from "react-native";
 
-class GameScreen extends Component {
+interface GameScreenProps {
+    room_token: string;
+    trivia: TriviaResponse;
+}
+
+interface GameScreenState {
+    room_token: string;
+    trivia: TriviaResponse | null;
+    isLoading: boolean;
+}
+
+class GameScreen extends Component<GameScreenProps, GameScreenState> {
+    constructor(props: any) {
+        super(props);
+        const params = new URLSearchParams(window.location.search);
+        const room_token = params.get('room_token') || props.room_token;
+
+        this.state = {
+            room_token: room_token,
+            trivia: null,
+            isLoading: true,
+        };
+    }
+
+    componentDidMount() {
+        this.getTrivia(this.state.room_token)
+            .then(data => {
+                this.setState({ trivia: data, isLoading: false });
+            })
+            .catch(() => {
+                this.setState({ isLoading: false, trivia: null });
+            });
+    }
+
+    async getTrivia(room_token: string): Promise<TriviaResponse | null> {
+        console.log("room_token: ", room_token);
+        const {data, error} = await supabase_client
+            .from('rooms')
+            .select('questions')
+            .eq('room', room_token);
+        if(error) {throw error;}
+        return data[0].questions as TriviaResponse;
+    }
+
     shuffle(data: string[]): string[] {
         let current_index = data.length;
         let random_index;
@@ -18,11 +62,13 @@ class GameScreen extends Component {
     };
 
     render() {
-        // const params = useLocalSearchParams();
-        // const trivia_data = (params.trivia) as TriviaResponse;
-        let trivia_data: any;
-        for(let i = 0; i < Object.keys(trivia_data.data).length; i++) {
-            const data = trivia_data.data[i];
+        const { trivia, isLoading } = this.state;
+        if (isLoading) {
+            return <ActivityIndicator size="large" color="#0000ff" />;
+        }
+        console.log(trivia);
+        for(let i = 0; i < Object.keys(trivia!.data).length; i++) {
+            const data = trivia!.data[i];
             if(data.type === 'multiple') {
                 let data_shuffled = data.incorrect_answer;
                 data_shuffled.push(data.correct_answer);
@@ -36,7 +82,7 @@ class GameScreen extends Component {
                         incorrect_answers={data.incorrect_answer}
                         answers={data_shuffled}
                         question_i={i+1}
-                        size={Object.keys(trivia_data.data).length} />
+                        size={Object.keys(trivia!.data).length} />
                 );
             } else if(data.type === 'boolean') {
                 return (
@@ -46,9 +92,11 @@ class GameScreen extends Component {
                         question={data.question}
                         correct_answer={data.correct_answer}
                         question_i={i+1}
-                        size={Object.keys(trivia_data.data).length} />
+                        size={Object.keys(trivia!.data).length} />
                 );
             }
         }
     }
 }
+
+export default GameScreen;

@@ -123,7 +123,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
                         setCRVisible(false);
                         let trivia_url: string = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
-                        let trivia = requestTrivia(trivia_url);
+                        let trivia = requestTrivia(room_token, trivia_url);
                         createRoom(room_token, trivia);
                     }}/>
                 </Pressable>

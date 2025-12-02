@@ -11,12 +11,10 @@ import {useEffect} from "react";
 
 
 export default function WaitingRoomScreen () {
-    const room_token = useLocalSearchParams();
-    const trivia = useLocalSearchParams();
-    const user_type = useLocalSearchParams();
+    const params = useLocalSearchParams();
 
     useEffect(() => {
-        const game_room = supabase_client.channel(`room:game-${room_token.room_token}`);
+        const game_room = supabase_client.channel(`room:game-${params.room_token}`);
         game_room.on(
             REALTIME_LISTEN_TYPES.PRESENCE,
             { event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN },
@@ -27,8 +25,7 @@ export default function WaitingRoomScreen () {
                     router.navigate({
                         pathname: './game',
                         params: {
-                            room_token: room_token.room_token,
-                            trivia: trivia.trivia,
+                            room_token: params.room_token,
                         },
                     });
                 }
@@ -38,8 +35,8 @@ export default function WaitingRoomScreen () {
                 if (status === 'SUBSCRIBED') {
                     console.log('Subscrito à sala de espera');
                     await game_room.track({
-                        user_id: `${user_type.user_type}`,
-                        role: `${user_type.user_type}`,
+                        user_id: `${params.user_type}`,
+                        role: `${params.user_type}`,
                         joined_at: Date.now(),
                     });
                 }

@@ -13,7 +13,12 @@ export interface TriviaResponse {
     data: TriviaObject[];
 }
 
-export async function requestTrivia(url: string): Promise<TriviaResponse | null> {
+interface APIResponse {
+    response_code: number,
+    results: TriviaResponse
+}
+
+export async function requestTrivia(room_token: string, url: string): Promise<TriviaResponse | null> {
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -24,16 +29,17 @@ export async function requestTrivia(url: string): Promise<TriviaResponse | null>
         if (!response.ok) {
             throw new Error(response.statusText);
         }
-        const result = (await response.json()) as TriviaResponse;
+        const result = (await response.json()) as APIResponse;
+        const trivia = result.results as TriviaResponse;
 
-        console.log('result is: ', JSON.stringify(result, null, 4));
+        console.log('result is: ', JSON.stringify(trivia, null, 4));
 
         const { error } = await supabase_client.from('rooms')
-            .insert({ questions: result });
+            .insert({room: room_token, questions: trivia});
 
         console.log(error);
 
-        return result;
+        return trivia;
     } catch (error) {
         console.error(error);
         return null;
