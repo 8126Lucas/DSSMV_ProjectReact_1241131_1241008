@@ -3,6 +3,7 @@ import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/CountdownClock";
+import {decode} from "html-entities";
 
 interface BooleanQuestionProps {
     difficulty: string;
@@ -22,7 +23,7 @@ class BooleanQuestion extends Component<BooleanQuestionProps> {
         return (
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <View style={styles.topbar}>
-                    <Text style={styles.category_text}>{this.props.category}</Text>
+                    <Text style={styles.category_text}>{decode(this.props.category)}</Text>
                     <View style={styles.bottom_row}>
                         <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
                         <View style={styles.countdown_container}>
@@ -32,7 +33,7 @@ class BooleanQuestion extends Component<BooleanQuestionProps> {
                 </View>
 
                 <View style={styles.question_container}>
-                    <Text style={styles.question_text}>{this.props.question}</Text>
+                    <Text style={styles.question_text}>{decode(this.props.question)}</Text>
                 </View>
 
                 <View style={styles.answer_container}>

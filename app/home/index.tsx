@@ -18,7 +18,7 @@ export default function HomePageScreen() {
         <View style={styles.wrapper}>
             <CreateRoomOverlay cr_visible={cr_visible} setCRVisible={setCRVisible} />
             <JoinRoomOverlay jrVisible={jrVisible} setJRVisible={setJRVisible} />
-            <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+            <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <ProfileOverview/>
                 <View style={styles.sneaklbContainer}>
                     <Text style={styles.sneaklbText}>Leaderboard Status</Text>

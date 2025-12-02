@@ -4,7 +4,7 @@ import {router, useLocalSearchParams, useRouter} from "expo-router";
 import AppButton from "@/components/homepage/AppButton";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {createClient, REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} from "@supabase/supabase-js";
-import {supabase_client} from "@/hooks/supabaseClient";
+import {supabase_client} from "@/constants/supabaseClient";
 import {useEffect} from "react";
 
 

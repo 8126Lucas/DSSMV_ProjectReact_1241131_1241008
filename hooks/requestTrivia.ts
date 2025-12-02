@@ -1,4 +1,5 @@
-import {supabase_client} from "@/hooks/supabaseClient";
+import {supabase_client} from "@/constants/supabaseClient";
+import {decode} from "html-entities";
 
 interface TriviaObject {
     type: string,
@@ -6,7 +7,7 @@ interface TriviaObject {
     category: string,
     question: string,
     correct_answer: string,
-    incorrect_answer: string[],
+    incorrect_answers: string[],
 }
 
 export interface TriviaResponse {

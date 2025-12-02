@@ -14,7 +14,7 @@ import {Colors} from "@/constants/theme";
 import AppButton from "@/components/homepage/AppButton";
 import {createClient} from "@supabase/supabase-js";
 import {router} from "expo-router";
-import {supabase_client} from "@/hooks/supabaseClient";
+import {supabase_client} from "@/constants/supabaseClient";
 
 interface JoinRoomOverlayProps {
     jrVisible: boolean;

@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/CountdownClock";
+import {decode} from "html-entities";
 
 interface ChoiceQuestionProps {
     difficulty: string;
@@ -27,7 +28,7 @@ class ChoiceQuestionScreen extends Component<ChoiceQuestionProps> {
            <View style={styles.wrapper}>
                <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                    <View style={styles.header}>
-                       <Text style={styles.category_text}> {this.props.category} </Text>
+                       <Text style={styles.category_text}>{decode(this.props.category)}</Text>
                        <View style={styles.bottom_row}>
                            <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
                            <View style={styles.countdown_container}>
@@ -37,21 +38,21 @@ class ChoiceQuestionScreen extends Component<ChoiceQuestionProps> {
                    </View>
 
                    <View style={styles.question_container}>
-                        <Text style={styles.question_text}>{this.props.question}</Text>
+                        <Text style={styles.question_text}>{decode(this.props.question)}</Text>
                    </View>
 
                    <View style={styles.answers_container}>
                         <TouchableOpacity style={styles.row_views}>
-                            <Text style={styles.answers_text}>{this.props.answers[0]}</Text>
+                            <Text style={styles.answers_text}>{decode(this.props.answers[0])}</Text>
                         </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{this.props.answers[1]}</Text>
+                           <Text style={styles.answers_text}>{decode(this.props.answers[1])}</Text>
                        </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{this.props.answers[2]}</Text>
+                           <Text style={styles.answers_text}>{decode(this.props.answers[2])}</Text>
                        </TouchableOpacity>
                        <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{this.props.answers[3]}</Text>
+                           <Text style={styles.answers_text}>{decode(this.props.answers[3])}</Text>
                        </TouchableOpacity>
                    </View>
 
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
     answers_text: {
         fontSize: 18,
         marginLeft: 20,
+        marginRight: 20,
         fontWeight: 'bold',
         textTransform: 'uppercase',
         alignItems: 'center',
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     },
     row_views: {
         width: Dimensions.get('screen').width * 0.9,
-        height: Dimensions.get('screen').height * 0.08,
+        minHeight: Dimensions.get('screen').height * 0.08,
         borderWidth: 2,
         borderColor: Colors.dark.backgroundColor,
         borderRadius: 10,
