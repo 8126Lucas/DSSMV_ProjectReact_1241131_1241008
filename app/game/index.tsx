@@ -5,6 +5,7 @@ import BooleanQuestion from "@/components/game/BooleanQuestion";
 import {supabase_client} from "@/constants/supabaseClient";
 import {ActivityIndicator} from "react-native";
 import {useLocalSearchParams} from "expo-router";
+import {calculateScore} from "@/hooks/calculateScore";
 
 async function uploadTrivia(room_token: string, retries = 6): Promise<TriviaResponse | null> {
     console.log("room_token: ", room_token);
@@ -39,11 +40,41 @@ function shuffle(data: string[]): string[] {
 export default function GameScreen() {
     const params = useLocalSearchParams();
     const [trivia, setTrivia] = useState<TriviaResponse | null>(null);
+    const [score, setScore] = useState(0);
+    const [current_question, setCurrentQuestion] = useState(0);
+    const [shuffled_answers, setShuffledAnswers] = useState<{[key: number]: string[]}>({});
+
+    const handleAnswer = (answer: string, time_left: number) => {
+        if(answer === data.correct_answer) {
+            const points = calculateScore(time_left, data.difficulty, data.type);
+            const old_score = score;
+            setScore(score + points);
+            console.log(`${old_score} + ${points} = ${score}`);
+            setCurrentQuestion(current_question + 1);
+        }
+        else {
+            const points = 0;
+            const old_score = score;
+            setScore(score + points);
+            console.log(`${old_score} + ${points} = ${score}`);
+            setCurrentQuestion(current_question + 1);
+        }
+    }
 
     useEffect(() => {
         const getTrivia = async () => {
             const trivia_response = await uploadTrivia(params.room_token as string);
-            setTrivia(trivia_response);
+            if(trivia_response?.data) {
+                const shuffled: {[key: number]: string[]} = {};
+                trivia_response.data.forEach((question, index) => {
+                    if (question.type === 'multiple') {
+                        const answers = [...question.incorrect_answers, question.correct_answer];
+                        shuffled[index] = shuffle(answers);
+                    }
+                });
+                setShuffledAnswers(shuffled);
+                setTrivia(trivia_response);
+            }
         };
         getTrivia()
     }, [params.room_token]);
@@ -52,33 +83,30 @@ export default function GameScreen() {
         return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
     }
 
-    for(let i = 0; i < trivia.data.length; i++) {
-        const data = trivia.data[i];
-        if(data.type === 'multiple') {
-            let data_shuffled = data.incorrect_answers;
-            data_shuffled.push(data.correct_answer);
-            data_shuffled = shuffle(data_shuffled);
-            return (
-                <ChoiceQuestion
-                    difficulty={data.difficulty}
-                    category={data.category}
-                    question={data.question}
-                    correct_answer={data.correct_answer}
-                    incorrect_answers={data.incorrect_answers}
-                    answers={data_shuffled}
-                    question_i={i+1}
-                    size={trivia.data.length} />
-            );
-        } else if(data.type === 'boolean') {
-            return (
-                <BooleanQuestion
-                    difficulty={data.difficulty}
-                    category={data.category}
-                    question={data.question}
-                    correct_answer={data.correct_answer}
-                    question_i={i+1}
-                    size={trivia.data.length} />
-            );
-        }
+    const data = trivia.data[current_question];
+    if(data.type === 'multiple') {
+        return (
+            <ChoiceQuestion
+                difficulty={data.difficulty}
+                category={data.category}
+                question={data.question}
+                correct_answer={data.correct_answer}
+                incorrect_answers={data.incorrect_answers}
+                answers={shuffled_answers[current_question]}
+                question_i={current_question+1}
+                size={trivia.data.length}
+                onPress={handleAnswer} />
+        );
+    } else if(data.type === 'boolean') {
+        return (
+            <BooleanQuestion
+                difficulty={data.difficulty}
+                category={data.category}
+                question={data.question}
+                correct_answer={data.correct_answer}
+                question_i={current_question+1}
+                size={trivia.data.length}
+                onPress={handleAnswer}/>
+        );
     }
 }

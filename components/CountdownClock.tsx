@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-type CountdownProps = {
+interface CountdownProps {
     seconds: number;
+    onTimeChange: (time: number) => void;
 }
 
 function decreaseValue(value: number) {
@@ -14,6 +15,11 @@ const Countdown = (props: CountdownProps) => {
     let [countdown, setCountdown] = useState(props.seconds);
     let [text_color, setTextColor] = useState('black');
     const scale = useSharedValue(1);
+
+    const handleTimer = (time: number) => {
+        props.onTimeChange(time);
+    }
+
     const animated_final_countdown = useAnimatedStyle(() => {
         return {
             transform: [{ scale: scale.value }]
@@ -30,10 +36,11 @@ const Countdown = (props: CountdownProps) => {
                     });
                 }
                 setCountdown(countdown => decreaseValue(countdown));
+                handleTimer(countdown);
             }
         }, 1000);
         return () => clearInterval(decreaseCountdown);
-    }, [countdown]);
+    }, [countdown, scale]);
     return (
         <View style={styles.clock_container}>
             <Animated.Text style={[{color: text_color}, styles.countdown_text, animated_final_countdown]}>{countdown}</Animated.Text>
@@ -41,9 +48,21 @@ const Countdown = (props: CountdownProps) => {
     );
 };
 
-const CountdownClock = () => {
+// ----------------------------------
+
+interface CountdownClockProps {
+    seconds: number;
+    onTimeChange: (time: number) => void;
+}
+
+const CountdownClock = (props: CountdownClockProps) => {
+    const handleTimer = (time: number) => {
+        props.onTimeChange(time);
+        props.seconds = 30; // não funciona
+    }
+
     return (
-        <Countdown seconds={30}/>
+        <Countdown seconds={props.seconds} onTimeChange={handleTimer} />
     );
 };
 

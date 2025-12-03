@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 
 import {Colors} from "@/constants/theme";
@@ -15,51 +15,59 @@ interface ChoiceQuestionProps {
     answers: string[];
     question_i: number;
     size: number;
+    onPress: (answer: string, time_left: number) => void;
 }
 
-class ChoiceQuestionScreen extends Component<ChoiceQuestionProps> {
-    constructor(props: ChoiceQuestionProps) {
-        super(props);
+export default function ChoiceQuestion(props: ChoiceQuestionProps) {
+    const [time_left, setTimeLeft] = useState(30);
+
+    const handleAnswer = (answer: string, time_left: number) => {
+        props.onPress(answer, time_left);
     }
 
-    render() {
-
-       return (
-           <View style={styles.wrapper}>
-               <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-                   <View style={styles.header}>
-                       <Text style={styles.category_text}>{decode(this.props.category)}</Text>
-                       <View style={styles.bottom_row}>
-                           <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
-                           <View style={styles.countdown_container}>
-                               <CountdownClock/>
-                           </View>
-                       </View>
-                   </View>
-
-                   <View style={styles.question_container}>
-                        <Text style={styles.question_text}>{decode(this.props.question)}</Text>
-                   </View>
-
-                   <View style={styles.answers_container}>
-                        <TouchableOpacity style={styles.row_views}>
-                            <Text style={styles.answers_text}>{decode(this.props.answers[0])}</Text>
-                        </TouchableOpacity>
-                       <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{decode(this.props.answers[1])}</Text>
-                       </TouchableOpacity>
-                       <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{decode(this.props.answers[2])}</Text>
-                       </TouchableOpacity>
-                       <TouchableOpacity style={styles.row_views}>
-                           <Text style={styles.answers_text}>{decode(this.props.answers[3])}</Text>
-                       </TouchableOpacity>
-                   </View>
-
-               </SafeAreaView>
-           </View>
-       );
+    const handleTimer = (time: number) => {
+        setTimeLeft(time);
     }
+
+    return (
+        <View style={styles.wrapper}>
+            <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+                <View style={styles.header}>
+                    <Text style={styles.category_text}>{decode(props.category)}</Text>
+                    <View style={styles.bottom_row}>
+                        <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
+                        <View style={styles.countdown_container}>
+                            <CountdownClock seconds={30} onTimeChange={handleTimer}/>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.question_container}>
+                    <Text style={styles.question_text}>{decode(props.question)}</Text>
+                </View>
+
+                <View style={styles.answers_container}>
+                    <TouchableOpacity style={styles.row_views}
+                        onPress={() => handleAnswer(props.answers[0], time_left)}>
+                        <Text style={styles.answers_text}>{decode(props.answers[0])}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row_views}
+                        onPress={() => handleAnswer(props.answers[1], time_left)}>
+                        <Text style={styles.answers_text}>{decode(props.answers[1])}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row_views}
+                        onPress={() => handleAnswer(props.answers[2], time_left)}>
+                        <Text style={styles.answers_text}>{decode(props.answers[2])}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.row_views}
+                        onPress={() => handleAnswer(props.answers[3], time_left)}>
+                        <Text style={styles.answers_text}>{decode(props.answers[3])}</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </SafeAreaView>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -155,4 +163,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ChoiceQuestionScreen;
+//export default ChoiceQuestionScreen;

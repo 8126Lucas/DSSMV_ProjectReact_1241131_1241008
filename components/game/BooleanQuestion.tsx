@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -12,42 +12,47 @@ interface BooleanQuestionProps {
     correct_answer: string;
     question_i: number;
     size: number;
+    onPress: (answer: string, time: number) => void;
 }
 
-class BooleanQuestion extends Component<BooleanQuestionProps> {
-    constructor(props: BooleanQuestionProps) {
-        super(props);
+export default function BooleanQuestion(props: BooleanQuestionProps) {
+    const [time_left, setTimeLeft] = useState(30);
+
+    const handleTimer = (time: number) => {
+        setTimeLeft(time);
     }
 
-    render() {
-        return (
-            <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
-                <View style={styles.topbar}>
-                    <Text style={styles.category_text}>{decode(this.props.category)}</Text>
-                    <View style={styles.bottom_row}>
-                        <Text style={styles.questions_text}>{this.props.question_i}/{this.props.size} Questions</Text>
-                        <View style={styles.countdown_container}>
-                            <CountdownClock/>
-                        </View>
+    return (
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
+            <View style={styles.topbar}>
+                <Text style={styles.category_text}>{decode(props.category)}</Text>
+                <View style={styles.bottom_row}>
+                    <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
+                    <View style={styles.countdown_container}>
+                        <CountdownClock seconds={30} onTimeChange={handleTimer}/>
                     </View>
                 </View>
+            </View>
 
-                <View style={styles.question_container}>
-                    <Text style={styles.question_text}>{decode(this.props.question)}</Text>
-                </View>
+            <View style={styles.question_container}>
+                <Text style={styles.question_text}>{decode(props.question)}</Text>
+            </View>
 
-                <View style={styles.answer_container}>
-                    <TouchableOpacity style={[styles.answer, {backgroundColor: Colors.default.correct}]}>
-                        <Text style={styles.answer_text}>True</Text>
-                    </TouchableOpacity>
-                    <View style={styles.vertical_line}/>
-                    <TouchableOpacity style={[styles.answer, {backgroundColor: Colors.default.incorrect}]}>
-                        <Text style={styles.answer_text}>False</Text>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
-        );
-    }
+            <View style={styles.answer_container}>
+                <TouchableOpacity 
+                    style={[styles.answer, {backgroundColor: Colors.default.correct}]}
+                    onPress={() => props.onPress('True', time_left)}>
+                    <Text style={styles.answer_text}>True</Text>
+                </TouchableOpacity>
+                <View style={styles.vertical_line}/>
+                <TouchableOpacity 
+                    style={[styles.answer, {backgroundColor: Colors.default.incorrect}]}
+                    onPress={() => props.onPress('False', time_left)}>
+                    <Text style={styles.answer_text}>False</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -137,7 +142,3 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.light.text,
     },
 });
-
-
-
-export default BooleanQuestion;

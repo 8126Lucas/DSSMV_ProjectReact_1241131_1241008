@@ -37,14 +37,14 @@ function generateTriviaURL(qn: string | null, cc: string | null, dc: string | nu
     return api_url;
 }
 
-async function createRoom(room_token: string, trivia: Promise<TriviaResponse | null>): Promise<void> {
+async function createRoom(room_token: string, number_of_players: number, trivia: Promise<TriviaResponse | null>): Promise<void> {
     trivia.then(trivia_data => {
         if(trivia_data) {
             router.navigate({
                 pathname: './waiting_room',
                 params: {
                     room_token: room_token,
-                    trivia: JSON.stringify(trivia_data),
+                    number_of_players: number_of_players,
                     user_type: 'host',
                 },
             });
@@ -98,6 +98,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         {label: 'Multiple Choice', value: 'multiple'},
         {label: 'True/False', value: 'boolean'},
     ];
+    const [number_of_players, setNumberOfPlayers] = useState(2);
     const [question_number, setQuestionNumber] = useState<string | null>(null);
     const [question_category, setQuestionCategory] = useState<string | null>(null);
     const [question_difficulty, setQuestionDifficulty] = useState<string | null>(null);
@@ -124,7 +125,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                         setCRVisible(false);
                         let trivia_url: string = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
                         let trivia = requestTrivia(room_token, trivia_url);
-                        createRoom(room_token, trivia);
+                        createRoom(room_token, number_of_players, trivia);
                     }}/>
                 </Pressable>
             </Pressable>
