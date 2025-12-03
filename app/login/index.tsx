@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
     },
     img: {
         alignSelf: 'center',
-        borderRadius: 100,
+        borderRadius: 60,
         paddingTop: 10,
         width: 120,
-        height: 120,
-        resizeMode: 'contain',
+        height: 125,
+        resizeMode: 'cover',
     },
     input: {
         width: '100%',

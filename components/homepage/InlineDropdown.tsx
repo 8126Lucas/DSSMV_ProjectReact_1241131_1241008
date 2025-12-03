@@ -17,6 +17,7 @@ const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
                 onValueChange={(value: string | null): void => updateValue(value)}
                 items={options}
                 style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
             />
         </View>
     );
@@ -27,22 +28,24 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         backgroundColor: '#00000000',
+        borderWidth: 1,
+        borderColor: '#000000',
+        borderRadius: 8,
+        marginTop: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
     },
     inputAndroid: {
         fontSize: 16,
         color: 'black',
         backgroundColor: '#00000000',
-    },
-    viewContainer: {
         borderWidth: 1,
         borderColor: '#000000',
         borderRadius: 8,
         marginTop: 5,
-        color: '#000'
+        paddingVertical: 12,
+        paddingHorizontal: 10,
     },
-    placeholder: {
-        color: 'black',
-    }
 });
 
 const styles = StyleSheet.create({
