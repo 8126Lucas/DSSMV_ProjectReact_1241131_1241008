@@ -1,4 +1,4 @@
-import {Component, useState} from "react";
+import {Component, useCallback, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -17,10 +17,11 @@ interface BooleanQuestionProps {
 
 export default function BooleanQuestion(props: BooleanQuestionProps) {
     const [time_left, setTimeLeft] = useState(30);
+    const [answered, setAnswered] = useState(false);
 
-    const handleTimer = (time: number) => {
+    const handleTimer = useCallback((time: number) => {
         setTimeLeft(time);
-    }
+    }, []);
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
@@ -29,7 +30,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
                 <View style={styles.bottom_row}>
                     <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
                     <View style={styles.countdown_container}>
-                        <CountdownClock seconds={30} onTimeChange={handleTimer}/>
+                        <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
                     </View>
                 </View>
             </View>
@@ -41,13 +42,19 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
             <View style={styles.answer_container}>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: Colors.default.correct}]}
-                    onPress={() => props.onPress('True', time_left)}>
+                    onPress={() => {
+                        setAnswered(true);
+                        props.onPress('True', time_left);
+                    }}>
                     <Text style={styles.answer_text}>True</Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: Colors.default.incorrect}]}
-                    onPress={() => props.onPress('False', time_left)}>
+                    onPress={() => {
+                        setAnswered(true);
+                        props.onPress('False', time_left);
+                    }}>
                     <Text style={styles.answer_text}>False</Text>
                 </TouchableOpacity>
             </View>

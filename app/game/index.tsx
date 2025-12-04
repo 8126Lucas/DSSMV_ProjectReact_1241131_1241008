@@ -1,10 +1,10 @@
-import {Component, useEffect, useState} from "react";
+import {Component, useCallback, useEffect, useState} from "react";
 import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
 import {supabase_client} from "@/constants/supabaseClient";
 import {ActivityIndicator} from "react-native";
-import {useLocalSearchParams} from "expo-router";
+import {router, useLocalSearchParams} from "expo-router";
 import {calculateScore} from "@/hooks/calculateScore";
 
 async function uploadTrivia(room_token: string, retries = 6): Promise<TriviaResponse | null> {
@@ -44,13 +44,14 @@ export default function GameScreen() {
     const [current_question, setCurrentQuestion] = useState(0);
     const [shuffled_answers, setShuffledAnswers] = useState<{[key: number]: string[]}>({});
 
-    const handleAnswer = (answer: string, time_left: number) => {
+    const handleAnswer = useCallback((answer: string, time_left: number) => {
         if(answer === data.correct_answer) {
             const points = calculateScore(time_left, data.difficulty, data.type);
             const old_score = score;
             setScore(score + points);
             console.log(`${old_score} + ${points} = ${score}`);
             setCurrentQuestion(current_question + 1);
+
         }
         else {
             const points = 0;
@@ -59,7 +60,11 @@ export default function GameScreen() {
             console.log(`${old_score} + ${points} = ${score}`);
             setCurrentQuestion(current_question + 1);
         }
-    }
+        // Esta condição está no local errado, continua, mesmo assim, a ir ler o type a um undefined.
+        // if(current_question > trivia!.data.length) {
+        //     router.navigate('./home');
+        // }
+    }, [trivia, current_question]);
 
     useEffect(() => {
         const getTrivia = async () => {

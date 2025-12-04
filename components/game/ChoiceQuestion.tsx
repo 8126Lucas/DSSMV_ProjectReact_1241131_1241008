@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useCallback, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 
 import {Colors} from "@/constants/theme";
@@ -19,15 +19,17 @@ interface ChoiceQuestionProps {
 }
 
 export default function ChoiceQuestion(props: ChoiceQuestionProps) {
+    const [answered, setAnswered] = useState(false);
     const [time_left, setTimeLeft] = useState(30);
 
     const handleAnswer = (answer: string, time_left: number) => {
+        setAnswered(true);
         props.onPress(answer, time_left);
     }
 
-    const handleTimer = (time: number) => {
+    const handleTimer = useCallback((time: number) => {
         setTimeLeft(time);
-    }
+    }, []);
 
     return (
         <View style={styles.wrapper}>
@@ -37,7 +39,7 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
                     <View style={styles.bottom_row}>
                         <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
                         <View style={styles.countdown_container}>
-                            <CountdownClock seconds={30} onTimeChange={handleTimer}/>
+                            <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
                         </View>
                     </View>
                 </View>

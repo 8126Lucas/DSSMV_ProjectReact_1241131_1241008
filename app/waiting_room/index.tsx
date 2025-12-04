@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, ActivityIndicator} from "react-native";
+import {Text, View, StyleSheet, ActivityIndicator, Share, Alert, Vibration} from "react-native";
 import {Colors} from "@/constants/theme";
 import {router, useLocalSearchParams, useRouter} from "expo-router";
 import AppButton from "@/components/homepage/AppButton";
@@ -7,8 +7,15 @@ import {createClient, REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} fr
 import {supabase_client} from "@/constants/supabaseClient";
 import {useEffect, useState} from "react";
 
-
-
+const shareRoom = async (room_token: any) => {
+    try {
+        await Share.share({
+            message: `Join me in a game of Challengers! Room token: ${room_token}`,
+        });
+    } catch (error: any) {
+        Alert.alert(error.message);
+    }
+}
 
 export default function WaitingRoomScreen () {
     const params = useLocalSearchParams();
@@ -32,13 +39,14 @@ export default function WaitingRoomScreen () {
                             payload: {start_time}
                         });
                         setTimeout(() => {
+                            Vibration.vibrate();
                             router.navigate({
                                 pathname: './game',
                                 params: {
                                     room_token: params.room_token,
                                 },
                             });
-                        }, 1500);
+                        }, 1000);
                     }
                 }
             )
@@ -60,6 +68,7 @@ export default function WaitingRoomScreen () {
                 (payload) => {
                     const delay = payload.start_time - Date.now();
                     setTimeout(() => {
+                        Vibration.vibrate();
                         router.navigate({
                             pathname: './game',
                             params: {
@@ -89,7 +98,7 @@ export default function WaitingRoomScreen () {
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
                 <Text style={styles.text}>Waiting Other{"\n"}Player to Join</Text>
-                <Text style={styles.room_token_text}>Room Code: #{params.room_token}</Text>
+                <Text onPress={() => shareRoom(params.room_token)} style={styles.room_token_text}>Room Code: #{params.room_token}</Text>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size="large" color={Colors.dark.backgroundColor} style={{transform: [{scale: 3}]}}/>
                 </View>
