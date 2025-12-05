@@ -60,10 +60,7 @@ export default function GameScreen() {
             console.log(`${old_score} + ${points} = ${score}`);
             setCurrentQuestion(current_question + 1);
         }
-        // Esta condição está no local errado, continua, mesmo assim, a ir ler o type a um undefined.
-        // if(current_question > trivia!.data.length) {
-        //     router.navigate('./home');
-        // }
+
     }, [trivia, current_question]);
 
     useEffect(() => {
@@ -89,9 +86,12 @@ export default function GameScreen() {
     }
 
     const data = trivia.data[current_question];
-    if(data.type === 'multiple') {
+    if(data.type === undefined) {
+        router.navigate('./home');
+    } else if(data.type === 'multiple') {
         return (
             <ChoiceQuestion
+                key={current_question}
                 difficulty={data.difficulty}
                 category={data.category}
                 question={data.question}

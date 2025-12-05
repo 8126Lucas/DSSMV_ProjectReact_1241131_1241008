@@ -7,6 +7,7 @@ import CountdownClock from "@/components/CountdownClock";
 import {decode} from "html-entities";
 
 interface ChoiceQuestionProps {
+    props: string;
     difficulty: string;
     category: string;
     question: string;
@@ -21,10 +22,45 @@ interface ChoiceQuestionProps {
 export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     const [answered, setAnswered] = useState(false);
     const [time_left, setTimeLeft] = useState(30);
+    const [color1, setColor1] = useState(Colors.light.backgroundColor);
+    const [color2, setColor2] = useState(Colors.light.backgroundColor);
+    const [color3, setColor3] = useState(Colors.light.backgroundColor);
+    const [color4, setColor4] = useState(Colors.light.backgroundColor);
 
-    const handleAnswer = (answer: string, time_left: number) => {
+    const handleAnswer = (answer: string, question_i: number, time_left: number) => {
         setAnswered(true);
         props.onPress(answer, time_left);
+        switch (question_i) {
+            case 0:
+                if(answer === props.correct_answer) {
+                    setColor1(Colors.default.correct2);
+                } else {
+                    setColor1(Colors.default.incorrect2);
+                }
+                break;
+            case 1:
+                if(answer === props.correct_answer) {
+                    setColor2(Colors.default.correct2);
+                } else {
+                    setColor2(Colors.default.incorrect2);
+                }
+                break;
+            case 2:
+                if(answer === props.correct_answer) {
+                    setColor3(Colors.default.correct2);
+                } else {
+                    setColor3(Colors.default.incorrect2);
+                }
+                break;
+            case 3:
+                if(answer === props.correct_answer) {
+                    setColor4(Colors.default.correct2);
+                } else {
+                    setColor4(Colors.default.incorrect2);
+                }
+                break;
+            default: break;
+        }
     }
 
     const handleTimer = useCallback((time: number) => {
@@ -49,20 +85,20 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
                 </View>
 
                 <View style={styles.answers_container}>
-                    <TouchableOpacity style={styles.row_views}
-                        onPress={() => handleAnswer(props.answers[0], time_left)}>
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color1}]}
+                        onPress={() => handleAnswer(props.answers[0], 0,time_left)}>
                         <Text style={styles.answers_text}>{decode(props.answers[0])}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.row_views}
-                        onPress={() => handleAnswer(props.answers[1], time_left)}>
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color2}]}
+                        onPress={() => handleAnswer(props.answers[1], 1,time_left)}>
                         <Text style={styles.answers_text}>{decode(props.answers[1])}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.row_views}
-                        onPress={() => handleAnswer(props.answers[2], time_left)}>
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color3}]}
+                        onPress={() => handleAnswer(props.answers[2], 2,time_left)}>
                         <Text style={styles.answers_text}>{decode(props.answers[2])}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.row_views}
-                        onPress={() => handleAnswer(props.answers[3], time_left)}>
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color4}]}
+                        onPress={() => handleAnswer(props.answers[3], 3,time_left)}>
                         <Text style={styles.answers_text}>{decode(props.answers[3])}</Text>
                     </TouchableOpacity>
                 </View>
