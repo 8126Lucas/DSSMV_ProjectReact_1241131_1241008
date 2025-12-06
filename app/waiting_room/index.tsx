@@ -32,7 +32,7 @@ export default function WaitingRoomScreen () {
                     const player_count = Object.keys(presence_state).length;
                     setPresenceCount(player_count)
                     if(player_count >= parseInt(params.number_of_players as string)) {
-                        const start_time = Date.now() + 1500;
+                        const start_time = Date.now() + 1000;
                         await game_room.send({
                             type: 'broadcast',
                             event: 'start',
@@ -43,10 +43,12 @@ export default function WaitingRoomScreen () {
                             router.navigate({
                                 pathname: './game',
                                 params: {
+                                    user_type: params.user_type,
                                     room_token: params.room_token,
+                                    number_of_players: params.number_of_players,
                                 },
                             });
-                        }, 1000);
+                        }, Math.max(0, Date.now() - start_time));
                     }
                 }
             )
@@ -72,6 +74,7 @@ export default function WaitingRoomScreen () {
                         router.navigate({
                             pathname: './game',
                             params: {
+                                user_type: params.user_type,
                                 room_token: params.room_token,
                             },
                         });

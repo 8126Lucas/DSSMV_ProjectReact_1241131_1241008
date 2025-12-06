@@ -1,4 +1,4 @@
-import React, {Component, useCallback, useState} from 'react';
+import React, {Component, useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 
 import {Colors} from "@/constants/theme";
@@ -7,7 +7,6 @@ import CountdownClock from "@/components/CountdownClock";
 import {decode} from "html-entities";
 
 interface ChoiceQuestionProps {
-    props: string;
     difficulty: string;
     category: string;
     question: string;
@@ -66,6 +65,15 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     const handleTimer = useCallback((time: number) => {
         setTimeLeft(time);
     }, []);
+
+    useEffect(() => {
+        setAnswered(false);
+        setColor1(Colors.light.backgroundColor);
+        setColor2(Colors.light.backgroundColor);
+        setColor3(Colors.light.backgroundColor);
+        setColor4(Colors.light.backgroundColor);
+        setTimeLeft(30);
+    }, [props.question_i]);
 
     return (
         <View style={styles.wrapper}>
