@@ -1,7 +1,7 @@
-import {Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
-import {useState} from "react";
+import {Dimensions, StyleSheet, Text, View} from 'react-native'
+import React from "react";
 import RNPickerSelect, {Item} from 'react-native-picker-select';
-
+import { Ionicons } from '@expo/vector-icons';
 
 interface InlineDropdownProps {
     title: string;
@@ -18,7 +18,7 @@ const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
-            />
+                Icon={() => {return <Ionicons name="chevron-down" size={24} color="gray" />;}}/>
         </View>
     );
 }
@@ -34,6 +34,7 @@ const pickerSelectStyles = StyleSheet.create({
         marginTop: 5,
         paddingVertical: 12,
         paddingHorizontal: 10,
+        paddingRight: 30,
     },
     inputAndroid: {
         fontSize: 16,
@@ -45,6 +46,11 @@ const pickerSelectStyles = StyleSheet.create({
         marginTop: 5,
         paddingVertical: 12,
         paddingHorizontal: 10,
+        paddingRight: 30,
+    },
+    iconContainer: {
+        top: 20,
+        right: 15,
     },
 });
 
@@ -54,20 +60,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get("screen").width * 0.7,
         marginBottom: 20,
     },
-    dropdown: {
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 5,
-    },
     text: {
         fontSize: 16,
         textAlign: 'left',
-    },
-    item: {
-        padding: 10,
-        backgroundColor: '#ccc',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
     },
 });
 
