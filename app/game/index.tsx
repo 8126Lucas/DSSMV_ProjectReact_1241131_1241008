@@ -3,12 +3,14 @@ import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
 import {supabase_client} from "@/constants/supabaseClient";
-import {ActivityIndicator, Vibration} from "react-native";
+import {ActivityIndicator, Vibration, View} from "react-native";
 import {router, useLocalSearchParams} from "expo-router";
 import {calculateScore} from "@/hooks/calculateScore";
 import {REALTIME_POSTGRES_CHANGES_LISTEN_EVENT} from "@supabase/realtime-js";
 import {REALTIME_LISTEN_TYPES} from "@supabase/supabase-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
+import GamePointsOverlay from "@/components/game/GamePointsOverlay";
 
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
@@ -25,13 +27,15 @@ function toNextQuestion(number_of_players: number, number_of_answers: number): b
     return number_of_answers === number_of_players;
 }
 
-async function uploadAnswer(room_token: string, question_index: number, player_uuid: string) {
+async function uploadAnswer(room_token: string, question_index: number, player_uuid: string, username: string, score: number) {
     const { error } = await supabase_client
         .from('in_game_answer_state')
         .insert({
             room: room_token,
             question_index: question_index,
             player_uuid: player_uuid,
+            player_name: username,
+            total_points: score,
         });
     if(error) {throw error;}
 }
@@ -70,32 +74,43 @@ export default function GameScreen() {
     const params = useLocalSearchParams();
     const [trivia, setTrivia] = useState<TriviaResponse | null>(null);
     const [score, setScore] = useState(0);
+    const [question_points, setQuestionPoints] = useState(0);
     const [current_question, setCurrentQuestion] = useState(0);
     const [shuffled_answers, setShuffledAnswers] = useState<{[key: number]: string[]}>({});
+    const [is_correct, setIsCorrect] = useState<boolean>(false);
+    const [points_overlay, setPointsOverlay] = useState<boolean>(false);
+    const [leaderboard_data, setLeaderboardData] = useState<{name: string, points: number}[]>([]);
+    const [leaderboard_overlay, setLeaderboardOverlay] = useState<boolean>(false);
 
     const handleAnswer = useCallback(async (answer: string, time_left: number) => {
+        setPointsOverlay(true);
+        let new_score = score;
         if (answer === data.correct_answer) {
+            setIsCorrect(true);
             const points = calculateScore(time_left, data.difficulty, data.type);
+            setQuestionPoints(points);
             const old_score = score;
             setScore(score + points);
+            new_score += points;
             console.log(`${old_score} + ${points}`);
         } else {
+            setIsCorrect(false);
             const points = 0;
-            const old_score = score;
-            setScore(score + points);
-            console.log(`${old_score} + ${points}`);
+            setQuestionPoints(0);
+            console.log(`${score} + ${points}`);
         }
         try {
             const player_uuid = await AsyncStorage.getItem('user_token');
+            const player_username = await AsyncStorage.getItem('username');
             if (player_uuid) {
-                await uploadAnswer(params.room_token.toString(), current_question, player_uuid);
+                await uploadAnswer(params.room_token.toString(), current_question, player_uuid, (player_username ? player_username : "Unknown Player"), new_score);
             } else {
                 console.error('No user token found!');
             }
         } catch (error) {
             console.error('Error handling answer:', error);
         }
-    }, [trivia, current_question]);
+    }, [trivia, current_question, score]);
 
     useEffect(() => {
         const getTrivia = async () => {
@@ -161,42 +176,98 @@ export default function GameScreen() {
     }, [params.number_of_players, params.room_token, params.user_type]);
 
     useEffect(() => {
-        if (trivia && trivia.data && current_question >= trivia.data.length) {
-            router.navigate('./home');
+        const fetchData = async () => {
+            if (trivia && trivia.data && current_question >= trivia.data.length) {
+                const {data, error} = await supabase_client
+                    .from('in_game_answer_state')
+                    .select('name: player_name, points: total_points')
+                    .eq('room', params.room_token)
+                    .eq('question_index', current_question-1);
+                console.log(data);
+                if (error) {
+                    throw error;
+                }
+                setLeaderboardData(data);
+                setLeaderboardOverlay(true);
+            }
         }
+        fetchData();
     }, [current_question, trivia]);
 
     if(!trivia || !trivia.data || !Array.isArray(trivia.data)) {
         return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
     }
-    if(!trivia || !trivia.data || !Array.isArray(trivia.data) || current_question >= trivia.data.length) {
+
+    if(current_question >= trivia.data.length && leaderboard_data.length === 0) {
         return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
+    }
+    else if (current_question >= trivia.data.length) {
+        return <GamePointsOverlay
+            player_scores={leaderboard_data}
+            isVisible={leaderboard_overlay}
+            onClose={() => {
+                setLeaderboardOverlay(false);
+                router.navigate('./home');
+            }}
+            duration={4000} />
     }
 
     const data = trivia.data[current_question];
     if(data.type === 'multiple') {
         return (
-            <ChoiceQuestion
-                difficulty={data.difficulty}
-                category={data.category}
-                question={data.question}
-                correct_answer={data.correct_answer}
-                incorrect_answers={data.incorrect_answers}
-                answers={shuffled_answers[current_question]}
-                question_i={current_question+1}
-                size={trivia.data.length}
-                onPress={handleAnswer} />
+            <View style={{flex: 1}}>
+                <ChoiceQuestion
+                    difficulty={data.difficulty}
+                    category={data.category}
+                    question={data.question}
+                    correct_answer={data.correct_answer}
+                    incorrect_answers={data.incorrect_answers}
+                    answers={shuffled_answers[current_question]}
+                    question_i={current_question+1}
+                    size={trivia.data.length}
+                    onPress={handleAnswer} />
+                <QuestionPointsOverlay
+                    points={question_points}
+                    correct={is_correct}
+                    isVisible={points_overlay}
+                    onClose={() => setPointsOverlay(false)}
+                    duration={2000} />
+                <GamePointsOverlay
+                    player_scores={leaderboard_data}
+                    isVisible={leaderboard_overlay}
+                    onClose={() => {
+                        setLeaderboardOverlay(false);
+                        router.navigate('./home');
+                    }}
+                    duration={4000} />
+            </View>
         );
     } else if(data.type === 'boolean') {
         return (
-            <BooleanQuestion
-                difficulty={data.difficulty}
-                category={data.category}
-                question={data.question}
-                correct_answer={data.correct_answer}
-                question_i={current_question+1}
-                size={trivia.data.length}
-                onPress={handleAnswer}/>
+            <View style={{flex: 1}}>
+                <BooleanQuestion
+                    difficulty={data.difficulty}
+                    category={data.category}
+                    question={data.question}
+                    correct_answer={data.correct_answer}
+                    question_i={current_question+1}
+                    size={trivia.data.length}
+                    onPress={handleAnswer}/>
+                <QuestionPointsOverlay
+                    points={question_points}
+                    correct={is_correct}
+                    isVisible={points_overlay}
+                    onClose={() => setPointsOverlay(false)}
+                    duration={2000} />
+                <GamePointsOverlay
+                    player_scores={leaderboard_data}
+                    isVisible={leaderboard_overlay}
+                    onClose={() => {
+                        setLeaderboardOverlay(false);
+                        router.navigate('./home');
+                    }}
+                    duration={4000} />
+            </View>
         );
     }
 }

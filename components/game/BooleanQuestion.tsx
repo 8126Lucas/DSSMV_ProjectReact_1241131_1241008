@@ -2,7 +2,7 @@ import {Component, useCallback, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
-import CountdownClock from "@/components/CountdownClock";
+import CountdownClock from "@/components/game/CountdownClock";
 import {decode} from "html-entities";
 
 interface BooleanQuestionProps {

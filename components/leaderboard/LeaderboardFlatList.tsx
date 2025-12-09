@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
     scoreText: {
         fontSize: 20,
-        color: Colors.default.green,
+        color: Colors.default.correct,
     }
 });
 
