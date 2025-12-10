@@ -9,9 +9,37 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
+import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 
+// não funciona
 const setAsyncUsername = async (value: string) => {
-    await AsyncStorage.setItem('username', value);
+    try {
+        await AsyncStorage.setItem('username', value);
+        const token = await AsyncStorage.getItem('user_token');
+        const filter = {'user_token': token};
+        await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json",
+                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+            }
+        })
+            .then(response => response.json())
+            .then(async data => {
+                await fetch(REST_DB_ENDPOINT_USER + `/${data[0]._id}`, {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        username: value,
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                        'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                    },
+                });
+            });
+    } catch (error) {
+        console.log(error);
+    }
 };
 const getAsyncUsername = async () => {
     return await AsyncStorage.getItem('username');
@@ -60,9 +88,10 @@ export default function SettingsScreen() {
                         placeholder={username || 'Username'}
                         underlineColorAndroid={Colors.light.text}
                         textContentType={'username'}
-                        onSubmitEditing={event => {
-                            setAsyncUsername(event.nativeEvent.text);
-                            setUsername(event.nativeEvent.text);
+                        onSubmitEditing={async (event) => {
+                            const typed_username = event.nativeEvent.text;
+                            await setAsyncUsername(typed_username);
+                            setUsername(typed_username);
                         }}
                     />
                     <TouchableOpacity style={styles.clipboard_button} onPress={getAsyncToken} >

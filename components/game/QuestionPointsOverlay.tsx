@@ -1,13 +1,11 @@
 import {Modal, View, Text, StyleSheet} from "react-native";
-import {Colors, FontSize} from "@/constants/theme";
+import {Colors} from "@/constants/theme";
 import {useEffect} from "react";
+import {PointsOverlayProps} from "@/constants/PointsOverlayProps";
 
-interface QuestionPointsOverlayProps {
+interface QuestionPointsOverlayProps extends PointsOverlayProps{
     points: number;
     correct: boolean;
-    isVisible: boolean;
-    onClose: () => void;
-    duration: number;
 }
 
 const QuestionPointsOverlay = (props: QuestionPointsOverlayProps) => {

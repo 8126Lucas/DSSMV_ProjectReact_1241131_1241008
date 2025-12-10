@@ -3,7 +3,7 @@ import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
 import {supabase_client} from "@/constants/supabaseClient";
-import {ActivityIndicator, Vibration, View} from "react-native";
+import {ActivityIndicator, View} from "react-native";
 import {router, useLocalSearchParams} from "expo-router";
 import {calculateScore} from "@/hooks/calculateScore";
 import {REALTIME_POSTGRES_CHANGES_LISTEN_EVENT} from "@supabase/realtime-js";
@@ -197,7 +197,6 @@ export default function GameScreen() {
     if(!trivia || !trivia.data || !Array.isArray(trivia.data)) {
         return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
     }
-
     if(current_question >= trivia.data.length && leaderboard_data.length === 0) {
         return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
     }
@@ -232,14 +231,6 @@ export default function GameScreen() {
                     isVisible={points_overlay}
                     onClose={() => setPointsOverlay(false)}
                     duration={2000} />
-                <GamePointsOverlay
-                    player_scores={leaderboard_data}
-                    isVisible={leaderboard_overlay}
-                    onClose={() => {
-                        setLeaderboardOverlay(false);
-                        router.navigate('./home');
-                    }}
-                    duration={4000} />
             </View>
         );
     } else if(data.type === 'boolean') {
@@ -259,14 +250,6 @@ export default function GameScreen() {
                     isVisible={points_overlay}
                     onClose={() => setPointsOverlay(false)}
                     duration={2000} />
-                <GamePointsOverlay
-                    player_scores={leaderboard_data}
-                    isVisible={leaderboard_overlay}
-                    onClose={() => {
-                        setLeaderboardOverlay(false);
-                        router.navigate('./home');
-                    }}
-                    duration={4000} />
             </View>
         );
     }

@@ -1,6 +1,7 @@
-import {Modal, StyleSheet, Text, View} from "react-native";
+import {Dimensions, Modal, StyleSheet, Text, View} from "react-native";
 import {useEffect} from "react";
 import {Colors} from "@/constants/theme";
+import {PointsOverlayProps} from "@/constants/PointsOverlayProps";
 
 interface GamePointsPerPlayerProps {
     index: number;
@@ -20,11 +21,8 @@ const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
 
 // ------------------------------------------------------------------
 
-interface GamePointsOverlayProps {
+interface GamePointsOverlayProps extends PointsOverlayProps {
     player_scores: {name: string, points: number}[];
-    isVisible: boolean;
-    onClose: () => void;
-    duration: number;
 }
 
 const GamePointsOverlay = (props: GamePointsOverlayProps) => {
@@ -75,25 +73,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000050',
     },
     container: {
+        minWidth: Dimensions.get('screen').width * 0.75,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 16,
+        margin: 16,
         marginBottom: 10,
-        backgroundColor: Colors.light.backgroundColor,
-        borderRadius: 10,
-        borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 2,
     },
     text: {
         fontSize: 26,
         fontWeight: 'bold',
         color: Colors.light.text,
+        textAlign: 'left',
     },
 });
 

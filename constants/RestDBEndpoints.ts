@@ -1,0 +1,1 @@
+export const REST_DB_ENDPOINT_USER = 'https://challengers-7214.restdb.io/rest/app-users'
