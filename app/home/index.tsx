@@ -27,7 +27,6 @@ export default function HomePageScreen() {
                 </View>
                 <AppButton title={"Join"} color={Colors.default.primaryAction1} onPress={() => setJRVisible(true)}/>
                 <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => setCRVisible(true)}/>
-                <AppButton title={"Login Teste"} color={Colors.default.primaryAction4} onPress={() => router.navigate('./login')}/>
             </SafeAreaView>
             <Navbar/>
         </View>

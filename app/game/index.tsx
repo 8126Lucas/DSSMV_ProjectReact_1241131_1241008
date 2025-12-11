@@ -11,7 +11,7 @@ import {REALTIME_LISTEN_TYPES} from "@supabase/supabase-js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
 import GamePointsOverlay from "@/components/game/GamePointsOverlay";
-
+import updateUserRestDB from "@/hooks/updateUserRestDB";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -204,9 +204,18 @@ export default function GameScreen() {
         return <GamePointsOverlay
             player_scores={leaderboard_data}
             isVisible={leaderboard_overlay}
-            onClose={() => {
-                setLeaderboardOverlay(false);
-                router.navigate('./home');
+            onClose={async () => {
+                try {
+                    const token = await AsyncStorage.getItem('user_token');
+                    if (token) {
+                        await updateUserRestDB(token, "games_played", { "$inc": 1 });
+                    }
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    setLeaderboardOverlay(false);
+                    router.navigate('./home');
+                }
             }}
             duration={4000} />
     }

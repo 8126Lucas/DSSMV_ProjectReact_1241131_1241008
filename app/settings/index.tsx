@@ -1,42 +1,23 @@
 import {Alert, Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Navbar from "@/components/Navbar";
-import {Colors, FontFamily, FontSize} from "@/constants/theme";
+import {Colors} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {FontAwesome6, Ionicons} from "@expo/vector-icons";
+import {FontAwesome6} from "@expo/vector-icons";
 import AppButton from "@/components/homepage/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
-import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
+import updateUserRestDB from "@/hooks/updateUserRestDB";
 
-// não funciona
 const setAsyncUsername = async (value: string) => {
     try {
         await AsyncStorage.setItem('username', value);
         const token = await AsyncStorage.getItem('user_token');
-        const filter = {'user_token': token};
-        await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': "application/json",
-                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
-            }
-        })
-            .then(response => response.json())
-            .then(async data => {
-                await fetch(REST_DB_ENDPOINT_USER + `/${data[0]._id}`, {
-                    method: "PUT",
-                    body: JSON.stringify({
-                        username: value,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                        'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
-                    },
-                });
-            });
+        if(token !== null) {
+            await updateUserRestDB(token, 'username', value);
+        }
     } catch (error) {
         console.log(error);
     }

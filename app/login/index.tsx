@@ -38,7 +38,7 @@ const handleGenerateToken = async () => {
                 'Content-Type': 'application/json',
                 'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
             }
-        });
+        }).then(response => console.log(response));
         router.navigate("./home");
     } catch (error) {
         console.log(error);
