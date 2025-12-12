@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
 import GamePointsOverlay from "@/components/game/GamePointsOverlay";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
+import uploadGameScore from "@/hooks/uploadGameScore";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -131,6 +132,7 @@ export default function GameScreen() {
     }, [params.room_token]);
 
     useEffect(() => {
+        let timeout_id: number;
         const answer_channel = supabase_client.channel(`answer:${params.room_token}`);
         if(params.user_type === 'host') {
             answer_channel.on(
@@ -151,7 +153,7 @@ export default function GameScreen() {
                             event: 'next_question',
                             payload: {start_time, question_index: question_index},
                         });
-                        setTimeout(() => {
+                        timeout_id = setTimeout(() => {
                             setCurrentQuestion(question_index + 1);
                         }, Math.max(0, start_time - Date.now()));
                     }
@@ -164,13 +166,16 @@ export default function GameScreen() {
                 { event: 'next_question' },
                 (payload) => {
                     const delay = payload.payload.start_time - Date.now();
-                    setTimeout(() => {
+                    timeout_id = setTimeout(() => {
                         setCurrentQuestion(payload.payload.question_index + 1);
                     }, Math.max(0, delay));
                 }
             ).subscribe();
         }
         return () => {
+            if (timeout_id) {
+                clearTimeout(timeout_id);
+            }
             answer_channel.unsubscribe();
         };
     }, [params.number_of_players, params.room_token, params.user_type]);
@@ -209,6 +214,7 @@ export default function GameScreen() {
                     const token = await AsyncStorage.getItem('user_token');
                     if (token) {
                         await updateUserRestDB(token, "games_played", { "$inc": 1 });
+                        await uploadGameScore(token, score);
                     }
                 } catch (error) {
                     console.log(error);

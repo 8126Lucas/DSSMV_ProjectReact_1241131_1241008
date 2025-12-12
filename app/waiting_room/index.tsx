@@ -22,6 +22,7 @@ export default function WaitingRoomScreen () {
     const [presence_count, setPresenceCount] = useState(1);
 
     useEffect(() => {
+        let timeout_id: number;
         const game_room = supabase_client.channel(`room:game-${params.room_token}`);
         if(params.user_type === 'host') {
             game_room.on(
@@ -38,7 +39,7 @@ export default function WaitingRoomScreen () {
                             event: 'start',
                             payload: {start_time}
                         });
-                        setTimeout(() => {
+                        timeout_id = setTimeout(() => {
                             Vibration.vibrate();
                             router.navigate({
                                 pathname: './game',
@@ -69,7 +70,7 @@ export default function WaitingRoomScreen () {
                 { event: 'start' },
                 (payload) => {
                     const delay = payload.start_time - Date.now();
-                    setTimeout(() => {
+                    timeout_id = setTimeout(() => {
                         Vibration.vibrate();
                         router.navigate({
                             pathname: './game',
@@ -93,6 +94,9 @@ export default function WaitingRoomScreen () {
                 });
         }
         return () => {
+            if (timeout_id) {
+                clearTimeout(timeout_id);
+            }
             game_room.unsubscribe();
         };
     }, [params.number_of_players, params.room_token, params.user_type]);

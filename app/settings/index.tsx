@@ -10,6 +10,7 @@ import {useState, useEffect} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
+import exportUserData from "@/hooks/exportUserData";
 
 const setAsyncUsername = async (value: string) => {
     try {
@@ -26,7 +27,7 @@ const getAsyncUsername = async () => {
     return await AsyncStorage.getItem('username');
 }
 
-const getAsyncToken = async() => {
+const copyAsyncToken = async() => {
     const token_to_copy = await AsyncStorage.getItem('user_token');
     if (token_to_copy != null) {
         await Clipboard.setStringAsync(token_to_copy);
@@ -75,12 +76,17 @@ export default function SettingsScreen() {
                             setUsername(typed_username);
                         }}
                     />
-                    <TouchableOpacity style={styles.clipboard_button} onPress={getAsyncToken} >
+                    <TouchableOpacity style={styles.clipboard_button} onPress={copyAsyncToken} >
                         <FontAwesome6 name="clipboard" size={30} color={Colors.light.backgroundColor} />
                     </TouchableOpacity>
                 </View>
                 <AppButton title={'Theme'} color={Colors.light.backgroundColor} onPress={toggleAppMode}/>
-                <AppButton title={'Export Data'} color={Colors.light.backgroundColor}/>
+                <AppButton title={'Export Data'} color={Colors.light.backgroundColor} onPress={async () => {
+                    const user_token = await AsyncStorage.getItem('user_token');
+                    if (user_token != null) {
+                        await exportUserData(user_token)
+                    }
+                }}/>
                 <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.navigate('./login')}/>
             </SafeAreaView>
             <Navbar/>
