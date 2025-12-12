@@ -1,80 +1,77 @@
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    Dimensions,
-    TouchableOpacity,
-    Platform,
-    TextInput,
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    Keyboard,
-    ScrollView,
-    Alert
-} from "react-native";
+import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Alert} from "react-native";
 import React, {useState} from "react";
 import * as Crypto from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {router} from "expo-router";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
+import {useDispatch} from "react-redux";
+import {setUser} from "@/src/flux/store/userSlice";
 
-const handleGenerateToken = async () => {
-    try {
-        const token = Crypto.randomUUID();
-        await AsyncStorage.setItem('user_token', token);
-        await AsyncStorage.setItem('games_played', '0');
-        await AsyncStorage.setItem('username', '');
-        await fetch(REST_DB_ENDPOINT_USER, {
-            method: 'POST',
-            body: JSON.stringify({
-                user_token: token,
-                username: '',
-                games_played: 0,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
-            }
-        }).then(response => console.log(response));
-        router.navigate("./home");
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-const handleTokenInput = async (token: string) => {
-    try {
-        await AsyncStorage.setItem('user_token', token);
-        const filter = {'user_token': token};
-        await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': "application/json",
-                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
-            }
-        })
-            .then(response => response.json())
-            .then(async data => {
-                if(data.length === 0) {
-                    throw Alert.alert('Your token does not exist!', 'You\'ve inserted a token that does not belong to anyone yet.');
-                }
-                else {
-                    await AsyncStorage.setItem("user_token", data[0].user_token);
-                    await AsyncStorage.setItem('username', data[0].username);
-                    await AsyncStorage.setItem('games_played', data[0].games_played.toString());
-                }
-            });
-        router.navigate("./home");
-    } catch (error) {
-        console.log(error);
-    }
-};
 
 export default function LoginScreen() {
     const [input_token, setInputToken] = useState("");
+    const dispatch = useDispatch();
+
+    const handleGenerateToken = async () => {
+        try {
+            const token = Crypto.randomUUID();
+            dispatch(setUser({
+                username: '',
+                user_token: token,
+                games_played: 0,
+                profile_picture: '',
+            }));
+            await fetch(REST_DB_ENDPOINT_USER, {
+                method: 'POST',
+                body: JSON.stringify({
+                    user_token: token,
+                    username: '',
+                    games_played: 0,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                }
+            }).then(response => console.log(response));
+            router.navigate("./home");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleTokenInput = async (token: string) => {
+        try {
+            await AsyncStorage.setItem('user_token', token);
+            const filter = {'user_token': token};
+            await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': "application/json",
+                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                }
+            })
+                .then(response => response.json())
+                .then(async data => {
+                    if(data.length === 0) {
+                        throw Alert.alert('Your token does not exist!', 'You\'ve inserted a token that does not belong to anyone yet.');
+                    }
+                    else {
+                        dispatch(setUser({
+                            username: '',
+                            user_token: token,
+                            games_played: 0,
+                            profile_picture: '',
+                        }));
+                    }
+                });
+            router.navigate("./home");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.wrapper}>
