@@ -17,6 +17,7 @@ export default function LoginScreen() {
     const handleGenerateToken = async () => {
         try {
             const token = Crypto.randomUUID();
+            await AsyncStorage.setItem("user_token", token);
             dispatch(setUser({
                 username: '',
                 user_token: token,
@@ -29,6 +30,7 @@ export default function LoginScreen() {
                     user_token: token,
                     username: '',
                     games_played: 0,
+                    profile_picture: '',
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +45,6 @@ export default function LoginScreen() {
 
     const handleTokenInput = async (token: string) => {
         try {
-            await AsyncStorage.setItem('user_token', token);
             const filter = {'user_token': token};
             await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
                 method: "GET",
@@ -58,11 +59,12 @@ export default function LoginScreen() {
                         throw Alert.alert('Your token does not exist!', 'You\'ve inserted a token that does not belong to anyone yet.');
                     }
                     else {
+                        await AsyncStorage.setItem("user_token", token);
                         dispatch(setUser({
-                            username: '',
+                            username: data[0].username,
                             user_token: token,
-                            games_played: 0,
-                            profile_picture: '',
+                            games_played: data[0].games_played,
+                            profile_picture: data[0].profile_picture,
                         }));
                     }
                 });

@@ -1,35 +1,18 @@
 import {View, Image, StyleSheet, ImageURISource, Text} from "react-native";
 import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useState, useEffect} from "react";
-
-const setAsyncUsername = async (value: string) => {
-    await AsyncStorage.setItem('username', value);
-};
-const getAsyncUsername = async () => {
-    return await AsyncStorage.getItem('username');
-}
-
-
+import {useSelector} from 'react-redux';
+import {RootState} from '@/src/flux/store/store';
 
 const ProfileOverview = () => {
-    const [username, setUsername] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchUsername = async () => {
-            const stored_username = await getAsyncUsername();
-            setUsername(stored_username);
-        };
-        fetchUsername();
-    }, []);
+    const user = useSelector((state: RootState) => state.user);
 
     return (
         <View style={styles.container}>
             <ImagePicker width={80} height={80}/>
             <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Name: {username}</Text>
-                <Text style={styles.user_info_text}>Played Games: </Text>
+                <Text style={styles.user_info_text}>Name: {user.username}</Text>
+                <Text style={styles.user_info_text}>Played Games: {user.games_played}</Text>
             </View>
         </View>
     );

@@ -2,6 +2,9 @@ import * as ExpoImagePicker from "expo-image-picker";
 import {useState, useEffect} from "react";
 import {Alert, Image, StyleSheet, TouchableOpacity} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/src/flux/store/store";
+import {setUser} from "@/src/flux/store/userSlice";
 
 interface ImagePickerProps {
     width: number;
@@ -10,26 +13,28 @@ interface ImagePickerProps {
 
 const BASE64_PREFIX = 'data:image/jpeg;base64,';
 
-const setAsyncProfilePicture = async (value: string) => {
-    await AsyncStorage.setItem('profile_picture', value);
-};
-const getAsyncProfilePicture = async () => {
-    return await AsyncStorage.getItem('profile_picture');
-};
-
 export default function ImagePicker({width, height}: ImagePickerProps) {
     const [image, setImage] = useState<string | null>(null);
-    const [profile_picture, setProfilePicture] = useState<string | null>(null);
+    const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch();
+
+    const saveProfilePicture = async (value: string) => {
+        dispatch(setUser({
+            username: (user.username ? user.username : ''),
+            user_token: (user.user_token ? user.user_token : ''),
+            games_played: (user.games_played ? user.games_played : 0),
+            profile_picture: value
+        }));
+    };
 
     useEffect(() => {
         const loadProfilePicture = async () => {
-            const base64 = await getAsyncProfilePicture();
-            if (base64) {
-                setImage(BASE64_PREFIX + base64);
+            if (user.profile_picture) {
+                setImage(BASE64_PREFIX + user.profile_picture);
             }
         };
         loadProfilePicture();
-    }, []);
+    }, [user.profile_picture]);
 
     const pickImage = async () => {
         const permission_result = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
@@ -46,7 +51,7 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
         if (!result.canceled) {
             const base64 = result.assets[0].base64;
             if (base64) {
-                await setAsyncProfilePicture(base64);
+                await saveProfilePicture(base64);
                 setImage(BASE64_PREFIX + base64);
             } else {
                 Alert.alert("Error", "Could not retrieve Base64 data for the image.");

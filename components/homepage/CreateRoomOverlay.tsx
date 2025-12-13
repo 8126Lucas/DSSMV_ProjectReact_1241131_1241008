@@ -64,8 +64,8 @@ async function createRoom(room_token: string, number_of_players: string | null, 
 }
 
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
-    const player_options = Array.from({length: 7}, (_, i) => ({
-        label: `${i + 2}`, value: `${i + 2}`
+    const player_options = Array.from({length: 8}, (_, i) => ({
+        label: `${i + 1}`, value: `${i + 1}`
     }));
     const number_options = Array.from({length: 50}, (_, i) => ({
         label: `${i + 1}`, value: `${i + 1}`

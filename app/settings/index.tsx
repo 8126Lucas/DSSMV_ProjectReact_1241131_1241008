@@ -11,33 +11,33 @@ import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import exportUserData from "@/hooks/exportUserData";
-
-const setAsyncUsername = async (value: string) => {
-    try {
-        await AsyncStorage.setItem('username', value);
-        const token = await AsyncStorage.getItem('user_token');
-        if(token !== null) {
-            await updateUserRestDB(token, 'username', value);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
-const getAsyncUsername = async () => {
-    return await AsyncStorage.getItem('username');
-}
-
-const copyAsyncToken = async() => {
-    const token_to_copy = await AsyncStorage.getItem('user_token');
-    if (token_to_copy != null) {
-        await Clipboard.setStringAsync(token_to_copy);
-        Alert.alert('Copied!', 'Your Token ' + token_to_copy + ' has been copied to your clipboard.');
-    }
-};
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/src/flux/store/store";
+import {setUser} from "@/src/flux/store/userSlice";
 
 export default function SettingsScreen() {
-    const [username, setUsername] = useState<string | null>(null);
     const [dark_mode, setDarkMode] = useState(false);
+    const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch();
+
+    const saveUsername = async (value: string) => {
+        dispatch(setUser({
+            username: value,
+            user_token: (user.user_token ? user.user_token : ''),
+            games_played: (user.games_played ? user.games_played : 0),
+            profile_picture: (user.profile_picture ? user.profile_picture : ''),
+        }));
+        if(user.user_token) {
+            await updateUserRestDB(user.user_token, 'username', value);
+        }
+    };
+
+    const copyUserToken = async () => {
+        if (user.user_token) {
+            await Clipboard.setStringAsync(user.user_token);
+            Alert.alert('Copied!', 'Your Token ' + user.user_token + ' has been copied to your clipboard.');
+        }
+    };
 
     const toggleAppMode = () => {
         setDarkMode(previous_state => !previous_state);
@@ -52,14 +52,6 @@ export default function SettingsScreen() {
         }
     },[dark_mode]);
 
-    useEffect(() => {
-        const fetchUsername = async () => {
-            const stored_username = await getAsyncUsername();
-            setUsername(stored_username);
-        };
-        fetchUsername();
-    }, []);
-
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -67,24 +59,22 @@ export default function SettingsScreen() {
                 <View style={styles.user_token_container}>
                     <TextInput
                         style={styles.title}
-                        placeholder={username || 'Username'}
+                        placeholder={user.username || 'Username'}
                         underlineColorAndroid={Colors.light.text}
                         textContentType={'username'}
                         onSubmitEditing={async (event) => {
                             const typed_username = event.nativeEvent.text;
-                            await setAsyncUsername(typed_username);
-                            setUsername(typed_username);
+                            await saveUsername(typed_username);
                         }}
                     />
-                    <TouchableOpacity style={styles.clipboard_button} onPress={copyAsyncToken} >
+                    <TouchableOpacity style={styles.clipboard_button} onPress={copyUserToken} >
                         <FontAwesome6 name="clipboard" size={30} color={Colors.light.backgroundColor} />
                     </TouchableOpacity>
                 </View>
                 <AppButton title={'Theme'} color={Colors.light.backgroundColor} onPress={toggleAppMode}/>
                 <AppButton title={'Export Data'} color={Colors.light.backgroundColor} onPress={async () => {
-                    const user_token = await AsyncStorage.getItem('user_token');
-                    if (user_token != null) {
-                        await exportUserData(user_token)
+                    if (user.user_token) {
+                        await exportUserData(user.user_token);
                     }
                 }}/>
                 <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.navigate('./login')}/>

@@ -2,14 +2,42 @@ import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Redirect, router} from "expo-router";
 import {ActivityIndicator, View} from "react-native";
+import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
+import {useDispatch} from "react-redux";
+import {setUser} from "@/src/flux/store/userSlice";
 
 export default function App() {
     const [has_token, setHasToken] = useState<boolean | null>(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const loginStatus = async () => {
             const user_token = await AsyncStorage.getItem("user_token");
-            setHasToken(!!user_token);
+            if(user_token) {
+                const filter = {'user_token': user_token};
+                await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': "application/json",
+                        'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                    }
+                })
+                    .then(response => response.json())
+                    .then(async data => {
+                        dispatch(setUser({
+                            username: data[0].username,
+                            user_token: user_token,
+                            games_played: data[0].games_played,
+                            profile_picture: data[0].profile_picture,
+                        }));
+                        setHasToken(true);
+                    })
+                    .catch((error) => {
+                        console.log("Error getting user data from database:", error);
+                        setHasToken(false);
+                    });
+            }
+            else {setHasToken(false);}
         };
         loginStatus();
     }, []);
