@@ -37,7 +37,7 @@ export default function LoginScreen() {
                     'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
                 }
             }).then(response => console.log(response));
-            router.navigate("./home");
+            router.replace("/home");
         } catch (error) {
             console.log(error);
         }
@@ -68,7 +68,7 @@ export default function LoginScreen() {
                         }));
                     }
                 });
-            router.navigate("./home");
+            router.replace("/home");
         } catch (error) {
             console.log(error);
         }

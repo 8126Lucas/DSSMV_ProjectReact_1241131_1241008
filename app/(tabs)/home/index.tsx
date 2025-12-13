@@ -1,5 +1,4 @@
 import {Text, View, StyleSheet, TouchableOpacity, Alert} from "react-native";
-import Navbar from "@/components/Navbar";
 import AppButton from "@/components/homepage/AppButton";
 import {Colors} from "@/constants/theme";
 import ProfileOverview from "@/components/homepage/ProfileOverview";
@@ -28,7 +27,6 @@ export default function HomePageScreen() {
                 <AppButton title={"Join"} color={Colors.default.primaryAction1} onPress={() => setJRVisible(true)}/>
                 <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
-            <Navbar/>
         </View>
     );
 };

@@ -44,7 +44,7 @@ async function createRoom(room_token: string, number_of_players: string | null, 
         trivia.then(trivia_data => {
             if(trivia_data) {
                 router.navigate({
-                    pathname: './waiting_room',
+                    pathname: '/waiting_room',
                     params: {
                         room_token: room_token,
                         number_of_players: +number_of_players,

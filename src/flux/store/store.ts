@@ -1,9 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import userReducer from './userSlice';
+import leaderboardReducer from './leaderboardSlice';
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
+        leaderboard: leaderboardReducer,
     },
 });
 

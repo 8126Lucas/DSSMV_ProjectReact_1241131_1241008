@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "challengers",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
@@ -41,7 +41,13 @@
         }
       ],
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs to access your photos for your profile picture."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

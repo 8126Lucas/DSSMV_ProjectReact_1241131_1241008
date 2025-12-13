@@ -18,7 +18,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: initial_state,
     reducers: {
-        setUser: (state, action: PayloadAction<{username: string, user_token: string, games_played: number, profile_picture: string }>) => {
+        setUser: (state, action: PayloadAction<UserState>) => {
             state.username = action.payload.username;
             state.user_token = action.payload.user_token;
             state.games_played = action.payload.games_played;

@@ -220,7 +220,7 @@ export default function GameScreen() {
                     console.log(error);
                 } finally {
                     setLeaderboardOverlay(false);
-                    router.navigate('./home');
+                    router.replace('/home');
                 }
             }}
             duration={4000} />

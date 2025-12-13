@@ -41,8 +41,8 @@ export default function WaitingRoomScreen () {
                         });
                         timeout_id = setTimeout(() => {
                             Vibration.vibrate();
-                            router.navigate({
-                                pathname: './game',
+                            router.replace({
+                                pathname: '/game',
                                 params: {
                                     user_type: params.user_type,
                                     room_token: params.room_token,
@@ -72,8 +72,8 @@ export default function WaitingRoomScreen () {
                     const delay = payload.start_time - Date.now();
                     timeout_id = setTimeout(() => {
                         Vibration.vibrate();
-                        router.navigate({
-                            pathname: './game',
+                        router.replace({
+                            pathname: '/game',
                             params: {
                                 user_type: params.user_type,
                                 room_token: params.room_token,
@@ -112,7 +112,7 @@ export default function WaitingRoomScreen () {
                 {params.user_type === "host" && (
                     <Text style={styles.text}>{presence_count}/{params.number_of_players} Players</Text>
                 )}
-                <AppButton title={"Cancel"} color={Colors.default.primaryAction2} onPress={() => router.navigate("./home")}/>
+                <AppButton title={"Cancel"} color={Colors.default.primaryAction2} onPress={() => router.replace("./home")}/>
             </SafeAreaView>
         </View>
 

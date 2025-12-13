@@ -6,17 +6,17 @@ import {router} from "expo-router";
 const Navbar = () => {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./leaderboard")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/leaderboard")}>
                 <FontAwesome6 name="trophy" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Leaderboard</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./home")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/home")}>
                 <FontAwesome6 name="house-chimney" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Home</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
-            <TouchableOpacity style={styles.button} onPress={() => router.navigate("./settings")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.navigate("/settings")}>
                 <Ionicons name="settings-sharp" size={16} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Settings</Text>
             </TouchableOpacity>

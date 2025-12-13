@@ -2,10 +2,10 @@ import { View, Text, FlatList, StyleSheet, ListRenderItem } from 'react-native';
 import { Colors} from "@/constants/theme";
 
 export interface GameScore {
-    id: string;
+    _id: string;
     rank?: number;
+    game_date: string;
     score: number;
-    date: Date;
 }
 
 interface LeaderboardListProps {
@@ -15,28 +15,31 @@ interface LeaderboardListProps {
 
 const LeaderboardList = ({ data, limit }: LeaderboardListProps) => {
     
-    const sortedData = [...data].sort((a, b) => {
+    const sorted_data = [...data].sort((a, b) => {
         return b.score - a.score;
     });
+
+    const ranked_data = sorted_data.map((item, index) => {
+        return {
+            ...item,
+            rank: index + 1,
+        }
+    })
     
-    sortedData.forEach((item, index) => {
-        item.rank = index + 1;
-    });
-    
-    const limitedData = limit ? sortedData.slice(0, limit) : sortedData;
+    const limited_data = limit ? ranked_data.slice(0, limit) : ranked_data;
 
     const renderItem: ListRenderItem<GameScore> = ({ item }) => (
         <View style={styles.container}>
             <View style={styles.leftGroup}>
                 <Text style={styles.rankText}>#{item.rank}</Text>
-                <Text style={styles.dateText}>--/--/----</Text> 
+                <Text style={styles.dateText}>{item.game_date}</Text>
             </View>
             <Text style={styles.scoreText}>{item.score} pts</Text>
         </View>
     );
 
     return (
-        <FlatList data={limitedData} renderItem={renderItem} keyExtractor={(item) => item.id}/>
+        <FlatList data={limited_data} renderItem={renderItem} keyExtractor={(item) => item._id}/>
     );
 };
 

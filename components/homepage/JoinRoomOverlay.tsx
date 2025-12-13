@@ -23,7 +23,7 @@ interface JoinRoomOverlayProps {
 
 function joinRoom(typed_token: string): void {
     router.navigate({
-        pathname: './waiting_room',
+        pathname: '/waiting_room',
         params: {
             room_token: typed_token,
             user_type: 'guest',

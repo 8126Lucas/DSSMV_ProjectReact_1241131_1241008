@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {setUser} from "@/src/flux/store/userSlice";
+import updateUserRestDB from "@/hooks/updateUserRestDB";
 
 interface ImagePickerProps {
     width: number;
@@ -25,6 +26,9 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
             games_played: (user.games_played ? user.games_played : 0),
             profile_picture: value
         }));
+        if(user.user_token) {
+            await updateUserRestDB(user.user_token, 'profile_picture', value);
+        }
     };
 
     useEffect(() => {
@@ -43,9 +47,9 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
             return;
         }
         let result = await ExpoImagePicker.launchImageLibraryAsync({
-            mediaTypes: "images",
+            mediaTypes: 'images',
             allowsEditing: true,
-            quality: 0.7,
+            quality: 0.3,
             base64: true,
         });
         if (!result.canceled) {

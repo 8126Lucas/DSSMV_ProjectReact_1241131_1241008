@@ -1,5 +1,4 @@
 import {Alert, Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import Navbar from "@/components/Navbar";
 import {Colors} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -14,6 +13,7 @@ import exportUserData from "@/hooks/exportUserData";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {setUser} from "@/src/flux/store/userSlice";
+import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 
 export default function SettingsScreen() {
     const [dark_mode, setDarkMode] = useState(false);
@@ -77,9 +77,8 @@ export default function SettingsScreen() {
                         await exportUserData(user.user_token);
                     }
                 }}/>
-                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.navigate('./login')}/>
+                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.replace('/login')}/>
             </SafeAreaView>
-            <Navbar/>
         </View>
     );
 }
