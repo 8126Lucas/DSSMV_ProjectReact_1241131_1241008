@@ -12,7 +12,7 @@ import updateUserRestDB from "@/hooks/updateUserRestDB";
 import exportUserData from "@/hooks/exportUserData";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
-import {setUser} from "@/src/flux/store/userSlice";
+import {setUser, logout} from "@/src/flux/store/userSlice";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 
 export default function SettingsScreen() {
@@ -42,6 +42,11 @@ export default function SettingsScreen() {
     const toggleAppMode = () => {
         setDarkMode(previous_state => !previous_state);
     };
+
+    const logoutApp = () => {
+        dispatch(logout());
+        router.replace('/login');
+    }
 
     useEffect(()=>{
         if (dark_mode) {
@@ -77,7 +82,7 @@ export default function SettingsScreen() {
                         await exportUserData(user.user_token);
                     }
                 }}/>
-                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={() => router.replace('/login')}/>
+                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={logoutApp}/>
             </SafeAreaView>
         </View>
     );

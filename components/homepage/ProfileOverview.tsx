@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.medium,
         margin: 6,
         fontWeight: "bold",
-        fontFamily: FontFamily.bodyBold,
     }
 });
 

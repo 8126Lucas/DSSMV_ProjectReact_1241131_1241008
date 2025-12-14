@@ -2,10 +2,13 @@ import {Dimensions, StyleSheet, View, Text, TouchableOpacity} from "react-native
 import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import {router} from "expo-router";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Navbar = () => {
+    const insets = useSafeAreaInsets();
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingBottom: insets.bottom }]}>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/leaderboard")}>
                 <FontAwesome6 name="trophy" size={14} color={Colors.light.backgroundColor} />
                 <Text style={styles.button_text}>Leaderboard</Text>
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 80,
+        height: 'auto',
         backgroundColor: Colors.dark.backgroundColor,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -42,15 +45,13 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        height: 70,
-        verticalAlign: "middle",
+        height: 'auto',
         gap: 5,
     },
     button_text: {
         textTransform: 'uppercase',
         color: Colors.light.backgroundColor,
         textAlign: "center",
-        fontFamily: FontFamily.body,
         fontSize: FontSize.small,
     },
     vertical_line: {
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: Colors.light.backgroundColor,
         margin: 5,
+        alignSelf: "center",
     },
 });
 
