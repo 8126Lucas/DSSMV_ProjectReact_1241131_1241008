@@ -8,6 +8,7 @@ export const Colors = {
         incorrect2: "#b91c1c",
         gold: '#FFD700',
         gold2: "#eab308",
+
         primaryAction1: "#8C69FA",
         primaryAction2: "#EB69FA",
         primaryAction3: "#FA69BF",
@@ -20,18 +21,24 @@ export const Colors = {
         player2Color: "#FF9900",
     },
     light: {
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#F9EDEA",
         surface: '#EEEEEE',
         text: '#000000',
         secondaryText: '#333333',
         border: '#666666',
+        primaryAction1: "#DA6827",
+        primaryAction2: "#D16718",
+        primaryAction3: "#EDA04E80",
     },
     dark: {
-        backgroundColor: "#1E1A1B",
+        backgroundColor: "#413B47",
         surface: '#1A1A1A',
         text: "#FFFFFF",
         secondaryText: '#BBBBBB',
         border: '#333333',
+        primaryAction1: "#7926A3",
+        primaryAction2: "#9E7BDC",
+        primaryAction3: "#CA7CDB",
     },
 };
 

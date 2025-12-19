@@ -5,7 +5,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
 import AppButton from "@/components/homepage/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
@@ -14,11 +14,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {setUser, logout} from "@/src/flux/store/userSlice";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
+import {setTheme} from "@/src/flux/store/themeSlice";
+import {useTheme} from "@/hooks/useTheme";
 
 export default function SettingsScreen() {
-    const [dark_mode, setDarkMode] = useState(false);
     const user = useSelector((state: RootState) => state.user);
+    const theme = useSelector((state: RootState) => state.theme);
     const dispatch = useDispatch();
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
 
     const saveUsername = async (value: string) => {
         dispatch(setUser({
@@ -39,8 +43,16 @@ export default function SettingsScreen() {
         }
     };
 
-    const toggleAppMode = () => {
-        setDarkMode(previous_state => !previous_state);
+     const toggleAppMode = async (current_theme: 'light' | 'dark') => {
+        const new_theme = (current_theme === 'light' ? 'dark' : 'light')
+        dispatch(setTheme({
+            theme: new_theme,
+        }));
+        try {
+            await AsyncStorage.setItem('app_theme', new_theme);
+        } catch (error) {
+            console.log('Failed to save app theme:', error);
+        }
     };
 
     const logoutApp = () => {
@@ -48,14 +60,14 @@ export default function SettingsScreen() {
         router.replace('/login');
     }
 
-    useEffect(()=>{
-        if (dark_mode) {
-            Appearance.setColorScheme("dark");
-        }
-        else {
-            Appearance.setColorScheme("light");
-        }
-    },[dark_mode]);
+    //useEffect(()=>{
+    //    if (dark_mode) {
+    //        Appearance.setColorScheme("dark");
+    //    }
+    //    else {
+    //        Appearance.setColorScheme("light");
+    //    }
+    //},[dark_mode]);
 
     return (
         <View style={styles.wrapper}>
@@ -73,25 +85,25 @@ export default function SettingsScreen() {
                         }}
                     />
                     <TouchableOpacity style={styles.clipboard_button} onPress={copyUserToken} >
-                        <FontAwesome6 name="clipboard" size={30} color={Colors.light.backgroundColor} />
+                        <FontAwesome6 name="clipboard" size={30} color={colors.backgroundColor} />
                     </TouchableOpacity>
                 </View>
-                <AppButton title={'Theme'} color={Colors.light.backgroundColor} onPress={toggleAppMode}/>
-                <AppButton title={'Export Data'} color={Colors.light.backgroundColor} onPress={async () => {
+                <AppButton title={'Theme'} color={colors.backgroundColor} onPress={async () => await toggleAppMode(theme.theme)}/>
+                <AppButton title={'Export Data'} color={colors.backgroundColor} onPress={async () => {
                     if (user.user_token) {
                         await exportUserData(user.user_token);
                     }
                 }}/>
-                <AppButton title={'Logout'} color={Colors.default.primaryAction2} onPress={logoutApp}/>
+                <AppButton title={'Logout'} color={Colors.default.incorrect2} onPress={logoutApp}/>
             </SafeAreaView>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,
@@ -106,7 +118,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginEnd: 5,
-        color: Colors.light.text
+        color: colors.text
     },
     user_token_container: {
         alignItems: 'center',
@@ -115,7 +127,7 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     clipboard_button: {
-        backgroundColor: Colors.light.text,
+        backgroundColor: colors.text,
         padding: 4,
         borderRadius: 100,
         aspectRatio: 1,

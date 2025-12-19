@@ -3,7 +3,6 @@ import {SafeAreaProvider} from "react-native-safe-area-context";
 import {Provider} from "react-redux";
 import {store} from "@/src/flux/store/store";
 
-
 export default function RootLayout() {
     return (
         <SafeAreaProvider>

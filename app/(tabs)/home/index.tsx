@@ -24,8 +24,8 @@ export default function HomePageScreen() {
                 <View style={styles.sneaklbContainer}>
                     <Text style={styles.sneaklbText}>Leaderboard Status</Text>
                 </View>
-                <AppButton title={"Join"} color={Colors.default.primaryAction1} onPress={() => setJRVisible(true)}/>
-                <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => setCRVisible(true)}/>
+                <AppButton title={"Join"} color={Colors.light.primaryAction3} onPress={() => setJRVisible(true)}/>
+                <AppButton title={"Create"} color={Colors.light.primaryAction1} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
         </View>
     );

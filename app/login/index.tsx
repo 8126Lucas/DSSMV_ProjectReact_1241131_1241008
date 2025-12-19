@@ -8,6 +8,7 @@ import {router} from "expo-router";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {useDispatch} from "react-redux";
 import {setUser} from "@/src/flux/store/userSlice";
+import {setTheme} from "@/src/flux/store/themeSlice";
 
 
 export default function LoginScreen() {
@@ -24,6 +25,10 @@ export default function LoginScreen() {
                 games_played: 0,
                 profile_picture: '',
             }));
+            dispatch(setTheme({
+                theme: 'light',
+            }));
+            await AsyncStorage.setItem("app_theme", 'light');
             await fetch(REST_DB_ENDPOINT_USER, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -53,7 +58,14 @@ export default function LoginScreen() {
                     'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
                 }
             })
-                .then(response => response.json())
+                .then(response => {
+                    if(!response.ok) {
+                        throw Alert.alert('There was an error whilst talking to the database.');
+                    }
+                    else {
+                        return response.json();
+                    }
+                })
                 .then(async data => {
                     if(data.length === 0) {
                         throw Alert.alert('Your token does not exist!', 'You\'ve inserted a token that does not belong to anyone yet.');
@@ -66,6 +78,10 @@ export default function LoginScreen() {
                             games_played: data[0].games_played,
                             profile_picture: data[0].profile_picture,
                         }));
+                        dispatch(setTheme({
+                            theme: 'light',
+                        }));
+                        await AsyncStorage.setItem('app_theme', 'light');
                     }
                 });
             router.replace("/home");
@@ -205,7 +221,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderWidth: 2,
         borderColor: Colors.dark.backgroundColor,
-        backgroundColor: Colors.default.primaryAction1,
+        backgroundColor: Colors.light.primaryAction1,
         padding: 15,
     },
     text: {

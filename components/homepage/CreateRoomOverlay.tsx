@@ -132,7 +132,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={'Select Category:'} options={category_options} updateValue={(value: string | null) => setQuestionCategory(value)}/>
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options} updateValue={(value: string | null) => setQuestionDifficulty(value)}/>
                     <InlineDropdown title={'Select Type:'} options={type_options} updateValue={(value: string | null) => setQuestionType(value)}/>
-                    <AppButton title={"Create"} color={Colors.default.primaryAction4} onPress={() => {
+                    <AppButton title={"Create"} color={Colors.light.primaryAction1} onPress={() => {
                         setCRVisible(false);
                         let trivia_url: string | null = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
                         if(trivia_url !== (TRIVIA_API_URL && null)) {

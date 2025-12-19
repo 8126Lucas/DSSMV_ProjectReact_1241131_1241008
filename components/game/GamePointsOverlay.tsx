@@ -12,7 +12,7 @@ interface GamePointsPerPlayerProps {
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{props.index}#</Text>
+            <Text style={styles.text}>#{props.index}</Text>
             <Text style={styles.text}>{props.name}</Text>
             <Text style={styles.text}>{props.points}</Text>
         </View>

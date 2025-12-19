@@ -112,7 +112,7 @@ export default function WaitingRoomScreen () {
                 {params.user_type === "host" && (
                     <Text style={styles.text}>{presence_count}/{params.number_of_players} Players</Text>
                 )}
-                <AppButton title={"Cancel"} color={Colors.default.primaryAction2} onPress={() => router.replace("./home")}/>
+                <AppButton title={"Cancel"} color={Colors.light.primaryAction1} onPress={() => router.replace("./home")}/>
             </SafeAreaView>
         </View>
 
@@ -144,6 +144,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.default.player1Color,
+        color: Colors.light.primaryAction3,
     }
 });

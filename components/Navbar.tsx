@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 'auto',
-        backgroundColor: Colors.dark.backgroundColor,
+        backgroundColor: Colors.light.primaryAction2,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },

@@ -13,6 +13,8 @@ import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
 import GamePointsOverlay from "@/components/game/GamePointsOverlay";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import uploadGameScore from "@/hooks/uploadGameScore";
+import {useSelector} from "react-redux";
+import {RootState} from "@/src/flux/store/store";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -72,6 +74,7 @@ function shuffle(data: string[]): string[] {
 }
 
 export default function GameScreen() {
+    const user = useSelector((state: RootState) => state.user);
     const params = useLocalSearchParams();
     const [trivia, setTrivia] = useState<TriviaResponse | null>(null);
     const [score, setScore] = useState(0);
@@ -101,10 +104,8 @@ export default function GameScreen() {
             console.log(`${score} + ${points}`);
         }
         try {
-            const player_uuid = await AsyncStorage.getItem('user_token');
-            const player_username = await AsyncStorage.getItem('username');
-            if (player_uuid) {
-                await uploadAnswer(params.room_token.toString(), current_question, player_uuid, (player_username ? player_username : "Unknown Player"), new_score);
+            if (user.user_token) {
+                await uploadAnswer(params.room_token.toString(), current_question, user.user_token, (user.username ? user.username : "Unknown Player"), new_score);
             } else {
                 console.error('No user token found!');
             }
