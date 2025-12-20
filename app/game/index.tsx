@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
@@ -13,8 +13,10 @@ import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
 import GamePointsOverlay from "@/components/game/GamePointsOverlay";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import uploadGameScore from "@/hooks/uploadGameScore";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
+import {useTheme} from "@/hooks/useTheme";
+import {setUser} from "@/src/flux/store/userSlice";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -75,7 +77,9 @@ function shuffle(data: string[]): string[] {
 
 export default function GameScreen() {
     const user = useSelector((state: RootState) => state.user);
+    const {colors} = useTheme();
     const params = useLocalSearchParams();
+    const dispatch = useDispatch();
     const [trivia, setTrivia] = useState<TriviaResponse | null>(null);
     const [score, setScore] = useState(0);
     const [question_points, setQuestionPoints] = useState(0);
@@ -201,10 +205,10 @@ export default function GameScreen() {
     }, [current_question, trivia]);
 
     if(!trivia || !trivia.data || !Array.isArray(trivia.data)) {
-        return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
+        return <ActivityIndicator size={"large"} color={colors.text} style={{flex: 1}} />
     }
     if(current_question >= trivia.data.length && leaderboard_data.length === 0) {
-        return <ActivityIndicator size={"large"} color={'black'} style={{flex: 1}} />
+        return <ActivityIndicator size={"large"} color={colors.text} style={{flex: 1}} />
     }
     else if (current_question >= trivia.data.length) {
         return <GamePointsOverlay
@@ -214,6 +218,12 @@ export default function GameScreen() {
                 try {
                     const token = await AsyncStorage.getItem('user_token');
                     if (token) {
+                        dispatch(setUser({
+                            username: user.username,
+                            user_token: user.user_token,
+                            games_played: user.games_played! + 1,
+                            profile_picture: user.profile_picture,
+                        }));
                         await updateUserRestDB(token, "games_played", { "$inc": 1 });
                         await uploadGameScore(token, score);
                     }

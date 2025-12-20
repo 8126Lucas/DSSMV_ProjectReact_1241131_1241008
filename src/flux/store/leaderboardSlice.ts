@@ -1,5 +1,5 @@
-import {GameScore} from "@/components/leaderboard/LeaderboardFlatList";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {GameScore} from "@/src/types/GameScore";
 
 interface LeaderboardState {
     leaderboard_data: GameScore[] | null;

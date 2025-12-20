@@ -1,17 +1,21 @@
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {View, Text, StyleSheet, ActivityIndicator} from "react-native";
-import LeaderboardList, {GameScore} from "@/components/leaderboard/LeaderboardFlatList";
+import LeaderboardList from "@/components/leaderboard/LeaderboardFlatList";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {REST_DB_ENDPOINT_LEADERBOARD} from "@/constants/RestDBEndpoints";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {setLeaderboardData} from "@/src/flux/store/leaderboardSlice";
+import {GameScore} from "@/src/types/GameScore";
+import {useTheme} from "@/hooks/useTheme";
 
 
 export default function LeaderboardScreen() {
     const user = useSelector((state: RootState) => state.user);
     const leaderboard = useSelector((state: RootState) => state.leaderboard);
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -45,8 +49,12 @@ export default function LeaderboardScreen() {
         getGameScores();
     }, []);
 
-    if(leaderboard.leaderboard_data === null || leaderboard.leaderboard_data.length === 0) {
-        return <ActivityIndicator size="large" color='black' style={{flex: 1}}/>
+    if(leaderboard.leaderboard_data === null) {
+        return (
+            <View style={styles.wrapper}>
+                <ActivityIndicator size="large" color={colors.text} style={{flex: 1}}/>
+            </View>
+        )
     }
 
     return (
@@ -62,9 +70,10 @@ export default function LeaderboardScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,
@@ -81,6 +90,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
 });

@@ -3,9 +3,13 @@ import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {useSelector} from 'react-redux';
 import {RootState} from '@/src/flux/store/store';
+import {useTheme} from "@/hooks/useTheme";
+import {useMemo} from "react";
 
 const ProfileOverview = () => {
     const user = useSelector((state: RootState) => state.user);
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
 
     return (
         <View style={styles.container}>
@@ -18,7 +22,7 @@ const ProfileOverview = () => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         width: '100%',
@@ -29,7 +33,7 @@ const styles = StyleSheet.create({
         flex: 1,
         maxWidth: 80,
         maxHeight: 80,
-        borderColor: Colors.light.border,
+        borderColor: colors.border,
         borderRadius: 80,
         borderWidth: 2,
         justifyContent: "center",
@@ -48,6 +52,7 @@ const styles = StyleSheet.create({
         fontSize: FontSize.medium,
         margin: 6,
         fontWeight: "bold",
+        color: colors.text,
     }
 });
 

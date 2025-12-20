@@ -1,19 +1,16 @@
 import {View, StyleSheet, Modal, Text, Dimensions, Pressable, Alert} from "react-native";
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import {Colors} from "@/constants/theme";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import {Item} from "react-native-picker-select";
-import AppButton from "@/components/homepage/AppButton";
+import AppButton from "@/components/AppButton";
 import {router} from "expo-router";
 import {createClient} from "@supabase/supabase-js";
 import {requestTrivia, TriviaResponse} from "@/hooks/requestTrivia";
+import {CreateRoomOverlayProps} from "@/src/types/CreateRoomOverlayProps";
+import {useTheme} from "@/hooks/useTheme";
 
 const TRIVIA_API_URL = 'https://opentdb.com/api.php?';
-
-interface CreateRoomOverlayProps {
-    cr_visible: boolean;
-    setCRVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 function generateRoomToken(): string {
     return Math.floor(Math.random() * (999999 - 1 + 1) + 1).toString().padStart(6, '0');
@@ -64,6 +61,9 @@ async function createRoom(room_token: string, number_of_players: string | null, 
 }
 
 const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+
     const player_options = Array.from({length: 8}, (_, i) => ({
         label: `${i + 1}`, value: `${i + 1}`
     }));
@@ -132,7 +132,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={'Select Category:'} options={category_options} updateValue={(value: string | null) => setQuestionCategory(value)}/>
                     <InlineDropdown title={'Select Difficulty:'} options={difficulty_options} updateValue={(value: string | null) => setQuestionDifficulty(value)}/>
                     <InlineDropdown title={'Select Type:'} options={type_options} updateValue={(value: string | null) => setQuestionType(value)}/>
-                    <AppButton title={"Create"} color={Colors.light.primaryAction1} onPress={() => {
+                    <AppButton title={"Create"} color={colors.primaryAction1} onPress={() => {
                         setCRVisible(false);
                         let trivia_url: string | null = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
                         if(trivia_url !== (TRIVIA_API_URL && null)) {
@@ -146,18 +146,18 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     root: {
         width: '100%',
         height: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000050',
+        backgroundColor: colors.semi_transparent,
     },
     container: {
         width: Dimensions.get("window").width * 0.8,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         borderRadius: 20,
         padding: 30,
         justifyContent: 'flex-start',
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 30,
+        color: colors.text,
     },
 });
 

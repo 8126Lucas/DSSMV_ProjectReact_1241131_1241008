@@ -3,7 +3,7 @@ import {Colors} from "@/constants/theme";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
-import AppButton from "@/components/homepage/AppButton";
+import AppButton from "@/components/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useEffect, useMemo} from "react";
 import * as Clipboard from "expo-clipboard";
@@ -20,9 +20,9 @@ import {useTheme} from "@/hooks/useTheme";
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
     const theme = useSelector((state: RootState) => state.theme);
-    const dispatch = useDispatch();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const dispatch = useDispatch();
 
     const saveUsername = async (value: string) => {
         dispatch(setUser({
@@ -50,6 +50,7 @@ export default function SettingsScreen() {
         }));
         try {
             await AsyncStorage.setItem('app_theme', new_theme);
+            console.log(`Theme saved: ${new_theme}`);
         } catch (error) {
             console.log('Failed to save app theme:', error);
         }
@@ -60,15 +61,6 @@ export default function SettingsScreen() {
         router.replace('/login');
     }
 
-    //useEffect(()=>{
-    //    if (dark_mode) {
-    //        Appearance.setColorScheme("dark");
-    //    }
-    //    else {
-    //        Appearance.setColorScheme("light");
-    //    }
-    //},[dark_mode]);
-
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -77,7 +69,8 @@ export default function SettingsScreen() {
                     <TextInput
                         style={styles.title}
                         placeholder={user.username || 'Username'}
-                        underlineColorAndroid={Colors.light.text}
+                        placeholderTextColor={colors.text}
+                        underlineColorAndroid={colors.text}
                         textContentType={'username'}
                         onSubmitEditing={async (event) => {
                             const typed_username = event.nativeEvent.text;
@@ -94,7 +87,7 @@ export default function SettingsScreen() {
                         await exportUserData(user.user_token);
                     }
                 }}/>
-                <AppButton title={'Logout'} color={Colors.default.incorrect2} onPress={logoutApp}/>
+                <AppButton title={'Logout'} color={colors.incorrect} onPress={logoutApp}/>
             </SafeAreaView>
         </View>
     );

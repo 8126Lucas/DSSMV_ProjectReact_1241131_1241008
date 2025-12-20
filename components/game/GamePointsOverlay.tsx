@@ -1,15 +1,13 @@
 import {Dimensions, Modal, StyleSheet, Text, View} from "react-native";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import {Colors} from "@/constants/theme";
-import {PointsOverlayProps} from "@/constants/PointsOverlayProps";
-
-interface GamePointsPerPlayerProps {
-    index: number;
-    points: number;
-    name: string;
-}
+import {GamePointsPerPlayerProps} from "@/src/types/GamePointsPerPlayerProps";
+import {GamePointsOverlayProps} from "@/src/types/GamePointsOverlayProps";
+import {useTheme} from "@/hooks/useTheme";
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     return (
         <View style={styles.container}>
             <Text style={styles.text}>#{props.index}</Text>
@@ -21,11 +19,9 @@ const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
 
 // ------------------------------------------------------------------
 
-interface GamePointsOverlayProps extends PointsOverlayProps {
-    player_scores: {name: string, points: number}[];
-}
-
 const GamePointsOverlay = (props: GamePointsOverlayProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const player_scores = [...props.player_scores];
     const sorted_scores = player_scores.sort((a, b) => b.points - a.points);
 
@@ -63,14 +59,14 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     root: {
         width: '100%',
         height: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000050',
+        backgroundColor: colors.semi_transparent,
     },
     container: {
         minWidth: Dimensions.get('screen').width * 0.75,
@@ -83,7 +79,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 26,
         fontWeight: 'bold',
-        color: Colors.light.text,
+        color: colors.text,
         textAlign: 'left',
     },
 });

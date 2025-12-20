@@ -1,11 +1,12 @@
 import {Text, View, StyleSheet, ActivityIndicator, Share, Alert, Vibration} from "react-native";
 import {Colors} from "@/constants/theme";
 import {router, useLocalSearchParams, useRouter} from "expo-router";
-import AppButton from "@/components/homepage/AppButton";
+import AppButton from "@/components/AppButton";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {createClient, REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} from "@supabase/supabase-js";
 import {supabase_client} from "@/constants/supabaseClient";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import {useTheme} from "@/hooks/useTheme";
 
 const shareRoom = async (room_token: any) => {
     try {
@@ -18,6 +19,8 @@ const shareRoom = async (room_token: any) => {
 }
 
 export default function WaitingRoomScreen () {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const params = useLocalSearchParams();
     const [presence_count, setPresenceCount] = useState(1);
 
@@ -107,22 +110,22 @@ export default function WaitingRoomScreen () {
                 <Text style={styles.text}>Waiting Other{"\n"}Player to Join</Text>
                 <Text onPress={() => shareRoom(params.room_token)} style={styles.room_token_text}>Room Code: #{params.room_token}</Text>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color={Colors.dark.backgroundColor} style={{transform: [{scale: 3}]}}/>
+                    <ActivityIndicator size="large" color={colors.text} style={{transform: [{scale: 3}]}}/>
                 </View>
                 {params.user_type === "host" && (
                     <Text style={styles.text}>{presence_count}/{params.number_of_players} Players</Text>
                 )}
-                <AppButton title={"Cancel"} color={Colors.light.primaryAction1} onPress={() => router.replace("./home")}/>
+                <AppButton title={"Cancel"} color={colors.primaryAction1} onPress={() => router.replace("./home")}/>
             </SafeAreaView>
         </View>
 
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     room_token_text: {
         fontSize: 24,
@@ -144,6 +147,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.light.primaryAction3,
+        color: colors.primaryAction3,
     }
 });

@@ -1,15 +1,15 @@
 import {Dimensions, StyleSheet, Text, View} from 'react-native'
-import React from "react";
+import React, {useMemo} from "react";
 import RNPickerSelect, {Item} from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
-
-interface InlineDropdownProps {
-    title: string;
-    options: Item[];
-    updateValue: (value: string | null) => void;
-}
+import {InlineDropdownProps} from "@/src/types/InlineDropdownProps";
+import {useTheme} from "@/hooks/useTheme";
 
 const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+    const pickerSelectStyles = useMemo(() => getPickerSelectStyles(colors), [colors]);
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{title}</Text>
@@ -18,18 +18,18 @@ const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
-                Icon={() => {return <Ionicons name="chevron-down" size={24} color="gray" />;}}/>
+                Icon={() => {return <Ionicons name="chevron-down" size={24} color={colors.secondaryText} />;}}/>
         </View>
     );
 }
 
-const pickerSelectStyles = StyleSheet.create({
+const getPickerSelectStyles = (colors: any) => StyleSheet.create({
     inputIOS: {
         fontSize: 16,
-        color: 'black',
+        color: colors.text,
         backgroundColor: '#00000000',
         borderWidth: 1,
-        borderColor: '#000000',
+        borderColor: colors.text,
         borderRadius: 8,
         marginTop: 5,
         paddingVertical: 12,
@@ -38,10 +38,10 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        color: 'black',
+        color: colors.text,
         backgroundColor: '#00000000',
         borderWidth: 1,
-        borderColor: '#000000',
+        borderColor: colors.text,
         borderRadius: 8,
         marginTop: 5,
         paddingVertical: 12,
@@ -54,7 +54,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
 });
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     container: {
         position: 'relative',
         width: Dimensions.get("screen").width * 0.7,
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         textAlign: 'left',
+        color: colors.text,
     },
 });
 

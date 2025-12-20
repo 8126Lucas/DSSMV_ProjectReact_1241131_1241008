@@ -3,31 +3,35 @@ import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import {router} from "expo-router";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useTheme} from "@/hooks/useTheme";
+import {useMemo} from "react";
 
 const Navbar = () => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const insets = useSafeAreaInsets();
 
     return (
         <View style={[styles.container, { paddingBottom: insets.bottom }]}>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/leaderboard")}>
-                <FontAwesome6 name="trophy" size={14} color={Colors.light.backgroundColor} />
+                <FontAwesome6 name="trophy" size={14} color={colors.backgroundColor} />
                 <Text style={styles.button_text}>Leaderboard</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/home")}>
-                <FontAwesome6 name="house-chimney" size={14} color={Colors.light.backgroundColor} />
+                <FontAwesome6 name="house-chimney" size={14} color={colors.backgroundColor} />
                 <Text style={styles.button_text}>Home</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/settings")}>
-                <Ionicons name="settings-sharp" size={16} color={Colors.light.backgroundColor} />
+                <Ionicons name="settings-sharp" size={16} color={colors.backgroundColor} />
                 <Text style={styles.button_text}>Settings</Text>
             </TouchableOpacity>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 'auto',
-        backgroundColor: Colors.light.primaryAction2,
+        backgroundColor: colors.primaryAction2,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
@@ -50,7 +54,7 @@ const styles = StyleSheet.create({
     },
     button_text: {
         textTransform: 'uppercase',
-        color: Colors.light.backgroundColor,
+        color: colors.backgroundColor,
         textAlign: "center",
         fontSize: FontSize.small,
     },
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: 50,
         width: 1,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         margin: 5,
         alignSelf: "center",
     },

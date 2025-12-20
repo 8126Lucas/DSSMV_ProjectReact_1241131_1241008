@@ -1,19 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import {CountdownClockProps} from "@/src/types/CountdownClockProps";
+import {useTheme} from "@/hooks/useTheme";
 
-interface CountdownClockProps {
-    seconds: number;
-    onTimeChange: (time: number) => void;
-}
+
 
 function decreaseValue(value: number) {
     return --value;
 }
 
 const CountdownClock = (props: CountdownClockProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const [countdown, setCountdown] = useState(props.seconds);
-    const [text_color, setTextColor] = useState('black');
+    const [text_color, setTextColor] = useState(colors.text);
     const scale = useSharedValue(1);
 
     const animated_final_countdown = useAnimatedStyle(() => {
@@ -40,7 +41,7 @@ const CountdownClock = (props: CountdownClockProps) => {
         props.onTimeChange(countdown);
 
         if (countdown <= 10) {
-            setTextColor('red');
+            setTextColor(colors.incorrect);
             scale.value = withSpring(1.2, {
                 damping: 2,
                 stiffness: 170,
@@ -54,12 +55,12 @@ const CountdownClock = (props: CountdownClockProps) => {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     clock_container: {
         width: 50,
         height: 50,
         borderRadius: 50/2,
-        borderColor: 'black',
+        borderColor: colors.text,
         borderWidth: 2,
         position: 'relative',
         alignItems: 'center',

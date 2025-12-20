@@ -1,30 +1,22 @@
-import React, {Component, useCallback, useEffect, useState} from 'react';
+import React, {Component, useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
 
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/game/CountdownClock";
 import {decode} from "html-entities";
-
-interface ChoiceQuestionProps {
-    difficulty: string;
-    category: string;
-    question: string;
-    correct_answer: string;
-    incorrect_answers: string[];
-    answers: string[];
-    question_i: number;
-    size: number;
-    onPress: (answer: string, time_left: number) => void;
-}
+import {ChoiceQuestionProps} from "@/src/types/ChoiceQuestionProps";
+import {useTheme} from "@/hooks/useTheme";
 
 export default function ChoiceQuestion(props: ChoiceQuestionProps) {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const [answered, setAnswered] = useState(false);
     const [time_left, setTimeLeft] = useState(30);
-    const [color1, setColor1] = useState(Colors.light.backgroundColor);
-    const [color2, setColor2] = useState(Colors.light.backgroundColor);
-    const [color3, setColor3] = useState(Colors.light.backgroundColor);
-    const [color4, setColor4] = useState(Colors.light.backgroundColor);
+    const [color1, setColor1] = useState(colors.backgroundColor);
+    const [color2, setColor2] = useState(colors.backgroundColor);
+    const [color3, setColor3] = useState(colors.backgroundColor);
+    const [color4, setColor4] = useState(colors.backgroundColor);
 
     const handleAnswer = (answer: string, question_i: number, time_left: number) => {
         setAnswered(true);
@@ -32,30 +24,30 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
         switch (question_i) {
             case 0:
                 if(answer === props.correct_answer) {
-                    setColor1(Colors.default.correct2);
+                    setColor1(colors.correct);
                 } else {
-                    setColor1(Colors.default.incorrect2);
+                    setColor1(colors.incorrect);
                 }
                 break;
             case 1:
                 if(answer === props.correct_answer) {
-                    setColor2(Colors.default.correct2);
+                    setColor2(colors.correct);
                 } else {
-                    setColor2(Colors.default.incorrect2);
+                    setColor2(colors.incorrect);
                 }
                 break;
             case 2:
                 if(answer === props.correct_answer) {
-                    setColor3(Colors.default.correct2);
+                    setColor3(colors.correct);
                 } else {
-                    setColor3(Colors.default.incorrect2);
+                    setColor3(colors.incorrect);
                 }
                 break;
             case 3:
                 if(answer === props.correct_answer) {
-                    setColor4(Colors.default.correct2);
+                    setColor4(colors.correct);
                 } else {
-                    setColor4(Colors.default.incorrect2);
+                    setColor4(colors.incorrect);
                 }
                 break;
             default: break;
@@ -68,10 +60,10 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
 
     useEffect(() => {
         setAnswered(false);
-        setColor1(Colors.light.backgroundColor);
-        setColor2(Colors.light.backgroundColor);
-        setColor3(Colors.light.backgroundColor);
-        setColor4(Colors.light.backgroundColor);
+        setColor1(colors.backgroundColor);
+        setColor2(colors.backgroundColor);
+        setColor3(colors.backgroundColor);
+        setColor4(colors.backgroundColor);
         setTimeLeft(30);
     }, [props.question_i]);
 
@@ -116,10 +108,10 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,
@@ -129,8 +121,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height * 0.1,
         borderWidth: 2,
-        backgroundColor: Colors.light.surface,
-        borderColor: Colors.dark.backgroundColor,
+        backgroundColor: colors.surface,
+        borderColor: colors.text,
         padding: 15,
         justifyContent: 'space-between',
     },
@@ -140,7 +132,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'center',
-        color: Colors.light.text,
+        color: colors.text,
     },
     bottom_row: {
         flexDirection: 'row',
@@ -153,7 +145,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'left',
-        color: Colors.light.text,
+        color: colors.text,
     },
     countdown_container: {
         marginTop: -14,
@@ -164,9 +156,9 @@ const styles = StyleSheet.create({
         width: 'auto',
         margin: 20,
         borderRadius: 16,
-        borderColor: Colors.dark.backgroundColor,
+        borderColor: colors.backgroundColor,
         borderWidth: 1.5,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         height: Dimensions.get('screen').height * 0.25,
     },
     question_text: {
@@ -174,7 +166,7 @@ const styles = StyleSheet.create({
         margin: 10,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: Colors.light.text,
+        color: colors.text,
     },
     answers_container: {
         alignItems: "center",
@@ -186,7 +178,7 @@ const styles = StyleSheet.create({
         marginTop: -2,
         marginBottom: 60,
         gap: 15,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
     },
     answers_text: {
         fontSize: 18,
@@ -196,17 +188,15 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         alignItems: 'center',
         textAlign: 'left',
-        color: Colors.light.text,
+        color: colors.text,
     },
     row_views: {
         width: Dimensions.get('screen').width * 0.9,
         minHeight: Dimensions.get('screen').height * 0.08,
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
+        borderColor: colors.text,
         borderRadius: 10,
         marginTop: 10,
         justifyContent: 'center',
     }
 });
-
-//export default ChoiceQuestionScreen;

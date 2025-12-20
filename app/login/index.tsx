@@ -1,7 +1,7 @@
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Alert} from "react-native";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import * as Crypto from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {router} from "expo-router";
@@ -9,11 +9,14 @@ import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {useDispatch} from "react-redux";
 import {setUser} from "@/src/flux/store/userSlice";
 import {setTheme} from "@/src/flux/store/themeSlice";
+import {useTheme} from "@/hooks/useTheme";
 
 
 export default function LoginScreen() {
-    const [input_token, setInputToken] = useState("");
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
+    const [input_token, setInputToken] = useState("");
 
     const handleGenerateToken = async () => {
         try {
@@ -115,7 +118,7 @@ export default function LoginScreen() {
                             <Text style={styles.generate_subtitle}>Put your existing token to access your data.</Text>
 
                             <TextInput style={styles.input} placeholder="Token UUID" returnKeyType="done"
-                                       placeholderTextColor={Colors.dark.secondaryText}
+                                       placeholderTextColor={colors.secondaryText}
                                         onSubmitEditing={event => setInputToken(event.nativeEvent.text)}/>
 
                             <Text style={styles.generate_title3}>Format: 550e8400-e29b-41d4-a716-446655440000</Text>
@@ -131,7 +134,7 @@ export default function LoginScreen() {
     )
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
     },
@@ -152,8 +155,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
-        backgroundColor: Colors.light.backgroundColor,
+        borderColor: colors.border,
+        backgroundColor: colors.backgroundColor,
         borderRadius: 10,
         paddingHorizontal: 15,
         fontSize: 18,
@@ -169,8 +172,8 @@ const styles = StyleSheet.create({
       borderWidth: 2,
       margin: 12,
       marginTop: -4,
-      backgroundColor: Colors.light.surface,
-      borderColor: Colors.dark.backgroundColor,
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
       padding: 15,
     },
     put_token_view: {
@@ -179,8 +182,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderWidth: 2,
         margin: 12,
-        backgroundColor: Colors.light.surface,
-        borderColor: Colors.dark.backgroundColor,
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
         padding: 15,
     },
     generate_title: {
@@ -188,14 +191,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     generate_title2: {
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     generate_title3: {
         fontSize: 10,
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         marginTop: -10,
         marginBottom: 10,
-        color: Colors.dark.secondaryText,
+        color: colors.secondaryText,
     },
     generate_subtitle: {
         fontSize: 12,
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     button_view: {
         width: Dimensions.get('window').width * 0.67,
@@ -220,8 +223,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignSelf: 'center',
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
-        backgroundColor: Colors.light.primaryAction1,
+        borderColor: colors.border,
+        backgroundColor: colors.primaryAction1,
         padding: 15,
     },
     text: {
@@ -230,7 +233,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     subtext: {
         fontSize: 14,
@@ -238,6 +241,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     }
 });

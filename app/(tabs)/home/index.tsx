@@ -1,17 +1,20 @@
 import {Text, View, StyleSheet, TouchableOpacity, Alert} from "react-native";
-import AppButton from "@/components/homepage/AppButton";
+import AppButton from "@/components/AppButton";
 import {Colors} from "@/constants/theme";
 import ProfileOverview from "@/components/homepage/ProfileOverview";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {router, useRouter} from "expo-router";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import CreateRoomOverlay from "@/components/homepage/CreateRoomOverlay";
 import JoinRoomOverlay from "@/components/homepage/JoinRoomOverlay";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useTheme} from "@/hooks/useTheme";
 
 export default function HomePageScreen() {
     const router = useRouter();
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const [cr_visible, setCRVisible] = useState(false);
     const [jrVisible, setJRVisible] = useState(false);
 
@@ -24,17 +27,17 @@ export default function HomePageScreen() {
                 <View style={styles.sneaklbContainer}>
                     <Text style={styles.sneaklbText}>Leaderboard Status</Text>
                 </View>
-                <AppButton title={"Join"} color={Colors.light.primaryAction3} onPress={() => setJRVisible(true)}/>
-                <AppButton title={"Create"} color={Colors.light.primaryAction1} onPress={() => setCRVisible(true)}/>
+                <AppButton title={"Join"} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>
+                <AppButton title={"Create"} color={colors.primaryAction1} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,
@@ -48,8 +51,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: Colors.light.border,
-        backgroundColor: Colors.light.surface,
+        borderColor: colors.border,
+        backgroundColor: colors.surface,
         borderRadius: 10,
         marginVertical: 10,
     },
@@ -57,6 +60,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        color: Colors.light.text,
+        color: colors.text,
     },
 });

@@ -29,6 +29,10 @@ export const Colors = {
         primaryAction1: "#DA6827",
         primaryAction2: "#D16718",
         primaryAction3: "#EDA04E80",
+        correct: "#65a30d",
+        incorrect: "#D10700",
+        gold: '#FFD700',
+        semi_transparent: '#00000050',
     },
     dark: {
         backgroundColor: "#413B47",
@@ -39,6 +43,10 @@ export const Colors = {
         primaryAction1: "#7926A3",
         primaryAction2: "#9E7BDC",
         primaryAction3: "#CA7CDB",
+        correct: "#4F8A3F",
+        incorrect: "#b91c1c",
+        gold: "#eab308",
+        semi_transparent: '#FFFFFF50',
     },
 };
 

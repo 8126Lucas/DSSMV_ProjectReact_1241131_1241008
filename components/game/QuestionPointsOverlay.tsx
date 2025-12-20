@@ -1,14 +1,15 @@
 import {Modal, View, Text, StyleSheet} from "react-native";
 import {Colors} from "@/constants/theme";
-import {useEffect} from "react";
-import {PointsOverlayProps} from "@/constants/PointsOverlayProps";
+import {useEffect, useMemo} from "react";
+import {QuestionPointsOverlayProps} from "@/src/types/QuestionPointsOverlayProps";
+import {useTheme} from "@/hooks/useTheme";
 
-interface QuestionPointsOverlayProps extends PointsOverlayProps{
-    points: number;
-    correct: boolean;
-}
+
 
 const QuestionPointsOverlay = (props: QuestionPointsOverlayProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+
     useEffect(() => {
         let timer: number;
         if (props.isVisible) {
@@ -30,20 +31,20 @@ const QuestionPointsOverlay = (props: QuestionPointsOverlayProps) => {
             visible={props.isVisible}
             onRequestClose={props.onClose}>
             <View style={styles.root}>
-                <Text style={[styles.text, {color: (props.correct ? Colors.default.correct : Colors.default.incorrect)}]}>+{props.points}</Text>
+                <Text style={[styles.text, {color: (props.correct ? colors.correct : colors.incorrect)}]}>+{props.points}</Text>
             </View>
         </Modal>
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     root: {
         width: '100%',
         height: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000050',
+        backgroundColor: colors.semi_transparent,
     },
     text: {
         fontSize: 100,

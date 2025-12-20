@@ -9,17 +9,14 @@ import {
     KeyboardAvoidingView,
     Platform, TouchableWithoutFeedback, Keyboard
 } from "react-native";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Colors} from "@/constants/theme";
-import AppButton from "@/components/homepage/AppButton";
+import AppButton from "@/components/AppButton";
 import {createClient} from "@supabase/supabase-js";
 import {router} from "expo-router";
 import {supabase_client} from "@/constants/supabaseClient";
-
-interface JoinRoomOverlayProps {
-    jrVisible: boolean;
-    setJRVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import {JoinRoomOverlayProps} from "@/src/types/JoinRoomOverlayProps";
+import {useTheme} from "@/hooks/useTheme";
 
 function joinRoom(typed_token: string): void {
     router.navigate({
@@ -32,6 +29,8 @@ function joinRoom(typed_token: string): void {
 }
 
 const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const [typed_token, setTypedToken] = useState("");
 
     return (
@@ -48,10 +47,10 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
                                 <Text style={styles.title}>Join Room</Text>
                                 <TextInput style={styles.input} placeholder="ENTER ROOM CODE" returnKeyType="done"
                                            keyboardType={Platform.OS === 'ios' ? "numbers-and-punctuation" : "numeric"} maxLength={6}
-                                           placeholderTextColor={Colors.dark.backgroundColor}
+                                           placeholderTextColor={colors.text}
                                             onChangeText={event => setTypedToken(event)}/>
                             </View>
-                            <AppButton title="Join Room" color={Colors.light.primaryAction3} onPress={() => {
+                            <AppButton title="Join Room" color={colors.primaryAction3} onPress={() => {
                                 setJRVisible(false);
                                 joinRoom(typed_token);
                             }}/>
@@ -63,17 +62,17 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     root: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000050'
+        backgroundColor: colors.semi_transparent,
     },
     container: {
         width: Dimensions.get("window").width * 0.8,
         height: Dimensions.get("window").height * 0.5,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         borderRadius: 20,
         padding: 30,
         justifyContent: 'space-evenly',
@@ -92,21 +91,22 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
         marginBottom: 15,
     },
     input: {
         width: '100%',
         height: 50,
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
-        backgroundColor: Colors.light.backgroundColor,
+        borderColor: colors.text,
+        backgroundColor: colors.backgroundColor,
         borderRadius: 10,
         paddingHorizontal: 15,
         fontSize: 18,
         textAlign: 'center',
         fontWeight: 'bold',
         textTransform: 'uppercase',
+        color: colors.text,
     }
 });
 

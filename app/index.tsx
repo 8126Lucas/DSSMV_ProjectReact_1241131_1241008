@@ -5,6 +5,7 @@ import {ActivityIndicator, View} from "react-native";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {useDispatch} from "react-redux";
 import {setUser} from "@/src/flux/store/userSlice";
+import {setTheme} from "@/src/flux/store/themeSlice";
 
 export default function App() {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -12,6 +13,13 @@ export default function App() {
 
     useEffect(() => {
         const loginStatus = async () => {
+            const saved_theme: string | null = await AsyncStorage.getItem('app_theme');
+            if(saved_theme === 'light' || saved_theme === 'dark') {
+                dispatch(setTheme({
+                    theme: saved_theme,
+                }));
+            }
+
             const user_token = await AsyncStorage.getItem("user_token");
             if(user_token) {
                 const filter = {'user_token': user_token};

@@ -1,20 +1,16 @@
 import { View, Text, FlatList, StyleSheet, ListRenderItem } from 'react-native';
 import { Colors} from "@/constants/theme";
+import {LeaderboardListProps} from "@/src/types/LeaderboardListProps";
+import {GameScore} from "@/src/types/GameScore";
+import {useTheme} from "@/hooks/useTheme";
+import {useMemo} from "react";
 
-export interface GameScore {
-    _id: string;
-    rank?: number;
-    game_date: string;
-    score: number;
-}
 
-interface LeaderboardListProps {
-    data: GameScore[];
-    limit?: number;
-}
 
 const LeaderboardList = ({ data, limit }: LeaderboardListProps) => {
-    
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
+
     const sorted_data = [...data].sort((a, b) => {
         return b.score - a.score;
     });
@@ -43,17 +39,17 @@ const LeaderboardList = ({ data, limit }: LeaderboardListProps) => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 16,
         marginBottom: 10,
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: Colors.dark.backgroundColor,
+        borderColor: colors.text,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -66,17 +62,17 @@ const styles = StyleSheet.create({
         gap: 16,
     },
     rankText: {
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
         fontSize: 18,
         letterSpacing: 0.8,
     },
     dateText: {
         fontSize: 14,
-        color: Colors.dark.backgroundColor,
+        color: colors.text,
     },
     scoreText: {
         fontSize: 20,
-        color: Colors.default.correct,
+        color: colors.correct,
     }
 });
 

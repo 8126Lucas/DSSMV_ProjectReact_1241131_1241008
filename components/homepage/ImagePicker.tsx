@@ -1,23 +1,22 @@
 import * as ExpoImagePicker from "expo-image-picker";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useMemo} from "react";
 import {Alert, Image, StyleSheet, TouchableOpacity} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {setUser} from "@/src/flux/store/userSlice";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
-
-interface ImagePickerProps {
-    width: number;
-    height: number;
-}
+import {ImagePickerProps} from "@/src/types/ImagePickerProps";
+import {useTheme} from "@/hooks/useTheme";
 
 const BASE64_PREFIX = 'data:image/jpeg;base64,';
 
 export default function ImagePicker({width, height}: ImagePickerProps) {
-    const [image, setImage] = useState<string | null>(null);
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
+    const [image, setImage] = useState<string | null>(null);
 
     const saveProfilePicture = async (value: string) => {
         dispatch(setUser({
@@ -69,17 +68,17 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     profile_image_container: {
         flex: 1,
-        borderColor: "black",
+        borderColor: colors.text,
         borderWidth: 2,
         justifyContent: "center",
         alignItems: "center",
         aspectRatio: 1,
     },
     profile_image_style: {
-        borderColor: "black",
+        borderColor: colors.text,
         borderWidth: 2,
         aspectRatio: 1,
     },

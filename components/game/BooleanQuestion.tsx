@@ -1,21 +1,17 @@
-import {Component, useCallback, useState} from "react";
+import {Component, useCallback, useMemo, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/game/CountdownClock";
 import {decode} from "html-entities";
+import {BooleanQuestionProps} from "@/src/types/BooleanQuestionProps";
+import {useTheme} from "@/hooks/useTheme";
 
-interface BooleanQuestionProps {
-    difficulty: string;
-    category: string;
-    question: string;
-    correct_answer: string;
-    question_i: number;
-    size: number;
-    onPress: (answer: string, time: number) => void;
-}
+
 
 export default function BooleanQuestion(props: BooleanQuestionProps) {
+    const {colors} = useTheme();
+    const styles = useMemo(() => getStyles(colors), [colors]);
     const [time_left, setTimeLeft] = useState(30);
     const [answered, setAnswered] = useState(false);
 
@@ -41,7 +37,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
 
             <View style={styles.answer_container}>
                 <TouchableOpacity 
-                    style={[styles.answer, {backgroundColor: Colors.default.correct}]}
+                    style={[styles.answer, {backgroundColor: colors.correct}]}
                     onPress={() => {
                         setAnswered(true);
                         props.onPress('True', time_left);
@@ -50,7 +46,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
-                    style={[styles.answer, {backgroundColor: Colors.default.incorrect}]}
+                    style={[styles.answer, {backgroundColor: colors.incorrect}]}
                     onPress={() => {
                         setAnswered(true);
                         props.onPress('False', time_left);
@@ -62,7 +58,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
@@ -71,8 +67,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height * 0.1,
         borderWidth: 2,
-        backgroundColor: Colors.light.surface,
-        borderColor: Colors.dark.backgroundColor,
+        backgroundColor: colors.surface,
+        borderColor: colors.border,
         padding: 15,
         justifyContent: 'space-between',
     },
@@ -82,7 +78,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'center',
-        color: Colors.light.text,
+        color: colors.text,
     },
     bottom_row: {
         flexDirection: 'row',
@@ -95,7 +91,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'left',
-        color: Colors.light.text,
+        color: colors.text,
     },
     countdown_container: {
         marginTop: -14,
@@ -103,7 +99,7 @@ const styles = StyleSheet.create({
     question_container: {
         alignItems: "center",
         justifyContent: "center",
-        borderColor: Colors.light.text,
+        borderColor: colors.text,
         borderWidth: 2,
         width: 'auto',
         height: Dimensions.get("screen").height * 0.25,
@@ -112,7 +108,7 @@ const styles = StyleSheet.create({
     },
     question_text: {
         textAlign: 'center',
-        color: Colors.light.text,
+        color: colors.text,
         fontSize: 20,
         fontWeight: 'bold',
         margin: 10,
@@ -128,7 +124,7 @@ const styles = StyleSheet.create({
     answer: {
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: Colors.light.backgroundColor,
+        backgroundColor: colors.backgroundColor,
         width: 50,
         height: '90%',
         flex: 1,
@@ -146,6 +142,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: '90%',
         width: 1,
-        backgroundColor: Colors.light.text,
+        backgroundColor: colors.text,
     },
 });
