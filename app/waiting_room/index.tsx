@@ -1,9 +1,8 @@
-import {Text, View, StyleSheet, ActivityIndicator, Share, Alert, Vibration} from "react-native";
-import {Colors} from "@/constants/theme";
-import {router, useLocalSearchParams, useRouter} from "expo-router";
+import {ActivityIndicator, Alert, Share, StyleSheet, Text, Vibration, View} from "react-native";
+import {router, useLocalSearchParams} from "expo-router";
 import AppButton from "@/components/AppButton";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {createClient, REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} from "@supabase/supabase-js";
+import {REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} from "@supabase/supabase-js";
 import {supabase_client} from "@/constants/supabaseClient";
 import {useEffect, useMemo, useState} from "react";
 import {useTheme} from "@/hooks/useTheme";
@@ -27,33 +26,38 @@ export default function WaitingRoomScreen () {
     useEffect(() => {
         let timeout_id: number;
         const game_room = supabase_client.channel(`room:game-${params.room_token}`);
+
+        async function handleRoomPresenceChange() {
+            const presence_state = game_room.presenceState();
+            const player_count = Object.keys(presence_state).filter(key => presence_state[key].length > 0).length;
+            setPresenceCount(player_count);
+            if(player_count >= parseInt(params.number_of_players as string)) {
+                const start_time = Date.now() + 1000;
+                await game_room.send({
+                    type: 'broadcast',
+                    event: 'start',
+                    payload: {start_time}
+                });
+                timeout_id = setTimeout(() => {
+                    Vibration.vibrate();
+                    router.replace({
+                        pathname: '/game',
+                        params: {
+                            user_type: params.user_type,
+                            room_token: params.room_token,
+                            number_of_players: params.number_of_players,
+                        },
+                    });
+                }, Math.max(0, Date.now() - start_time));
+            }
+        }
+
         if(params.user_type === 'host') {
             game_room.on(
                 REALTIME_LISTEN_TYPES.PRESENCE,
-                { event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN },
-                async (payload) => {
-                    const presence_state = game_room.presenceState();
-                    const player_count = Object.keys(presence_state).length;
-                    setPresenceCount(player_count)
-                    if(player_count >= parseInt(params.number_of_players as string)) {
-                        const start_time = Date.now() + 1000;
-                        await game_room.send({
-                            type: 'broadcast',
-                            event: 'start',
-                            payload: {start_time}
-                        });
-                        timeout_id = setTimeout(() => {
-                            Vibration.vibrate();
-                            router.replace({
-                                pathname: '/game',
-                                params: {
-                                    user_type: params.user_type,
-                                    room_token: params.room_token,
-                                    number_of_players: params.number_of_players,
-                                },
-                            });
-                        }, Math.max(0, Date.now() - start_time));
-                    }
+                {event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN},
+                async () => {
+                    await handleRoomPresenceChange();
                 }
             )
                 .subscribe(async (status) => {
@@ -66,6 +70,13 @@ export default function WaitingRoomScreen () {
                         });
                     }
                 });
+            game_room.on(
+                REALTIME_LISTEN_TYPES.PRESENCE,
+                {event: REALTIME_PRESENCE_LISTEN_EVENTS.LEAVE},
+                async () => {
+                    await handleRoomPresenceChange();
+                }
+            )
         }
         else if(params.user_type === 'guest') {
             game_room.on(

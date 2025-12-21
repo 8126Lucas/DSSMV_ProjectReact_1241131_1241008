@@ -53,6 +53,7 @@ export default function LoginScreen() {
 
     const handleTokenInput = async (token: string) => {
         try {
+            console.log(token);
             const filter = {'user_token': token};
             await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
                 method: "GET",
@@ -119,7 +120,8 @@ export default function LoginScreen() {
 
                             <TextInput style={styles.input} placeholder="Token UUID" returnKeyType="done"
                                        placeholderTextColor={colors.secondaryText}
-                                        onSubmitEditing={event => setInputToken(event.nativeEvent.text)}/>
+                                        onChangeText={setInputToken}
+                                        value={input_token}/>
 
                             <Text style={styles.generate_title3}>Format: 550e8400-e29b-41d4-a716-446655440000</Text>
 
@@ -162,7 +164,6 @@ const getStyles = (colors: any) => StyleSheet.create({
         fontSize: 18,
         textAlign: 'left',
         fontWeight: 'bold',
-        textTransform: 'uppercase',
         marginBottom: 15,
     },
     generate_view: {
@@ -204,7 +205,6 @@ const getStyles = (colors: any) => StyleSheet.create({
         fontSize: 10,
         fontWeight: 'bold',
         textAlign: 'center',
-        textTransform: 'uppercase',
         marginTop: -10,
         marginBottom: 10,
         color: colors.secondaryText,
