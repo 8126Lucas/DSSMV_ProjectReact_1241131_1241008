@@ -5,8 +5,10 @@ import {router} from "expo-router";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {useTheme} from "@/hooks/useTheme";
 import {useMemo} from "react";
+import {useTranslation} from "react-i18next";
 
 const Navbar = () => {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const insets = useSafeAreaInsets();
@@ -15,17 +17,17 @@ const Navbar = () => {
         <View style={[styles.container, { paddingBottom: insets.bottom }]}>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/leaderboard")}>
                 <FontAwesome6 name="trophy" size={14} color={colors.backgroundColor} />
-                <Text style={styles.button_text}>Leaderboard</Text>
+                <Text style={styles.button_text}>{t('LEADERBOARD')}</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/home")}>
                 <FontAwesome6 name="house-chimney" size={14} color={colors.backgroundColor} />
-                <Text style={styles.button_text}>Home</Text>
+                <Text style={styles.button_text}>{t('HOME')}</Text>
             </TouchableOpacity>
             <View style={styles.vertical_line}/>
             <TouchableOpacity style={styles.button} onPress={() => router.navigate("/settings")}>
                 <Ionicons name="settings-sharp" size={16} color={colors.backgroundColor} />
-                <Text style={styles.button_text}>Settings</Text>
+                <Text style={styles.button_text}>{t('SETTINGS')}</Text>
             </TouchableOpacity>
         </View>
     );

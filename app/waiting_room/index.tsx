@@ -6,6 +6,7 @@ import {REALTIME_LISTEN_TYPES, REALTIME_PRESENCE_LISTEN_EVENTS} from "@supabase/
 import {supabase_client} from "@/constants/supabaseClient";
 import {useEffect, useMemo, useState} from "react";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 const shareRoom = async (room_token: any) => {
     try {
@@ -18,6 +19,7 @@ const shareRoom = async (room_token: any) => {
 }
 
 export default function WaitingRoomScreen () {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const params = useLocalSearchParams();
@@ -118,15 +120,15 @@ export default function WaitingRoomScreen () {
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-                <Text style={styles.text}>Waiting Other{"\n"}Player to Join</Text>
-                <Text onPress={() => shareRoom(params.room_token)} style={styles.room_token_text}>Room Code: #{params.room_token}</Text>
+                <Text style={styles.text}>{t('WAITING OTHER')}{"\n"}{t('PLAYERS TO JOIN')}</Text>
+                <Text onPress={() => shareRoom(params.room_token)} style={styles.room_token_text}>{t('ROOM CODE')}: #{params.room_token}</Text>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size="large" color={colors.text} style={{transform: [{scale: 3}]}}/>
                 </View>
                 {params.user_type === "host" && (
-                    <Text style={styles.text}>{presence_count}/{params.number_of_players} Players</Text>
+                    <Text style={styles.text}>{presence_count}/{params.number_of_players} {t('PLAYERS')}</Text>
                 )}
-                <AppButton title={"Cancel"} color={colors.primaryAction1} onPress={() => router.replace("./home")}/>
+                <AppButton title={t("CANCEL")} color={colors.primaryAction1} onPress={() => router.replace("./home")}/>
             </SafeAreaView>
         </View>
 

@@ -23,7 +23,8 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
             username: (user.username ? user.username : ''),
             user_token: (user.user_token ? user.user_token : ''),
             games_played: (user.games_played ? user.games_played : 0),
-            profile_picture: value
+            profile_picture: value,
+            language: (user.language ? user.language : 'en'),
         }));
         if(user.user_token) {
             await updateUserRestDB(user.user_token, 'profile_picture', value);

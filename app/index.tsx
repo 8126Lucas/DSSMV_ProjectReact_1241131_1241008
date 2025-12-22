@@ -37,6 +37,7 @@ export default function App() {
                             user_token: user_token,
                             games_played: data[0].games_played,
                             profile_picture: data[0].profile_picture,
+                            language: data[0].language,
                         }));
                         setHasToken(true);
                     })

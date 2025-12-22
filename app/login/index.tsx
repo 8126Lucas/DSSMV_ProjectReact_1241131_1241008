@@ -10,9 +10,11 @@ import {useDispatch} from "react-redux";
 import {setUser} from "@/src/flux/store/userSlice";
 import {setTheme} from "@/src/flux/store/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 
 export default function LoginScreen() {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export default function LoginScreen() {
                 user_token: token,
                 games_played: 0,
                 profile_picture: '',
+                language: 'en',
             }));
             dispatch(setTheme({
                 theme: 'light',
@@ -39,6 +42,7 @@ export default function LoginScreen() {
                     username: '',
                     games_played: 0,
                     profile_picture: '',
+                    language: 'en',
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ export default function LoginScreen() {
             })
                 .then(response => {
                     if(!response.ok) {
-                        throw Alert.alert('There was an error whilst talking to the database.');
+                        throw Alert.alert(t('There was an error whilst talking to the database.'));
                     }
                     else {
                         return response.json();
@@ -72,7 +76,7 @@ export default function LoginScreen() {
                 })
                 .then(async data => {
                     if(data.length === 0) {
-                        throw Alert.alert('Your token does not exist!', 'You\'ve inserted a token that does not belong to anyone yet.');
+                        throw Alert.alert(t('Your token does not exist!'), t('You\'ve inserted a token that does not belong to anyone yet.'));
                     }
                     else {
                         await AsyncStorage.setItem("user_token", token);
@@ -81,6 +85,7 @@ export default function LoginScreen() {
                             user_token: token,
                             games_played: data[0].games_played,
                             profile_picture: data[0].profile_picture,
+                            language: data[0].language,
                         }));
                         dispatch(setTheme({
                             theme: 'light',
@@ -102,31 +107,31 @@ export default function LoginScreen() {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <Image style={styles.img} source={require('@/assets/images/icon.png')} />
 
-                        <Text style={styles.text}>Welcome to Challengers</Text>
-                        <Text style={styles.subtext}>Generate an unique token or put your existing token to access your data.</Text>
+                        <Text style={styles.text}>{t('Welcome to Challengers')}</Text>
+                        <Text style={styles.subtext}>{t('Generate an unique token or put your existing token to access your data.')}</Text>
 
                         <View style={styles.generate_view}>
-                            <Text style={styles.generate_title}>New Token</Text>
-                            <Text style={styles.generate_subtitle}>Generate your unique token to access your data.</Text>
+                            <Text style={styles.generate_title}>{t('New Token')}</Text>
+                            <Text style={styles.generate_subtitle}>{t('Generate your unique token to access your data.')}</Text>
 
                             <TouchableOpacity style={styles.button_view} onPress={handleGenerateToken}>
-                                <Text style={styles.generate_title2}>Generate New Token</Text>
+                                <Text style={styles.generate_title2}>{t('Generate New Token')}</Text>
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.put_token_view}>
-                            <Text style={styles.generate_title}>Already Have Token</Text>
-                            <Text style={styles.generate_subtitle}>Put your existing token to access your data.</Text>
+                            <Text style={styles.generate_title}>{t('Already Have Token')}</Text>
+                            <Text style={styles.generate_subtitle}>{t('Put your existing token to access your data.')}</Text>
 
                             <TextInput style={styles.input} placeholder="Token UUID" returnKeyType="done"
                                        placeholderTextColor={colors.secondaryText}
                                         onChangeText={setInputToken}
                                         value={input_token}/>
 
-                            <Text style={styles.generate_title3}>Format: 550e8400-e29b-41d4-a716-446655440000</Text>
+                            <Text style={styles.generate_title3}>{t('Format')}: 550e8400-e29b-41d4-a716-446655440000</Text>
 
                             <TouchableOpacity style={styles.button_view} onPress={() => handleTokenInput(input_token)}>
-                                <Text style={styles.generate_title2}>Login With My Token</Text>
+                                <Text style={styles.generate_title2}>{t('Login With My Token')}</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

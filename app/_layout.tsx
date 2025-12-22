@@ -2,8 +2,10 @@ import { Stack } from "expo-router";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import {Provider} from "react-redux";
 import {store} from "@/src/flux/store/store";
+import "@/src/i18n";
 
 export default function RootLayout() {
+
     return (
         <SafeAreaProvider>
             <Provider store={store}>

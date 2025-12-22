@@ -10,8 +10,10 @@ import JoinRoomOverlay from "@/components/homepage/JoinRoomOverlay";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 export default function HomePageScreen() {
+    const {t} = useTranslation();
     const router = useRouter();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
@@ -25,10 +27,10 @@ export default function HomePageScreen() {
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <ProfileOverview/>
                 <View style={styles.sneaklbContainer}>
-                    <Text style={styles.sneaklbText}>Leaderboard Status</Text>
+                    <Text style={styles.sneaklbText}>{t('LEADERBOARD STATUS')}</Text>
                 </View>
-                <AppButton title={"Join"} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>
-                <AppButton title={"Create"} color={colors.primaryAction1} onPress={() => setCRVisible(true)}/>
+                <AppButton title={t('JOIN')} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>
+                <AppButton title={t("CREATE")} color={colors.primaryAction1} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
         </View>
     );

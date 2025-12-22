@@ -16,6 +16,7 @@ import {setUser, logout} from "@/src/flux/store/userSlice";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {setTheme} from "@/src/flux/store/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -23,6 +24,7 @@ export default function SettingsScreen() {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
+    const {i18n, t} = useTranslation();
 
     const saveUsername = async (value: string) => {
         dispatch(setUser({
@@ -30,6 +32,7 @@ export default function SettingsScreen() {
             user_token: (user.user_token ? user.user_token : ''),
             games_played: (user.games_played ? user.games_played : 0),
             profile_picture: (user.profile_picture ? user.profile_picture : ''),
+            language: (user.language ? user.language : 'en'),
         }));
         if(user.user_token) {
             await updateUserRestDB(user.user_token, 'username', value);
@@ -39,7 +42,7 @@ export default function SettingsScreen() {
     const copyUserToken = async () => {
         if (user.user_token) {
             await Clipboard.setStringAsync(user.user_token);
-            Alert.alert('Copied!', 'Your Token ' + user.user_token + ' has been copied to your clipboard.');
+            Alert.alert(`${t('Copied')}!`, `${t('Your Token')} ${user.user_token} ${t('has been copied to your clipboard.')}`);
         }
     };
 
@@ -56,7 +59,23 @@ export default function SettingsScreen() {
         }
     };
 
-    const logoutApp = () => {
+     const toggleLanguage = async (language: string) => {
+         const languages = ['en', 'pt', 'es'];
+         const next_language = languages[(languages.indexOf(language) + 1) % languages.length];
+         if(user.user_token) {
+             dispatch(setUser({
+                 username: (user.username ? user.username : ''),
+                 user_token: (user.user_token ? user.user_token : ''),
+                 games_played: (user.games_played ? user.games_played : 0),
+                 profile_picture: (user.profile_picture ? user.profile_picture : ''),
+                 language: next_language,
+             }));
+             await i18n.changeLanguage(next_language);
+             await updateUserRestDB(user.user_token, 'language', next_language);
+         }
+     }
+
+     const logoutApp = () => {
         dispatch(logout());
         router.replace('/login');
     }
@@ -68,7 +87,7 @@ export default function SettingsScreen() {
                 <View style={styles.user_token_container}>
                     <TextInput
                         style={styles.title}
-                        placeholder={user.username || 'Username'}
+                        placeholder={user.username || t('Username')}
                         placeholderTextColor={colors.text}
                         underlineColorAndroid={colors.text}
                         textContentType={'username'}
@@ -81,13 +100,14 @@ export default function SettingsScreen() {
                         <FontAwesome6 name="clipboard" size={30} color={colors.backgroundColor} />
                     </TouchableOpacity>
                 </View>
-                <AppButton title={'Theme'} color={colors.backgroundColor} onPress={async () => await toggleAppMode(theme.theme)}/>
-                <AppButton title={'Export Data'} color={colors.backgroundColor} onPress={async () => {
+                <AppButton title={t('THEME')} color={colors.backgroundColor} onPress={async () => await toggleAppMode(theme.theme)}/>
+                <AppButton title={t('LANGUAGE')} color={colors.backgroundColor} onPress={async () => await toggleLanguage((user.language ? user.language : 'en'))}/>
+                <AppButton title={t('EXPORT DATA')} color={colors.backgroundColor} onPress={async () => {
                     if (user.user_token) {
                         await exportUserData(user.user_token);
                     }
                 }}/>
-                <AppButton title={'Logout'} color={colors.incorrect} onPress={logoutApp}/>
+                <AppButton title={t('LOGOUT')} color={colors.incorrect} onPress={logoutApp}/>
             </SafeAreaView>
         </View>
     );

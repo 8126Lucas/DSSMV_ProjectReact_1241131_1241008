@@ -5,8 +5,10 @@ import {useSelector} from 'react-redux';
 import {RootState} from '@/src/flux/store/store';
 import {useTheme} from "@/hooks/useTheme";
 import {useMemo} from "react";
+import {useTranslation} from "react-i18next";
 
 const ProfileOverview = () => {
+    const {t} = useTranslation();
     const user = useSelector((state: RootState) => state.user);
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
@@ -15,8 +17,8 @@ const ProfileOverview = () => {
         <View style={styles.container}>
             <ImagePicker width={80} height={80}/>
             <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Name: {user.username}</Text>
-                <Text style={styles.user_info_text}>Played Games: {user.games_played}</Text>
+                <Text style={styles.user_info_text}>{t('Name')}: {user.username}</Text>
+                <Text style={styles.user_info_text}>{t('Played Games')}: {user.games_played}</Text>
             </View>
         </View>
     );

@@ -4,10 +4,10 @@ import {LeaderboardListProps} from "@/src/types/LeaderboardListProps";
 import {GameScore} from "@/src/types/GameScore";
 import {useTheme} from "@/hooks/useTheme";
 import {useMemo} from "react";
-
-
+import {useTranslation} from "react-i18next";
 
 const LeaderboardList = ({ data, limit }: LeaderboardListProps) => {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -30,7 +30,7 @@ const LeaderboardList = ({ data, limit }: LeaderboardListProps) => {
                 <Text style={styles.rankText}>#{item.rank}</Text>
                 <Text style={styles.dateText}>{item.game_date}</Text>
             </View>
-            <Text style={styles.scoreText}>{item.score} pts</Text>
+            <Text style={styles.scoreText}>{item.score} {t('pts')}</Text>
         </View>
     );
 

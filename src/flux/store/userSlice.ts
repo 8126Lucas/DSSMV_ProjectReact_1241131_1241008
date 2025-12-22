@@ -5,6 +5,7 @@ interface UserState {
     user_token: string | null;
     games_played: number | null;
     profile_picture: string | null;
+    language: string | null;
 }
 
 const initial_state: UserState = {
@@ -12,6 +13,7 @@ const initial_state: UserState = {
     user_token: null,
     games_played: null,
     profile_picture: null,
+    language: null,
 };
 
 const userSlice = createSlice({
@@ -23,12 +25,14 @@ const userSlice = createSlice({
             state.user_token = action.payload.user_token;
             state.games_played = action.payload.games_played;
             state.profile_picture = action.payload.profile_picture;
+            state.language = action.payload.language;
         },
         logout: (state: UserState) => {
             state.username = null;
             state.user_token = null;
             state.games_played = null;
             state.profile_picture = null;
+            state.language = null;
         }
     }
 });

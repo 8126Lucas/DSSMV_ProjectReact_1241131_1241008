@@ -1,14 +1,4 @@
-import {
-    StyleSheet,
-    Modal,
-    Text,
-    Dimensions,
-    Pressable,
-    TextInput,
-    View,
-    KeyboardAvoidingView,
-    Platform, TouchableWithoutFeedback, Keyboard
-} from "react-native";
+import {StyleSheet, Modal, Text, Dimensions, Pressable, TextInput, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from "react-native";
 import React, {useMemo, useState} from "react";
 import {Colors} from "@/constants/theme";
 import AppButton from "@/components/AppButton";
@@ -17,6 +7,7 @@ import {router} from "expo-router";
 import {supabase_client} from "@/constants/supabaseClient";
 import {JoinRoomOverlayProps} from "@/src/types/JoinRoomOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 function joinRoom(typed_token: string): void {
     router.navigate({
@@ -29,6 +20,7 @@ function joinRoom(typed_token: string): void {
 }
 
 const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const [typed_token, setTypedToken] = useState("");
@@ -44,13 +36,13 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View style={styles.container} onStartShouldSetResponder={() => true}>
                             <View style={styles.inputGroup}>
-                                <Text style={styles.title}>Join Room</Text>
-                                <TextInput style={styles.input} placeholder="ENTER ROOM CODE" returnKeyType="done"
+                                <Text style={styles.title}>{t('JOIN ROOM')}</Text>
+                                <TextInput style={styles.input} placeholder={t("ENTER ROOM CODE")} returnKeyType="done"
                                            keyboardType={Platform.OS === 'ios' ? "numbers-and-punctuation" : "numeric"} maxLength={6}
                                            placeholderTextColor={colors.text}
                                             onChangeText={event => setTypedToken(event)}/>
                             </View>
-                            <AppButton title="Join Room" color={colors.primaryAction3} onPress={() => {
+                            <AppButton title={t("JOIN ROOM")} color={colors.primaryAction3} onPress={() => {
                                 setJRVisible(false);
                                 joinRoom(typed_token);
                             }}/>

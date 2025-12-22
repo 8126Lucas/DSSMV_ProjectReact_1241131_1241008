@@ -223,6 +223,7 @@ export default function GameScreen() {
                             user_token: user.user_token,
                             games_played: user.games_played! + 1,
                             profile_picture: user.profile_picture,
+                            language: user.language,
                         }));
                         await updateUserRestDB(token, "games_played", { "$inc": 1 });
                         await uploadGameScore(token, score);

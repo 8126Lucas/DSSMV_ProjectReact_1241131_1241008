@@ -9,9 +9,11 @@ import {useEffect, useMemo} from "react";
 import {setLeaderboardData} from "@/src/flux/store/leaderboardSlice";
 import {GameScore} from "@/src/types/GameScore";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 
 export default function LeaderboardScreen() {
+    const {t} = useTranslation();
     const user = useSelector((state: RootState) => state.user);
     const leaderboard = useSelector((state: RootState) => state.leaderboard);
     const {colors} = useTheme();
@@ -60,8 +62,8 @@ export default function LeaderboardScreen() {
     return (
         <View style={styles.wrapper}>
             <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
-                <Text style={styles.text}>Leaderboard</Text>
-                <Text style={styles.text}>My Best Scores</Text>
+                <Text style={styles.text}>{t('LEADERBOARD')}</Text>
+                <Text style={styles.text}>{t('MY BEST SCORES')}</Text>
                 <View style={styles.listContainer}>
                     <LeaderboardList data={leaderboard.leaderboard_data} limit={25}/>
                 </View>
