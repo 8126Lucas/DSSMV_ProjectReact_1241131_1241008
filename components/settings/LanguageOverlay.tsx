@@ -42,6 +42,8 @@ const LanguageOverlay = ({ lo_visible, setLOVisible }: LanguageOverlayProps) => 
         <Modal
             animationType="fade"
             transparent={true}
+            navigationBarTranslucent={true}
+            statusBarTranslucent={true}
             visible={lo_visible}
             onRequestClose={() => setLOVisible(false)}>
             <Pressable style={styles.root} onPress={() => setLOVisible(false)}>

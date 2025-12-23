@@ -28,6 +28,8 @@ const QuestionPointsOverlay = (props: QuestionPointsOverlayProps) => {
         <Modal
             animationType={"fade"}
             transparent={true}
+            navigationBarTranslucent={true}
+            statusBarTranslucent={true}
             visible={props.isVisible}
             onRequestClose={props.onClose}>
             <View style={styles.root}>

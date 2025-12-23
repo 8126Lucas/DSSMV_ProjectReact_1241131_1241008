@@ -29,6 +29,8 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
         <Modal
             animationType={"fade"}
             transparent={true}
+            navigationBarTranslucent={true}
+            statusBarTranslucent={true}
             visible={jrVisible}
             onRequestClose={() => setJRVisible(false)}>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>

@@ -16,6 +16,8 @@ const GameMetadataOverlay = (props: GameMetadataOverlayProps) => {
         <Modal
             animationType={"fade"}
             transparent={true}
+            navigationBarTranslucent={true}
+            statusBarTranslucent={true}
             visible={props.metadata_visible}
             onRequestClose={() => props.setMetadataVisible(false)}>
             <Pressable style={styles.root} onPress={() => props.setMetadataVisible(false)}>

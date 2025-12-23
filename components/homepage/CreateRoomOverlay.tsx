@@ -124,6 +124,8 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         <Modal
             animationType={"fade"}
             transparent={true}
+            navigationBarTranslucent={true}
+            statusBarTranslucent={true}
             visible={cr_visible}
             onRequestClose={() => setCRVisible(false)}>
             <Pressable style={styles.root} onPress={() => setCRVisible(false)}>
