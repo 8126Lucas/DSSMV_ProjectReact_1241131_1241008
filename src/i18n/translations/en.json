@@ -38,12 +38,16 @@
   "MY BEST SCORES": "MY BEST SCORES",
   "pts": "pts",
 
+  "There has been an error with the game data!": "There has been an error with the game data!",
+
   "Username": "Username",
   "Copied": "Copied",
   "Your Token": "Your Token",
   "has been copied to your clipboard.": "has been copied to your clipboard.",
   "THEME": "THEME",
   "LANGUAGE" : "LANGUAGE",
+  "Select Language": "Select Language",
+  "Close": "Close",
   "EXPORT DATA": "EXPORT DATA",
   "LOGOUT": "LOGOUT",
 

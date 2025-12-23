@@ -4,10 +4,19 @@ import {Colors} from "@/constants/theme";
 import {GamePointsPerPlayerProps} from "@/src/types/GamePointsPerPlayerProps";
 import {GamePointsOverlayProps} from "@/src/types/GamePointsOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/src/flux/store/store";
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const leaderboard = useSelector((state: RootState) => state.leaderboard);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>#{props.index}</Text>

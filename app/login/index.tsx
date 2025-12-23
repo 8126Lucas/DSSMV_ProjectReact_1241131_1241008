@@ -144,6 +144,7 @@ export default function LoginScreen() {
 const getStyles = (colors: any) => StyleSheet.create({
     wrapper: {
         flex: 1,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         flex: 1,

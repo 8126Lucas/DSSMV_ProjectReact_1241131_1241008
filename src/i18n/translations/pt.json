@@ -38,16 +38,20 @@
   "MY BEST SCORES" : "MEUS MELHORES RESULTADOS",
   "pts" : "pts",
 
+  "There has been an error with the game data!": "Houve um erro com os dados das partidas!",
+
   "Username": "Nome",
   "Copied": "Copiado",
   "Your Token": "O Teu Token",
   "has been copied to your clipboard.": "foi copiado para a tua área de transferência.",
   "THEME": "TEMA",
   "LANGUAGE" : "LINGUAGEM",
+  "Select Language": "Selecionar Idioma",
+  "Close": "Fechar",
   "EXPORT DATA" : "EXPORTAR DADOS",
   "LOGOUT": "SAIR",
 
-  "WAITING OTHER ": "À ESPERA DE",
+  "WAITING OTHER": "À ESPERA DE",
   "PLAYERS TO JOIN": "JOGADORES PARA ENTRAR",
   "ROOM CODE": "CÓDIGO DA SALA",
   "PLAYERS": "JOGADORES",

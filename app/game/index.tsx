@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {useTheme} from "@/hooks/useTheme";
 import {setUser} from "@/src/flux/store/userSlice";
+import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -89,6 +90,7 @@ export default function GameScreen() {
     const [points_overlay, setPointsOverlay] = useState<boolean>(false);
     const [leaderboard_data, setLeaderboardData] = useState<{name: string, points: number}[]>([]);
     const [leaderboard_overlay, setLeaderboardOverlay] = useState<boolean>(false);
+    const [is_submitting_points, setIsSubmittingPoints] = useState(false);
 
     const handleAnswer = useCallback(async (answer: string, time_left: number) => {
         setPointsOverlay(true);
@@ -215,6 +217,8 @@ export default function GameScreen() {
             player_scores={leaderboard_data}
             isVisible={leaderboard_overlay}
             onClose={async () => {
+                if(is_submitting_points) {return;}
+                setIsSubmittingPoints(true);
                 try {
                     const token = await AsyncStorage.getItem('user_token');
                     if (token) {
@@ -225,8 +229,12 @@ export default function GameScreen() {
                             profile_picture: user.profile_picture,
                             language: user.language,
                         }));
+                        const game_metadata: GameScoreMetadata = {
+                            room_token: params.room_token.toString(),
+                            data: leaderboard_data,
+                        }
                         await updateUserRestDB(token, "games_played", { "$inc": 1 });
-                        await uploadGameScore(token, score);
+                        await uploadGameScore(token, score, game_metadata);
                     }
                 } catch (error) {
                     console.log(error);
@@ -235,7 +243,7 @@ export default function GameScreen() {
                     router.replace('/home');
                 }
             }}
-            duration={4000} />
+            duration={1000} />
     }
 
     const data = trivia.data[current_question];
