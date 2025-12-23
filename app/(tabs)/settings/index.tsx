@@ -13,10 +13,10 @@ import exportUserData from "@/hooks/exportUserData";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {setUser, logout} from "@/src/flux/store/userSlice";
-import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {setTheme} from "@/src/flux/store/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
+import LanguageOverlay from "@/components/settings/LanguageOverlay";
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -25,6 +25,7 @@ export default function SettingsScreen() {
     const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
     const {i18n, t} = useTranslation();
+    const [loVisible, setLOVisible] = useState(false);
 
     const saveUsername = async (value: string) => {
         dispatch(setUser({
@@ -59,22 +60,6 @@ export default function SettingsScreen() {
         }
     };
 
-     const toggleLanguage = async (language: string) => {
-         const languages = ['en', 'pt', 'es'];
-         const next_language = languages[(languages.indexOf(language) + 1) % languages.length];
-         if(user.user_token) {
-             dispatch(setUser({
-                 username: (user.username ? user.username : ''),
-                 user_token: (user.user_token ? user.user_token : ''),
-                 games_played: (user.games_played ? user.games_played : 0),
-                 profile_picture: (user.profile_picture ? user.profile_picture : ''),
-                 language: next_language,
-             }));
-             await i18n.changeLanguage(next_language);
-             await updateUserRestDB(user.user_token, 'language', next_language);
-         }
-     }
-
      const logoutApp = () => {
         dispatch(logout());
         router.replace('/login');
@@ -83,6 +68,7 @@ export default function SettingsScreen() {
     return (
         <View style={styles.wrapper}>
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+                <LanguageOverlay lo_visible={loVisible} setLOVisible={setLOVisible} />
                 <ImagePicker width={200} height={200}/>
                 <View style={styles.user_token_container}>
                     <TextInput
@@ -101,7 +87,7 @@ export default function SettingsScreen() {
                     </TouchableOpacity>
                 </View>
                 <AppButton title={t('THEME')} color={colors.backgroundColor} onPress={async () => await toggleAppMode(theme.theme)}/>
-                <AppButton title={t('LANGUAGE')} color={colors.backgroundColor} onPress={async () => await toggleLanguage((user.language ? user.language : 'en'))}/>
+                <AppButton title={t('LANGUAGE')} color={colors.backgroundColor} onPress={() => setLOVisible(true)}/>
                 <AppButton title={t('EXPORT DATA')} color={colors.backgroundColor} onPress={async () => {
                     if (user.user_token) {
                         await exportUserData(user.user_token);
