@@ -243,7 +243,7 @@ export default function GameScreen() {
                     router.replace('/home');
                 }
             }}
-            duration={1000} />
+            duration={100} />
     }
 
     const data = trivia.data[current_question];

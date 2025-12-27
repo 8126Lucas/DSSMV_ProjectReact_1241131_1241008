@@ -63,7 +63,7 @@ const getPickerSelectStyles = (colors: any) => StyleSheet.create({
 const getStyles = (colors: any) => StyleSheet.create({
     container: {
         position: 'relative',
-        width: Dimensions.get("screen").width * 0.75,
+        width: '95%',
         marginTop: 20,
     },
     text: {

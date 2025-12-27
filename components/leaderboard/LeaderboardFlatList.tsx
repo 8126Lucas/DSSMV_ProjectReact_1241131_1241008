@@ -7,6 +7,7 @@ import {useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
 import GameMetadataOverlay from "@/components/leaderboard/GameMetadataOverlay";
+import {StrokeText} from "@charmy.tech/react-native-stroke-text";
 
 const LeaderboardList = (props: LeaderboardListProps) => {
     const {t} = useTranslation();
@@ -48,7 +49,7 @@ const LeaderboardList = (props: LeaderboardListProps) => {
                 <Text style={styles.rankText}>#{item.rank}</Text>
                 <Text style={styles.dateText}>{item.game_date}</Text>
             </View>
-            <Text style={styles.scoreText}>{item.score} {t('pts')}</Text>
+            <Text style={[styles.scoreText, {color: (item.score > 0) ? colors.correct : colors.incorrect}]}>{item.score} {t('pts')}</Text>
         </TouchableOpacity>
     );
 
@@ -103,7 +104,10 @@ const getStyles = (colors: any) => StyleSheet.create({
     },
     scoreText: {
         fontSize: 20,
-        color: colors.correct,
+        fontWeight: 'bold',
+        textShadowColor: colors.text,
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 1
     }
 });
 

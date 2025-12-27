@@ -21,13 +21,11 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
-            <View style={styles.topbar}>
+            <View style={styles.header}>
                 <Text style={styles.category_text}>{decode(props.category)}</Text>
                 <View style={styles.bottom_row}>
                     <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
-                    <View style={styles.countdown_container}>
-                        <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
-                    </View>
+                    <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
                 </View>
             </View>
 
@@ -62,29 +60,29 @@ const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+        backgroundColor: colors.backgroundColor,
     },
-    topbar: {
+    header: {
         width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height * 0.1,
         borderWidth: 2,
         backgroundColor: colors.surface,
-        borderColor: colors.border,
-        padding: 15,
+        borderColor: colors.primaryAction2,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
         justifyContent: 'space-between',
     },
     category_text: {
         fontSize: 18,
-        marginTop: -8,
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'center',
         color: colors.text,
+        fontStyle: 'italic',
     },
     bottom_row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
     },
     questions_text: {
         fontSize: 18,
@@ -93,25 +91,24 @@ const getStyles = (colors: any) => StyleSheet.create({
         textAlign: 'left',
         color: colors.text,
     },
-    countdown_container: {
-        marginTop: -14,
-    },
     question_container: {
         alignItems: "center",
         justifyContent: "center",
-        borderColor: colors.text,
-        borderWidth: 2,
         width: 'auto',
-        height: Dimensions.get("screen").height * 0.25,
-        margin: 18,
+        margin: 20,
         borderRadius: 16,
+        borderColor: colors.primaryAction2,
+        borderWidth: 1.5,
+        backgroundColor: colors.surface,
+        height: Dimensions.get('screen').height * 0.25,
     },
     question_text: {
         textAlign: 'center',
         color: colors.text,
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         margin: 10,
+        fontStyle: 'italic',
     },
     answer_container: {
         flexDirection: 'row',

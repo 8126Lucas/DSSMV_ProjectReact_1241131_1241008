@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {GameScore} from "@/src/types/GameScore";
 import {setLeaderboardData} from "@/src/flux/store/leaderboardSlice";
+import {FontAwesome6} from "@expo/vector-icons";
 
 export default function HomePageScreen() {
     const {t} = useTranslation();
@@ -75,13 +76,13 @@ export default function HomePageScreen() {
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <ProfileOverview/>
                 <View style={styles.sneaklbContainer}>
-                    <Text style={styles.sneaklbText}>{t('LEADERBOARD STATUS')}</Text>
+                    <Text style={styles.sneaklbText}>{t('LEADERBOARD STATS')}</Text>
                     <View style={styles.listContainer}>
                         <LeaderboardList data={leaderboard.leaderboard_data} limit={3} type={"latest"}/>
                     </View>
                 </View>
-                <AppButton title={t('JOIN')} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>
-                <AppButton title={t("CREATE")} color={colors.primaryAction1} onPress={() => setCRVisible(true)}/>
+                <AppButton icon={<FontAwesome6 name="user" size={20} color={colors.text}/>} title={t('JOIN')} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>
+                <AppButton icon={<FontAwesome6 name="circle-plus" size={20} color={colors.text}/>} title={t("CREATE")} color={colors.primaryAction1} onPress={() => setCRVisible(true)}/>
             </SafeAreaView>
         </View>
     );
@@ -100,7 +101,8 @@ const getStyles = (colors: any) => StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        width: '100%',
+        width: '88%',
+        margin: 8,
     },
     sneaklbContainer: {
         flex: 1,
@@ -120,5 +122,6 @@ const getStyles = (colors: any) => StyleSheet.create({
         textTransform: 'uppercase',
         color: colors.text,
         textAlign: "center",
+        margin: 8,
     },
 });

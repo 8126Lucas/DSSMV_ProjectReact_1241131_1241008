@@ -77,14 +77,14 @@ const getStyles = (colors: any) => StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.semi_transparent,
+        backgroundColor: colors.backgroundColor,
     },
     container: {
         minWidth: Dimensions.get('screen').width * 0.75,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        margin: 16,
+        margin: 20,
         marginBottom: 10,
     },
     text: {

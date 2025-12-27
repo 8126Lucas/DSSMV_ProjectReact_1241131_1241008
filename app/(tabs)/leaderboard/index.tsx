@@ -29,8 +29,7 @@ export default function LeaderboardScreen() {
     return (
         <View style={styles.wrapper}>
             <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
-                <Text style={styles.text}>{t('LEADERBOARD')}</Text>
-                <Text style={styles.text}>{t('MY BEST SCORES')}</Text>
+                <Text style={styles.text}>{`🏆 ${t('LEADERBOARD')} 🏆`}</Text>
                 <View style={styles.listContainer}>
                     <LeaderboardList data={leaderboard.leaderboard_data} limit={25} type={"best"}/>
                 </View>

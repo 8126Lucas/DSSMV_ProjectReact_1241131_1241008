@@ -86,9 +86,9 @@ export default function SettingsScreen() {
                         <FontAwesome6 name="clipboard" size={30} color={colors.backgroundColor} />
                     </TouchableOpacity>
                 </View>
-                <AppButton title={t('THEME')} color={colors.backgroundColor} onPress={async () => await toggleAppMode(theme.theme)}/>
-                <AppButton title={t('LANGUAGE')} color={colors.backgroundColor} onPress={() => setLOVisible(true)}/>
-                <AppButton title={t('EXPORT DATA')} color={colors.backgroundColor} onPress={async () => {
+                <AppButton title={t('THEME')} color={colors.surface} onPress={async () => await toggleAppMode(theme.theme)}/>
+                <AppButton title={t('LANGUAGE')} color={colors.surface} onPress={() => setLOVisible(true)}/>
+                <AppButton title={t('EXPORT DATA')} color={colors.surface} onPress={async () => {
                     if (user.user_token) {
                         await exportUserData(user.user_token);
                     }
@@ -111,6 +111,7 @@ const getStyles = (colors: any) => StyleSheet.create({
         height: "auto",
         justifyContent: 'flex-start',
         alignItems: 'center',
+        marginTop: 20,
     },
     title: {
         fontSize: 24,

@@ -1,4 +1,4 @@
-import {Dimensions, Modal, Pressable, StyleSheet, Text} from "react-native";
+import {Dimensions, Modal, Pressable, StyleSheet, Text, View} from "react-native";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import AppButton from "@/components/AppButton";
 import {requestTrivia} from "@/hooks/requestTrivia";
@@ -23,11 +23,18 @@ const GameMetadataOverlay = (props: GameMetadataOverlayProps) => {
             <Pressable style={styles.root} onPress={() => props.setMetadataVisible(false)}>
                 <Pressable style={styles.container} onPress={() => props.setMetadataVisible(true)}>
                     <Text style={styles.title}>{t('Room Code')}: #{props.metadata.room_token}</Text>
-                    {props.metadata.data.map((item, index) => (
-                        <Text key={index} style={styles.title}>
-                            {item.name}: {item.points} pts{'\n'}
-                        </Text>
-                    ))}
+                    <View style={styles.pointsContainer}>
+                        {props.metadata.data.map((item, index) => (
+                            <View key={index} style={styles.singlePointContainer}>
+                                <Text style={styles.item}>
+                                    {item.name}
+                                </Text>
+                                <Text style={styles.item}>
+                                    {item.points} pts
+                                </Text>
+                            </View>
+                        ))}
+                    </View>
                 </Pressable>
             </Pressable>
         </Modal>
@@ -56,11 +63,30 @@ const getStyles = (colors: any) => StyleSheet.create({
         shadowRadius: 5,
         elevation: 10,
     },
+    pointsContainer: {
+        flexDirection: "column",
+        gap: 16,
+        width: '100%',
+    },
+    singlePointContainer: {
+        flexDirection: "row",
+        gap: 16,
+        borderBottomWidth: 2,
+        borderColor: colors.text,
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 30,
+        color: colors.primaryAction2,
+    },
+    item: {
+        flex: 1,
+        padding: 6,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
         color: colors.text,
     },
 });
