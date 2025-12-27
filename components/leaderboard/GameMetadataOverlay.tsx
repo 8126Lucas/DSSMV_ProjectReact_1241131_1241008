@@ -2,15 +2,31 @@ import {Dimensions, Modal, Pressable, StyleSheet, Text, View} from "react-native
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import AppButton from "@/components/AppButton";
 import {requestTrivia} from "@/hooks/requestTrivia";
-import React, {useMemo} from "react";
+import React, {Component, useMemo, useRef} from "react";
 import {GameMetadataOverlayProps} from "@/src/types/GameMetadataOverlayProps";
 import {useTranslation} from "react-i18next";
 import {useTheme} from "@/hooks/useTheme";
+import {FontAwesome6} from "@expo/vector-icons";
+import { captureRef } from "react-native-view-shot";
+import {shareAsync} from "expo-sharing";
 
 const GameMetadataOverlay = (props: GameMetadataOverlayProps) => {
     const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const view_ref = useRef<View | null>(null);
+
+    const captureCard = async () => {
+        try {
+            const result = await captureRef(view_ref, {
+                quality: 0.7
+            });
+            await shareAsync(result);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Modal
@@ -22,19 +38,22 @@ const GameMetadataOverlay = (props: GameMetadataOverlayProps) => {
             onRequestClose={() => props.setMetadataVisible(false)}>
             <Pressable style={styles.root} onPress={() => props.setMetadataVisible(false)}>
                 <Pressable style={styles.container} onPress={() => props.setMetadataVisible(true)}>
-                    <Text style={styles.title}>{t('Room Code')}: #{props.metadata.room_token}</Text>
-                    <View style={styles.pointsContainer}>
-                        {props.metadata.data.map((item, index) => (
-                            <View key={index} style={styles.singlePointContainer}>
-                                <Text style={styles.item}>
-                                    {item.name}
-                                </Text>
-                                <Text style={styles.item}>
-                                    {item.points} pts
-                                </Text>
-                            </View>
-                        ))}
+                    <View ref={view_ref} style={styles.subContainer} accessible={true}>
+                        <Text style={styles.title}>{t('Room Code')}: #{props.metadata.room_token}</Text>
+                        <View style={styles.pointsContainer}>
+                            {props.metadata.data.map((item, index) => (
+                                <View key={index} style={styles.singlePointContainer}>
+                                    <Text style={styles.item}>
+                                        {item.name}
+                                    </Text>
+                                    <Text style={styles.item}>
+                                        {item.points} pts
+                                    </Text>
+                                </View>
+                            ))}
+                        </View>
                     </View>
+                    <AppButton title={t("SHARE")} color={colors.primaryAction2} onPress={captureCard} icon={<FontAwesome6 name="share" size={20} color={colors.text}/>} />
                 </Pressable>
             </Pressable>
         </Modal>
@@ -62,6 +81,14 @@ const getStyles = (colors: any) => StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 5,
         elevation: 10,
+    },
+    subContainer: {
+        width: Dimensions.get("window").width * 0.8,
+        backgroundColor: colors.backgroundColor,
+        borderRadius: 20,
+        padding: 30,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
     },
     pointsContainer: {
         flexDirection: "column",

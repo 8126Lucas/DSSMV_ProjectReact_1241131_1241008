@@ -56,7 +56,7 @@ const getStyles = (colors: any) => StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 15,
+        marginVertical: 18,
         textTransform: 'uppercase',
         color: colors.text,
     },
