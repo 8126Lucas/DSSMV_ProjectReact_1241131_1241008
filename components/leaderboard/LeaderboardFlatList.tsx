@@ -55,7 +55,11 @@ const LeaderboardList = (props: LeaderboardListProps) => {
 
     return (
         <View style={{flex: 1}}>
-            <FlatList data={limited_data} renderItem={renderItem} keyExtractor={(item) => item._id}/>
+            <FlatList data={limited_data}
+                      renderItem={renderItem}
+                      keyExtractor={(item) => item._id}
+                      refreshing={props.refreshing}
+                      onRefresh={props.onRefresh}/>
             {selected_item && (
                 <GameMetadataOverlay
                     metadata_visible={true}

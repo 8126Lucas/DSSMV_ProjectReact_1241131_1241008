@@ -4,7 +4,7 @@ import {Colors} from "@/constants/theme";
 import ProfileOverview from "@/components/homepage/ProfileOverview";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {router, useRouter} from "expo-router";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import CreateRoomOverlay from "@/components/homepage/CreateRoomOverlay";
 import JoinRoomOverlay from "@/components/homepage/JoinRoomOverlay";
 import {REST_DB_ENDPOINT_LEADERBOARD, REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
@@ -17,6 +17,7 @@ import {RootState} from "@/src/flux/store/store";
 import {GameScore} from "@/src/types/GameScore";
 import {setLeaderboardData} from "@/src/flux/store/leaderboardSlice";
 import {FontAwesome6} from "@expo/vector-icons";
+import {fetchGameScores} from "@/hooks/fetchGameScores";
 
 export default function HomePageScreen() {
     const {t} = useTranslation();
@@ -30,33 +31,13 @@ export default function HomePageScreen() {
 
     useEffect(() => {
         const getGameScores = async () => {
-            const filter = {'user_token': user.user_token};
-            await fetch(REST_DB_ENDPOINT_LEADERBOARD + `?q=${JSON.stringify(filter)}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    let reviewed_data: GameScore[] = [];
-                    for(let i = 0; i < data.length; i++) {
-                        reviewed_data.push({
-                            _id: data[i]._id,
-                            game_date: data[i].game_date,
-                            score: data[i].score,
-                            time: data[i].time,
-                            metadata: data[i].metadata,
-                        });
-                    }
-                    console.log(reviewed_data);
-                    dispatch(setLeaderboardData({
-                        leaderboard_data: reviewed_data,
-                    }));
-                    console.log(leaderboard.leaderboard_data);
-                });
+            if(user.user_token) {
+                let reviewed_data: GameScore[] = await fetchGameScores(user.user_token);
+                dispatch(setLeaderboardData({
+                    leaderboard_data: reviewed_data,
+                }));
+                console.log(leaderboard.leaderboard_data);
+            }
         };
         getGameScores();
     }, []);
@@ -78,7 +59,10 @@ export default function HomePageScreen() {
                 <View style={styles.sneaklbContainer}>
                     <Text style={styles.sneaklbText}>{t('LEADERBOARD STATS')}</Text>
                     <View style={styles.listContainer}>
-                        <LeaderboardList data={leaderboard.leaderboard_data} limit={3} type={"latest"}/>
+                        <LeaderboardList
+                            data={leaderboard.leaderboard_data}
+                            limit={3}
+                            type={"latest"}/>
                     </View>
                 </View>
                 <AppButton icon={<FontAwesome6 name="user" size={20} color={colors.text}/>} title={t('JOIN')} color={colors.primaryAction3} onPress={() => setJRVisible(true)}/>

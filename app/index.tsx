@@ -6,6 +6,7 @@ import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {useDispatch} from "react-redux";
 import {setUser} from "@/src/flux/store/userSlice";
 import {setTheme} from "@/src/flux/store/themeSlice";
+import i18n from "i18next";
 
 export default function App() {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -39,6 +40,7 @@ export default function App() {
                             profile_picture: data[0].profile_picture,
                             language: data[0].language,
                         }));
+                        await i18n.changeLanguage(data[0].language);
                         setHasToken(true);
                     })
                     .catch((error) => {

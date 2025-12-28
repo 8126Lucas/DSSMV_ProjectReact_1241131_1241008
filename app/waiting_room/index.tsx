@@ -11,7 +11,7 @@ import {useTranslation} from "react-i18next";
 const shareRoom = async (room_token: any) => {
     try {
         await Share.share({
-            message: `Join me in a game of Challengers! Room token: ${room_token}`,
+            message: `Join me in a game of Challengers!\nhttps://8126lucas.github.io/waiting_room?room_token=${room_token}&user_type=guest`,
         });
     } catch (error: any) {
         Alert.alert(error.message);
