@@ -42,7 +42,10 @@
               "pathPrefix": "/waiting_room"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -70,6 +73,19 @@
         "expo-image-picker",
         {
           "photosPermission": "The app needs to access your photos for your profile picture."
+        }
+      ],
+      [
+        "expo-quick-actions",
+        {
+          "iosActions": [
+            {
+              "id": "share_challengers",
+              "title": "Share Challengers",
+              "subtitle": "Send a download link",
+              "icon": "UIApplicationShortcutIconTypeShare"
+            }
+          ]
         }
       ]
     ],
