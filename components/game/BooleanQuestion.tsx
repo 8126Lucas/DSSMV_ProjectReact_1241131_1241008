@@ -1,4 +1,4 @@
-import {Component, useCallback, useMemo, useState} from "react";
+import {Component, useCallback, useEffect, useMemo, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
 import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -15,9 +15,25 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
     const [time_left, setTimeLeft] = useState(30);
     const [answered, setAnswered] = useState(false);
 
+    const handleAnswer = (answer: string, time_left: number)=> {
+        setAnswered(true);
+        props.onPress(answer, time_left);
+    }
+
+    useEffect(() => {
+        if (time_left === 0 && !answered) {
+            handleAnswer("", 0);
+        }
+    }, [time_left, answered]);
+
     const handleTimer = useCallback((time: number) => {
         setTimeLeft(time);
     }, []);
+
+    useEffect(() => {
+        setAnswered(false);
+        setTimeLeft(30);
+    }, [props.question_i]);
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
@@ -36,19 +52,13 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
             <View style={styles.answer_container}>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.correct}]}
-                    onPress={() => {
-                        setAnswered(true);
-                        props.onPress('True', time_left);
-                    }}>
+                    onPress={() => handleAnswer('True', time_left)}>
                     <Text style={styles.answer_text}>True</Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.incorrect}]}
-                    onPress={() => {
-                        setAnswered(true);
-                        props.onPress('False', time_left);
-                    }}>
+                    onPress={() => handleAnswer('False', time_left)}>
                     <Text style={styles.answer_text}>False</Text>
                 </TouchableOpacity>
             </View>

@@ -59,6 +59,12 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     }, []);
 
     useEffect(() => {
+       if (time_left === 0 && !answered) {
+           handleAnswer("", -1, 0);
+       }
+    }, [time_left, answered]);
+
+    useEffect(() => {
         setAnswered(false);
         setColor1(colors.backgroundColor);
         setColor2(colors.backgroundColor);
