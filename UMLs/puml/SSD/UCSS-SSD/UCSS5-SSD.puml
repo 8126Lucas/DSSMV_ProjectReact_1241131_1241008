@@ -9,7 +9,7 @@ participant ":System" as sys
 user -> sys: Click Settings navbar button
 user <-- sys: Show Settings Screen
 
-user -> sys: Chooses the data format
-user <-- sys: Exports the app's data in the selected format
+user -> sys: Chooses the app language
+user <-- sys: Updates the app language
 
 @enduml

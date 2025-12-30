@@ -6,10 +6,10 @@ autonumber
 Actor "User" as user
 participant ":System" as sys
 
-user -> sys: Click leaderboard navbar button
-user <-- sys: Show Leaderboard Screen
+user -> sys: Enter Leaderboard Screen
+user <-- sys: Shows 25 users or global highest scores
 
-user -> sys: Click a game to delete
-user <-- sys: Deletes the game
+user -> sys: Click on a game result
+user <-- sys: Opens game result overlay
 
 @enduml
