@@ -1,10 +1,14 @@
 import {REST_DB_ENDPOINT_LEADERBOARD} from "@/constants/RestDBEndpoints";
 import {GameScore} from "@/src/types/GameScore";
 
-export const fetchGameScores = async (user_token: string) => {
-    const filter = {'user_token': user_token};
+export const fetchGameScores = async (user_token: string | null) => {
+    let url: string = REST_DB_ENDPOINT_LEADERBOARD;
+    if(user_token) {
+        const filter = {'user_token': user_token};
+        url += `?q=${JSON.stringify(filter)}`;
+    }
     let reviewed_data: GameScore[] = [];
-    await fetch(REST_DB_ENDPOINT_LEADERBOARD + `?q=${JSON.stringify(filter)}`, {
+    await fetch(url, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

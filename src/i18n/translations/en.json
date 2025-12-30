@@ -18,7 +18,7 @@
 
   "Name": "Name",
   "Played Games": "Played Games",
-  "LEADERBOARD STATS": "LEADERBOARD STATS",
+  "LAST 3 GAMES": "LAST 3 GAMES",
   "JOIN": "JOIN",
   "CREATE": "CREATE",
   "JOIN ROOM": "JOIN ROOM",
@@ -38,6 +38,9 @@
   "MY BEST SCORES": "MY BEST SCORES",
   "pts": "pts",
   "SHARE": "SHARE",
+  "YOUR": "YOUR",
+  "'s": "'s",
+  "GLOBAL": "GLOBAL",
 
   "There has been an error with the game data!": "There has been an error with the game data!",
 

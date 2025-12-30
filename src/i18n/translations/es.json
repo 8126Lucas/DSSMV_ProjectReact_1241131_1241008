@@ -18,7 +18,7 @@
 
   "Name": "Nombre",
   "Played Games": "Juegos Jugados",
-  "LEADERBOARD STATS": "ESTADÍSTICAS DE CLASIFICACIÓN",
+  "LAST 3 GAMES": "ÚLTIMOS 3 JUEGOS",
   "JOIN": "ENTRAR",
   "CREATE": "CREAR",
   "JOIN ROOM": "ENTRA A LA SALA",
@@ -38,6 +38,9 @@
   "MY BEST SCORES" : "MIS MEJORES RESULTADOS",
   "pts" : "pts",
   "SHARE": "COMPARTIR",
+  "YOUR": "SU",
+  "'s": "",
+  "GLOBAL": "GLOBAL",
 
   "There has been an error with the game data!": "¡Hubo un error con los datos del partido!",
 

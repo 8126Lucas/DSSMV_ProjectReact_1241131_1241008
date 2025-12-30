@@ -15,7 +15,7 @@ import LeaderboardList from "@/components/leaderboard/LeaderboardFlatList";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import {GameScore} from "@/src/types/GameScore";
-import {setLeaderboardData} from "@/src/flux/store/leaderboardSlice";
+import {setLeaderboardData, setUserLeaderboardData} from "@/src/flux/store/leaderboardSlice";
 import {FontAwesome6} from "@expo/vector-icons";
 import {fetchGameScores} from "@/hooks/fetchGameScores";
 
@@ -33,16 +33,16 @@ export default function HomePageScreen() {
         const getGameScores = async () => {
             if(user.user_token) {
                 let reviewed_data: GameScore[] = await fetchGameScores(user.user_token);
-                dispatch(setLeaderboardData({
-                    leaderboard_data: reviewed_data,
+                dispatch(setUserLeaderboardData({
+                    user_leaderboard_data: reviewed_data,
                 }));
-                console.log(leaderboard.leaderboard_data);
+                console.log(leaderboard.user_leaderboard_data);
             }
         };
         getGameScores();
     }, []);
 
-    if(leaderboard.leaderboard_data === null) {
+    if(leaderboard.user_leaderboard_data === null || leaderboard.user_leaderboard_data === undefined) {
         return (
             <View style={styles.wrapper}>
                 <ActivityIndicator size="large" color={colors.text} style={{flex: 1}}/>
@@ -57,10 +57,10 @@ export default function HomePageScreen() {
             <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
                 <ProfileOverview/>
                 <View style={styles.sneaklbContainer}>
-                    <Text style={styles.sneaklbText}>{t('LEADERBOARD STATS')}</Text>
+                    <Text style={styles.sneaklbText}>{t('LAST 3 GAMES')}</Text>
                     <View style={styles.listContainer}>
                         <LeaderboardList
-                            data={leaderboard.leaderboard_data}
+                            data={leaderboard.user_leaderboard_data}
                             limit={3}
                             type={"latest"}/>
                     </View>

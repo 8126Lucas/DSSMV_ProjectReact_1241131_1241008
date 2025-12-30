@@ -77,6 +77,9 @@ export default function SettingsScreen() {
                         placeholderTextColor={colors.text}
                         underlineColorAndroid={colors.text}
                         textContentType={'username'}
+                        clearButtonMode={'while-editing'}
+                        maxLength={15}
+                        returnKeyType={'send'}
                         onSubmitEditing={async (event) => {
                             const typed_username = event.nativeEvent.text;
                             await saveUsername(typed_username);
