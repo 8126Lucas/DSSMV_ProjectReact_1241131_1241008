@@ -60,7 +60,7 @@ const getStyles = (colors: any) => StyleSheet.create({
     },
     button_text: {
         textTransform: 'uppercase',
-        fontSize: FontSize.small,
+        fontSize: 12,
         fontWeight: "bold",
     },
 });

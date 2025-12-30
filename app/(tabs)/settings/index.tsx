@@ -1,11 +1,10 @@
-import {Alert, Appearance, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {Colors} from "@/constants/theme";
+import {Alert, StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
 import AppButton from "@/components/AppButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useState, useEffect, useMemo} from "react";
+import {useState, useMemo} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
@@ -24,7 +23,7 @@ export default function SettingsScreen() {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
-    const {i18n, t} = useTranslation();
+    const {t} = useTranslation();
     const [loVisible, setLOVisible] = useState(false);
 
     const saveUsername = async (value: string) => {
@@ -74,7 +73,7 @@ export default function SettingsScreen() {
                     <TextInput
                         style={styles.title}
                         placeholder={user.username || t('Username')}
-                        placeholderTextColor={colors.text}
+                        placeholderTextColor={colors.secondaryText}
                         underlineColorAndroid={colors.text}
                         textContentType={'username'}
                         clearButtonMode={'while-editing'}

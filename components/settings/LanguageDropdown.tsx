@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, Text, View } from 'react-native';
+import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
 import React, {useMemo} from "react";
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import {Ionicons} from '@expo/vector-icons';
@@ -19,7 +19,7 @@ const LanguageDropdown = ({ title, options, updateValue, currentValue }: Languag
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
-                Icon={() => { return <Ionicons name="chevron-down" size={24} color={colors.secondaryText} />; }}
+                Icon={() => {return (Platform.OS !== 'web' ? <Ionicons name="chevron-down" size={24} color={colors.secondaryText}/> : null);}}
             />
         </View>
     );
@@ -53,6 +53,18 @@ const getPickerSelectStyles = (colors: any) => StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         textTransform: 'uppercase',
+    },
+    inputWeb: {
+        fontSize: 16,
+        color: colors.text,
+        backgroundColor: colors.backgroundColor,
+        borderWidth: 1,
+        borderColor: colors.text,
+        borderRadius: 8,
+        marginTop: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        paddingRight: 30,
     },
     iconContainer: {
         top: 15,

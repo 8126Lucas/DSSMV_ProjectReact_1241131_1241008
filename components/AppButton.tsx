@@ -1,6 +1,5 @@
 import React, {useMemo} from 'react';
-import {TouchableOpacity, Text, StyleSheet, ColorValue, Dimensions} from 'react-native';
-import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
+import {TouchableOpacity, Text, StyleSheet, Dimensions} from 'react-native';
 import {AppButtonProps} from "@/src/types/AppButtonProps";
 import {useTheme} from "@/hooks/useTheme";
 
@@ -33,9 +32,8 @@ const getStyles = (colors: any) => StyleSheet.create({
         verticalAlign: "middle",
     },
     text: {
-        fontFamily: FontFamily.headingMedium,
         color: colors.text,
-        fontSize: FontSize.large,
+        fontSize: 24,
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'center',

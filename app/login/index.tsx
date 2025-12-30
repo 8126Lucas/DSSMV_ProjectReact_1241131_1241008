@@ -1,4 +1,3 @@
-import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Alert} from "react-native";
 import React, {useMemo, useState} from "react";
@@ -12,7 +11,6 @@ import {setTheme} from "@/src/flux/store/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
-
 
 export default function LoginScreen() {
     const {t} = useTranslation();
@@ -100,7 +98,6 @@ export default function LoginScreen() {
         }
     };
 
-
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.wrapper}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -172,6 +169,7 @@ const getStyles = (colors: any) => StyleSheet.create({
         textAlign: 'left',
         fontWeight: 'bold',
         marginBottom: 15,
+        color: colors.text,
     },
     generate_view: {
       width: Dimensions.get('window').width * 0.9,

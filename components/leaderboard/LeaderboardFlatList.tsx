@@ -1,4 +1,4 @@
-import {View, Text, FlatList, StyleSheet, ListRenderItem, Alert, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, StyleSheet, ListRenderItem, Alert, TouchableOpacity, RefreshControl} from 'react-native';
 import { Colors} from "@/constants/theme";
 import {LeaderboardListProps} from "@/src/types/LeaderboardListProps";
 import {GameScore} from "@/src/types/GameScore";

@@ -14,9 +14,11 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
     const styles = useMemo(() => getStyles(colors), [colors]);
     const [time_left, setTimeLeft] = useState(30);
     const [answered, setAnswered] = useState(false);
+    const [disable, setDisable] = useState(false);
 
     const handleAnswer = (answer: string, time_left: number)=> {
         setAnswered(true);
+        setDisable(true);
         props.onPress(answer, time_left);
     }
 
@@ -32,6 +34,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
 
     useEffect(() => {
         setAnswered(false);
+        setDisable(false);
         setTimeLeft(30);
     }, [props.question_i]);
 
@@ -52,12 +55,14 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
             <View style={styles.answer_container}>
                 <TouchableOpacity
                     style={[styles.answer, {backgroundColor: colors.correct}]}
+                    disabled={disable}
                     onPress={() => handleAnswer('True', time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>True</Animated.Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.incorrect}]}
+                    disabled={disable}
                     onPress={() => handleAnswer('False', time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>False</Animated.Text>
                 </TouchableOpacity>

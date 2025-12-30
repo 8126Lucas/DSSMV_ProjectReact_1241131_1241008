@@ -16,9 +16,11 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     const [color2, setColor2] = useState(colors.backgroundColor);
     const [color3, setColor3] = useState(colors.backgroundColor);
     const [color4, setColor4] = useState(colors.backgroundColor);
+    const [disable, setDisable] = useState(false);
 
     const handleAnswer = (answer: string, question_i: number, time_left: number) => {
         setAnswered(true);
+        setDisable(true);
         props.onPress(answer, time_left);
         switch (question_i) {
             case 0:
@@ -69,6 +71,7 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
         setColor2(colors.backgroundColor);
         setColor3(colors.backgroundColor);
         setColor4(colors.backgroundColor);
+        setDisable(false);
         setTimeLeft(30);
     }, [props.question_i]);
 
@@ -88,19 +91,19 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
                 </View>
 
                 <View style={styles.answers_container}>
-                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color1}]}
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color1}]} disabled={disable}
                         onPress={() => handleAnswer(props.answers[0], 0,time_left)}>
                         <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[0])}</Animated.Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color2}]}
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color2}]} disabled={disable}
                         onPress={() => handleAnswer(props.answers[1], 1,time_left)}>
                         <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[1])}</Animated.Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color3}]}
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color3}]} disabled={disable}
                         onPress={() => handleAnswer(props.answers[2], 2,time_left)}>
                         <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[2])}</Animated.Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color4}]}
+                    <TouchableOpacity style={[styles.row_views, {backgroundColor: color4}]} disabled={disable}
                         onPress={() => handleAnswer(props.answers[3], 3,time_left)}>
                         <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[3])}</Animated.Text>
                     </TouchableOpacity>

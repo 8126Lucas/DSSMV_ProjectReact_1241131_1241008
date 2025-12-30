@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native'
+import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native'
 import React, {useMemo} from "react";
-import RNPickerSelect, {Item} from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import {InlineDropdownProps} from "@/src/types/InlineDropdownProps";
 import {useTheme} from "@/hooks/useTheme";
@@ -18,7 +18,7 @@ const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
-                Icon={() => {return <Ionicons name="chevron-down" size={24} color={colors.secondaryText} />;}}/>
+                Icon={() => {return (Platform.OS !== 'web' ? <Ionicons name="chevron-down" size={24} color={colors.secondaryText}/> : null);}}/>
         </View>
     );
 }
@@ -48,9 +48,21 @@ const getPickerSelectStyles = (colors: any) => StyleSheet.create({
         paddingHorizontal: 10,
         paddingRight: 30,
     },
+    inputWeb: {
+        fontSize: 16,
+        color: colors.text,
+        backgroundColor: colors.backgroundColor,
+        borderWidth: 1,
+        borderColor: colors.text,
+        borderRadius: 8,
+        marginTop: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        paddingRight: 30,
+    },
     iconContainer: {
         top: 20,
-        right: 15,
+        paddingRight: 15,
     },
 });
 

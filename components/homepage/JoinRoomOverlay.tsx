@@ -1,10 +1,7 @@
 import {StyleSheet, Modal, Text, Dimensions, Pressable, TextInput, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from "react-native";
 import React, {useMemo, useState} from "react";
-import {Colors} from "@/constants/theme";
 import AppButton from "@/components/AppButton";
-import {createClient} from "@supabase/supabase-js";
 import {router} from "expo-router";
-import {supabase_client} from "@/constants/supabaseClient";
 import {JoinRoomOverlayProps} from "@/src/types/JoinRoomOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
@@ -39,14 +36,25 @@ const JoinRoomOverlay = ({jrVisible, setJRVisible}: JoinRoomOverlayProps) => {
                         <View style={styles.container} onStartShouldSetResponder={() => true}>
                             <View style={styles.inputGroup}>
                                 <Text style={styles.title}>{t('JOIN ROOM')}</Text>
-                                <TextInput style={styles.input} placeholder={t("ENTER ROOM CODE")} returnKeyType="done"
-                                           keyboardType={Platform.OS === 'ios' ? "numbers-and-punctuation" : "numeric"} maxLength={6}
+                                <TextInput style={styles.input}
+                                           placeholder={t("ENTER ROOM CODE")}
+                                           returnKeyType="done"
+                                           inputMode="numeric"
+                                           keyboardType={Platform.OS === 'ios' ? "numbers-and-punctuation" : "numeric"}
+                                           maxLength={6}
                                            placeholderTextColor={colors.text}
-                                            onChangeText={event => setTypedToken(event)}/>
+                                            onChangeText={event => {
+                                                const typed_text = event;
+                                                if(/^[0-9]*$/.test(typed_text) || typed_text === '') {
+                                                    setTypedToken(typed_text);
+                                                }
+                                            }}/>
                             </View>
                             <AppButton title={t("JOIN ROOM")} color={colors.primaryAction3} onPress={() => {
-                                setJRVisible(false);
-                                joinRoom(typed_token);
+                                if(typed_token !== '' && typed_token.length === 6) {
+                                    setJRVisible(false);
+                                    joinRoom(typed_token);
+                                }
                             }}/>
                         </View>
                     </TouchableWithoutFeedback>
