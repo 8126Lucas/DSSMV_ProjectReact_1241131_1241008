@@ -1,4 +1,5 @@
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 export default async function updateUserRestDB(token: string, column: string, value: string | number | {"$inc": number}) {
     const filter = {'user_token': token};
@@ -6,7 +7,7 @@ export default async function updateUserRestDB(token: string, column: string, va
         method: "GET",
         headers: {
             'Content-Type': "application/json",
-            'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+            'x-apikey': RESTDB_API_KEY,
         }
     })
         .then(response => response.json())
@@ -27,7 +28,7 @@ export default async function updateUserRestDB(token: string, column: string, va
                 }),
                 headers: {
                     "Content-Type": "application/json",
-                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                    'x-apikey': RESTDB_API_KEY,
                 },
             });
         });

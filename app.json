@@ -91,7 +91,8 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "baseUrl": "/DSSMV_ProjectReact_1241131_1241008"
     },
     "extra": {
       "router": {},

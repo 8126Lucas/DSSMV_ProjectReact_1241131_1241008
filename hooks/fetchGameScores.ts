@@ -1,5 +1,6 @@
 import {REST_DB_ENDPOINT_LEADERBOARD} from "@/constants/RestDBEndpoints";
 import {GameScore} from "@/src/types/GameScore";
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 export const fetchGameScores = async (user_token: string | null) => {
     let url: string = REST_DB_ENDPOINT_LEADERBOARD;
@@ -12,7 +13,7 @@ export const fetchGameScores = async (user_token: string | null) => {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+            'x-apikey': RESTDB_API_KEY,
         },
     })
         .then(response => response.json())

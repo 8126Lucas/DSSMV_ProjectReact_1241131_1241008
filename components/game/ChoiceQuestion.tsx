@@ -1,12 +1,11 @@
-import React, {Component, useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
-
-import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/game/CountdownClock";
 import {decode} from "html-entities";
 import {ChoiceQuestionProps} from "@/src/types/ChoiceQuestionProps";
 import {useTheme} from "@/hooks/useTheme";
+import Animated, {FadeIn} from "react-native-reanimated";
 
 export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     const {colors} = useTheme();
@@ -85,25 +84,25 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
                 </View>
 
                 <View style={styles.question_container}>
-                    <Text style={styles.question_text}>{decode(props.question)}</Text>
+                    <Animated.Text style={styles.question_text} entering={FadeIn.duration(300)}>{decode(props.question)}</Animated.Text>
                 </View>
 
                 <View style={styles.answers_container}>
                     <TouchableOpacity style={[styles.row_views, {backgroundColor: color1}]}
                         onPress={() => handleAnswer(props.answers[0], 0,time_left)}>
-                        <Text style={styles.answers_text}>{decode(props.answers[0])}</Text>
+                        <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[0])}</Animated.Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.row_views, {backgroundColor: color2}]}
                         onPress={() => handleAnswer(props.answers[1], 1,time_left)}>
-                        <Text style={styles.answers_text}>{decode(props.answers[1])}</Text>
+                        <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[1])}</Animated.Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.row_views, {backgroundColor: color3}]}
                         onPress={() => handleAnswer(props.answers[2], 2,time_left)}>
-                        <Text style={styles.answers_text}>{decode(props.answers[2])}</Text>
+                        <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[2])}</Animated.Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.row_views, {backgroundColor: color4}]}
                         onPress={() => handleAnswer(props.answers[3], 3,time_left)}>
-                        <Text style={styles.answers_text}>{decode(props.answers[3])}</Text>
+                        <Animated.Text style={styles.answers_text} entering={FadeIn.duration(300)}>{decode(props.answers[3])}</Animated.Text>
                     </TouchableOpacity>
                 </View>
 

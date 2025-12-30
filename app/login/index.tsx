@@ -11,6 +11,7 @@ import {setUser} from "@/src/flux/store/userSlice";
 import {setTheme} from "@/src/flux/store/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 
 export default function LoginScreen() {
@@ -46,7 +47,7 @@ export default function LoginScreen() {
                 }),
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                    'x-apikey': RESTDB_API_KEY,
                 }
             }).then(response => console.log(response));
             router.replace("/home");
@@ -63,7 +64,7 @@ export default function LoginScreen() {
                 method: "GET",
                 headers: {
                     'Content-Type': "application/json",
-                    'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                    'x-apikey': RESTDB_API_KEY,
                 }
             })
                 .then(response => {

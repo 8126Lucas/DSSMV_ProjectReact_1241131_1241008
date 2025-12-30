@@ -6,6 +6,7 @@ import {GamePointsOverlayProps} from "@/src/types/GamePointsOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
+import Animated, {FadeInUp} from "react-native-reanimated";
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     const {colors} = useTheme();
@@ -58,13 +59,14 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
             onRequestClose={props.onClose}>
             <View style={styles.root}>
                 {sorted_scores.map((item, index) => (
+                    <Animated.View style={{width: '100%'}} key={index} entering={FadeInUp.delay(index * 100)}>
                         <GamePointsPerPlayer
                             key={index}
                             index={index + 1}
                             points={item.points}
                             name={item.name} />
-                    )
-                )}
+                    </Animated.View>
+                ))}
             </View>
         </Modal>
     );

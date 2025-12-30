@@ -8,13 +8,13 @@ import {useTranslation} from "react-i18next";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
 import GameMetadataOverlay from "@/components/leaderboard/GameMetadataOverlay";
 import {StrokeText} from "@charmy.tech/react-native-stroke-text";
+import Animated, {FadeIn, FadeInLeft} from "react-native-reanimated";
 
 const LeaderboardList = (props: LeaderboardListProps) => {
     const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const [selected_item, setSelectedItem] = useState<GameScore | null>(null);
-
 
     let sorted_data: GameScore[] = [];
 
@@ -43,14 +43,16 @@ const LeaderboardList = (props: LeaderboardListProps) => {
     
     const limited_data = props.limit ? ranked_data.slice(0, props.limit) : ranked_data;
 
-    const renderItem: ListRenderItem<GameScore> = ({ item }) => (
-        <TouchableOpacity style={styles.container} onPress={() => setSelectedItem(item)}>
-            <View style={styles.leftGroup}>
-                <Text style={styles.rankText}>#{item.rank}</Text>
-                <Text style={styles.dateText}>{item.game_date}</Text>
-            </View>
-            <Text style={[styles.scoreText, {color: (item.score > 0) ? colors.correct : colors.incorrect}]}>{item.score} {t('pts')}</Text>
-        </TouchableOpacity>
+    const renderItem: ListRenderItem<GameScore> = ({ item, index }) => (
+        <Animated.View style={{flex: 1}} key={index} entering={FadeInLeft.delay(index * 50)}>
+            <TouchableOpacity style={styles.container} onPress={() => setSelectedItem(item)}>
+                <View style={styles.leftGroup}>
+                    <Text style={styles.rankText}>#{item.rank}</Text>
+                    <Text style={styles.dateText}>{item.game_date}</Text>
+                </View>
+                <Text style={[styles.scoreText, {color: (item.score > 0) ? colors.correct : colors.incorrect}]}>{item.score} {t('pts')}</Text>
+            </TouchableOpacity>
+        </Animated.View>
     );
 
     return (

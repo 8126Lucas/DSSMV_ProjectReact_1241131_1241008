@@ -6,6 +6,7 @@ import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {setUser} from "@/src/flux/store/userSlice";
 import i18n from "i18next";
 import {ActivityIndicator, View} from "react-native";
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 export default function AppInitializer({children}: {children: React.ReactNode}) {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -27,7 +28,7 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
                     method: "GET",
                     headers: {
                         'Content-Type': "application/json",
-                        'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                        'x-apikey': RESTDB_API_KEY,
                     }
                 })
                     .then(response => response.json())

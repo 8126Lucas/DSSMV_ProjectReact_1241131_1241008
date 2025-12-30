@@ -1,11 +1,11 @@
-import {Component, useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Dimensions} from "react-native";
-import {Colors} from "@/constants/theme";
 import {SafeAreaView} from "react-native-safe-area-context";
 import CountdownClock from "@/components/game/CountdownClock";
 import {decode} from "html-entities";
 import {BooleanQuestionProps} from "@/src/types/BooleanQuestionProps";
 import {useTheme} from "@/hooks/useTheme";
+import Animated, {FadeIn} from "react-native-reanimated";
 
 
 
@@ -46,20 +46,20 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
             </View>
 
             <View style={styles.question_container}>
-                <Text style={styles.question_text}>{decode(props.question)}</Text>
+                <Animated.Text style={styles.question_text} entering={FadeIn.duration(300)}>{decode(props.question)}</Animated.Text>
             </View>
 
             <View style={styles.answer_container}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.answer, {backgroundColor: colors.correct}]}
                     onPress={() => handleAnswer('True', time_left)}>
-                    <Text style={styles.answer_text}>True</Text>
+                    <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>True</Animated.Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.incorrect}]}
                     onPress={() => handleAnswer('False', time_left)}>
-                    <Text style={styles.answer_text}>False</Text>
+                    <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>False</Animated.Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

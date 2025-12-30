@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
@@ -18,6 +18,7 @@ import {RootState} from "@/src/flux/store/store";
 import {useTheme} from "@/hooks/useTheme";
 import {setUser} from "@/src/flux/store/userSlice";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
+import * as Haptics from 'expo-haptics';
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -96,6 +97,7 @@ export default function GameScreen() {
         setPointsOverlay(true);
         let new_score = score;
         if (answer === data.correct_answer) {
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             setIsCorrect(true);
             const points = calculateScore(time_left, data.difficulty, data.type);
             setQuestionPoints(points);
@@ -104,6 +106,7 @@ export default function GameScreen() {
             new_score += points;
             console.log(`${old_score} + ${points}`);
         } else {
+            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             setIsCorrect(false);
             const points = 0;
             setQuestionPoints(0);
@@ -218,6 +221,7 @@ export default function GameScreen() {
             isVisible={leaderboard_overlay}
             onClose={async () => {
                 if(is_submitting_points) {return;}
+                if(leaderboard_data[0].name === user.username) {await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);}
                 setIsSubmittingPoints(true);
                 try {
                     const token = await AsyncStorage.getItem('user_token');
@@ -243,7 +247,7 @@ export default function GameScreen() {
                     router.replace('/home');
                 }
             }}
-            duration={100} />
+            duration={200} />
     }
 
     const data = trivia.data[current_question];

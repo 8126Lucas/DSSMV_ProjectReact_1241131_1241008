@@ -7,6 +7,7 @@ import {supabase_client} from "@/constants/supabaseClient";
 import {useEffect, useMemo, useState} from "react";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
+import * as Haptics from 'expo-haptics';
 
 const shareRoom = async (room_token: any) => {
     try {
@@ -40,8 +41,8 @@ export default function WaitingRoomScreen () {
                     event: 'start',
                     payload: {start_time}
                 });
-                timeout_id = setTimeout(() => {
-                    Vibration.vibrate();
+                timeout_id = setTimeout(async () => {
+                    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
                     router.replace({
                         pathname: '/game',
                         params: {

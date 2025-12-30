@@ -1,5 +1,6 @@
 import {REST_DB_ENDPOINT_LEADERBOARD} from "@/constants/RestDBEndpoints";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 export default async function uploadGameScore(token: string, final_score: number, metadata: GameScoreMetadata) {
     const date: Date = new Date();
@@ -15,7 +16,7 @@ export default async function uploadGameScore(token: string, final_score: number
         }),
         headers: {
             "Content-Type": "application/json",
-            'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+            'x-apikey': RESTDB_API_KEY,
         },
     });
 }

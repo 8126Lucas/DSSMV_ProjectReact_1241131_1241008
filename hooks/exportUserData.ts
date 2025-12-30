@@ -1,6 +1,7 @@
 import {REST_DB_ENDPOINT_LEADERBOARD, REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import { File, Paths } from 'expo-file-system';
 import { shareAsync } from 'expo-sharing';
+import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 
 export default async function exportUserData(token: string) {
     let json_data: {user_data: any, leaderboard_data: any};
@@ -10,7 +11,7 @@ export default async function exportUserData(token: string) {
             method: "GET",
             headers: {
                 'Content-Type': "application/json",
-                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                'x-apikey': RESTDB_API_KEY,
             }
         });
         const user_data = await user_fetch.json();
@@ -18,7 +19,7 @@ export default async function exportUserData(token: string) {
             method: "GET",
             headers: {
                 'Content-Type': "application/json",
-                'x-apikey': process.env.EXPO_PUBLIC_RESTDB_API,
+                'x-apikey': RESTDB_API_KEY,
             }
         });
         const leaderboard_data = await leaderboard_fetch.json();
