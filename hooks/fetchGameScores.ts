@@ -28,7 +28,7 @@ export const fetchGameScores = async (user_token: string | null) => {
                     metadata: data[i].metadata,
                 });
             }
-            console.log(reviewed_data);
+            console.log("Request: ", reviewed_data);
         });
     return reviewed_data;
 }

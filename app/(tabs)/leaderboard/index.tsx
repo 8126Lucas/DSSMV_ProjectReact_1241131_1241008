@@ -23,7 +23,15 @@ export default function LeaderboardScreen() {
     const [leaderboard_type, setLeaderboardType] = useState<'user' | 'global'>('user');
 
     useEffect(() => {
-        onRefresh();
+        if((leaderboard_type === 'user' &&
+            (leaderboard.user_leaderboard_data === null || leaderboard.user_leaderboard_data === undefined)) ||
+            (leaderboard_type === 'global' &&
+                (leaderboard.global_leaderboard_data === null || leaderboard.global_leaderboard_data === undefined))) {
+            onRefresh();
+        }
+        else {
+            setLeaderboardListData(leaderboard_type === 'user' ? leaderboard.user_leaderboard_data : leaderboard.global_leaderboard_data);
+        }
     }, [leaderboard_type]);
 
     const onRefresh = useCallback(async () => {
@@ -52,12 +60,9 @@ export default function LeaderboardScreen() {
         } finally {
             setRefreshing(false);
         }
-    }, [leaderboard_type]);
+    }, [leaderboard.global_leaderboard_data, leaderboard.user_leaderboard_data, leaderboard_type, user.user_token]);
 
-    if(leaderboard.user_leaderboard_data === null ||
-        leaderboard.user_leaderboard_data === undefined ||
-        leaderboard_list_data === null ||
-        leaderboard_list_data === undefined) {
+    if(leaderboard_list_data === null || leaderboard_list_data === undefined) {
         return (
             <View style={styles.wrapper}>
                 <ActivityIndicator size="large" color={colors.text} style={{flex: 1}}/>

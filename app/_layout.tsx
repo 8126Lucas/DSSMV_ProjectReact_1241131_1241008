@@ -8,6 +8,7 @@ import * as QuickActions from "expo-quick-actions";
 import {useQuickAction} from "expo-quick-actions/hooks";
 import {useEffect} from "react";
 import {Platform, Share} from "react-native";
+import MaintenanceRoom from "@/components/MaintenanceRoom";
 
 export default function RootLayout() {
     const quick_action = useQuickAction();
@@ -35,7 +36,10 @@ export default function RootLayout() {
         <SafeAreaProvider>
             <Provider store={store}>
                 <AppInitializer>
-                    <Stack screenOptions={{headerShown: false}}/>
+                    {store.getState().app.app_state === 'available'
+                        ? <Stack screenOptions={{headerShown: false}}/>
+                        : <MaintenanceRoom/>
+                    }
                 </AppInitializer>
             </Provider>
         </SafeAreaProvider>

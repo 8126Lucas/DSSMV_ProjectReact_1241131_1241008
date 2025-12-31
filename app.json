@@ -50,6 +50,7 @@
       ]
     },
     "web": {
+      "title": "Challengers",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },

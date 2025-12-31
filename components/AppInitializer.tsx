@@ -7,6 +7,7 @@ import {setUser} from "@/src/flux/store/userSlice";
 import i18n from "i18next";
 import {ActivityIndicator, View} from "react-native";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
+import {setMaintenance} from "@/src/flux/store/appSlice";
 
 export default function AppInitializer({children}: {children: React.ReactNode}) {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -31,7 +32,10 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
                         'x-apikey': RESTDB_API_KEY,
                     }
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        // if(response.status === 429) {dispatch(setMaintenance());}
+                        return response.json();
+                    })
                     .then(async data => {
                         dispatch(setUser({
                             username: data[0].username,

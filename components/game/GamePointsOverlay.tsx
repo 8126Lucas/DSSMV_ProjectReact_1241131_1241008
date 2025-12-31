@@ -7,21 +7,18 @@ import {useTheme} from "@/hooks/useTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store/store";
 import Animated, {FadeInUp} from "react-native-reanimated";
+import {useTranslation} from "react-i18next";
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
-    const leaderboard = useSelector((state: RootState) => state.leaderboard);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-
-    }, []);
+    const user = useSelector((state: RootState) => state.user);
+    const {t} = useTranslation();
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>#{props.index}</Text>
-            <Text style={styles.text}>{props.name}</Text>
+            <Text style={styles.text}>{props.user_token === user.user_token ? `${props.name} (${t("YOU")})` : props.name}</Text>
             <Text style={styles.text}>{props.points}</Text>
         </View>
     );
@@ -64,7 +61,8 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
                             key={index}
                             index={index + 1}
                             points={item.points}
-                            name={item.name} />
+                            name={item.name}
+                            user_token={item.user_token}/>
                     </Animated.View>
                 ))}
             </View>

@@ -89,7 +89,7 @@ export default function GameScreen() {
     const [shuffled_answers, setShuffledAnswers] = useState<{[key: number]: string[]}>({});
     const [is_correct, setIsCorrect] = useState<boolean>(false);
     const [points_overlay, setPointsOverlay] = useState<boolean>(false);
-    const [leaderboard_data, setLeaderboardData] = useState<{name: string, points: number}[]>([]);
+    const [leaderboard_data, setLeaderboardData] = useState<{name: string, points: number, user_token: string}[]>([]);
     const [leaderboard_overlay, setLeaderboardOverlay] = useState<boolean>(false);
     const [is_submitting_points, setIsSubmittingPoints] = useState(false);
 
@@ -195,7 +195,7 @@ export default function GameScreen() {
             if (trivia && trivia.data && current_question >= trivia.data.length) {
                 const {data, error} = await supabase_client
                     .from('in_game_answer_state')
-                    .select('name: player_name, points: total_points')
+                    .select('name: player_name, points: total_points, user_token: player_uuid')
                     .eq('room', params.room_token)
                     .eq('question_index', current_question-1);
                 console.log(data);
@@ -226,6 +226,12 @@ export default function GameScreen() {
                 try {
                     const token = await AsyncStorage.getItem('user_token');
                     if (token) {
+                        const game_metadata: GameScoreMetadata = {
+                            room_token: params.room_token.toString(),
+                            data: leaderboard_data,
+                        }
+                        await updateUserRestDB(token, "games_played", { "$inc": 1 });
+                        await uploadGameScore(token, score, game_metadata);
                         dispatch(setUser({
                             username: user.username,
                             user_token: user.user_token,
@@ -233,12 +239,6 @@ export default function GameScreen() {
                             profile_picture: user.profile_picture,
                             language: user.language,
                         }));
-                        const game_metadata: GameScoreMetadata = {
-                            room_token: params.room_token.toString(),
-                            data: leaderboard_data,
-                        }
-                        await updateUserRestDB(token, "games_played", { "$inc": 1 });
-                        await uploadGameScore(token, score, game_metadata);
                     }
                 } catch (error) {
                     console.log(error);
