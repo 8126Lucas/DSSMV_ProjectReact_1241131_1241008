@@ -1,5 +1,4 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { FontSize } from "@/constants/theme";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router, usePathname } from "expo-router";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

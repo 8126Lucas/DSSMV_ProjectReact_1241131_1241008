@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
+import {RootState} from "@/src/flux/store";
 import {Colors} from "@/constants/theme";
 
 export const useTheme = () => {

@@ -9,9 +9,9 @@ import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import LeaderboardList from "@/components/leaderboard/LeaderboardFlatList";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
+import {RootState} from "@/src/flux/store";
 import {GameScore} from "@/src/types/GameScore";
-import {setUserLeaderboardData} from "@/src/flux/store/leaderboardSlice";
+import {setUserLeaderboardData} from "@/src/flux/leaderboardSlice";
 import {FontAwesome6} from "@expo/vector-icons";
 import {fetchGameScores} from "@/hooks/fetchGameScores";
 

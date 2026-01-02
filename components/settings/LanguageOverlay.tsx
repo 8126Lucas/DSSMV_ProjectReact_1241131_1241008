@@ -7,8 +7,8 @@ import LanguageDropdown from "@/components/settings/LanguageDropdown";
 import AppButton from "@/components/AppButton";
 import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
-import {setUser} from "@/src/flux/store/userSlice";
+import {RootState} from "@/src/flux/store";
+import {setUser} from "@/src/flux/userSlice";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 
 const language_options: Item[] = [

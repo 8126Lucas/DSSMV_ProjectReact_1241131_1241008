@@ -2,15 +2,16 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Alert} from "react-native";
 import React, {useMemo, useState} from "react";
 import * as Crypto from "expo-crypto";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {router} from "expo-router";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
 import {useDispatch} from "react-redux";
-import {setUser} from "@/src/flux/store/userSlice";
-import {setTheme} from "@/src/flux/store/themeSlice";
+import {setUser} from "@/src/flux/userSlice";
+import {setTheme} from "@/src/flux/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
+import {storage} from "@/constants/storage";
+import {setMaintenance} from "@/src/flux/appSlice";
 
 export default function LoginScreen() {
     const {t} = useTranslation();
@@ -22,7 +23,7 @@ export default function LoginScreen() {
     const handleGenerateToken = async () => {
         try {
             const token = Crypto.randomUUID();
-            await AsyncStorage.setItem("user_token", token);
+            storage.set("user_token", token);
             dispatch(setUser({
                 username: '',
                 user_token: token,
@@ -33,7 +34,7 @@ export default function LoginScreen() {
             dispatch(setTheme({
                 theme: 'light',
             }));
-            await AsyncStorage.setItem("app_theme", 'light');
+            storage.set("app_theme", 'light');
             await fetch(REST_DB_ENDPOINT_USER, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -66,7 +67,11 @@ export default function LoginScreen() {
                 }
             })
                 .then(response => {
-                    if(!response.ok) {
+                    if(response.status === 429) {
+                        dispatch(setMaintenance());
+                    }
+                    else if(!response.ok) {
+                        console.log(response.statusText);
                         throw Alert.alert(t('There was an error whilst talking to the database.'));
                     }
                     else {
@@ -78,7 +83,7 @@ export default function LoginScreen() {
                         throw Alert.alert(t('Your token does not exist!'), t('You\'ve inserted a token that does not belong to anyone yet.'));
                     }
                     else {
-                        await AsyncStorage.setItem("user_token", token);
+                        storage.set("user_token", token);
                         dispatch(setUser({
                             username: data[0].username,
                             user_token: token,
@@ -89,7 +94,7 @@ export default function LoginScreen() {
                         dispatch(setTheme({
                             theme: 'light',
                         }));
-                        await AsyncStorage.setItem('app_theme', 'light');
+                        storage.set('app_theme', 'light');
                     }
                 });
             router.replace("/home");

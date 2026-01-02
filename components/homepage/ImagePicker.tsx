@@ -1,10 +1,9 @@
 import * as ExpoImagePicker from "expo-image-picker";
 import {useState, useEffect, useMemo} from "react";
 import {Alert, Image, StyleSheet, TouchableOpacity} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
-import {setUser} from "@/src/flux/store/userSlice";
+import {RootState} from "@/src/flux/store";
+import {setUser} from "@/src/flux/userSlice";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import {ImagePickerProps} from "@/src/types/ImagePickerProps";
 import {useTheme} from "@/hooks/useTheme";

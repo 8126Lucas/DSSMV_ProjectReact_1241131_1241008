@@ -1,13 +1,13 @@
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {setTheme} from "@/src/flux/store/themeSlice";
+import {setTheme} from "@/src/flux/themeSlice";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
-import {setUser} from "@/src/flux/store/userSlice";
+import {setUser} from "@/src/flux/userSlice";
 import i18n from "i18next";
 import {ActivityIndicator, View} from "react-native";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
-import {setMaintenance} from "@/src/flux/store/appSlice";
+import {setMaintenance} from "@/src/flux/appSlice";
+import {storage} from "@/constants/storage";
 
 export default function AppInitializer({children}: {children: React.ReactNode}) {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -15,14 +15,14 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
 
     useEffect(() => {
         const loginStatus = async () => {
-            const saved_theme: string | null = await AsyncStorage.getItem('app_theme');
+            const saved_theme = storage.getString('app_theme');
             if(saved_theme === 'light' || saved_theme === 'dark') {
                 dispatch(setTheme({
                     theme: saved_theme,
                 }));
             }
 
-            const user_token = await AsyncStorage.getItem("user_token");
+            const user_token = storage.getString("user_token");
             if(user_token) {
                 const filter = {'user_token': user_token};
                 await fetch(REST_DB_ENDPOINT_USER + `?q=${JSON.stringify(filter)}`, {
@@ -33,7 +33,7 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
                     }
                 })
                     .then(response => {
-                        // if(response.status === 429) {dispatch(setMaintenance());}
+                        if(response.status === 429) {dispatch(setMaintenance());}
                         return response.json();
                     })
                     .then(async data => {

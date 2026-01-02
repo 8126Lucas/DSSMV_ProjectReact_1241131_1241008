@@ -5,7 +5,7 @@ import {GamePointsPerPlayerProps} from "@/src/types/GamePointsPerPlayerProps";
 import {GamePointsOverlayProps} from "@/src/types/GamePointsOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
+import {RootState} from "@/src/flux/store";
 import Animated, {FadeInUp} from "react-native-reanimated";
 import {useTranslation} from "react-i18next";
 

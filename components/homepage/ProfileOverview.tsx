@@ -1,8 +1,7 @@
-import {View, Image, StyleSheet, ImageURISource, Text} from "react-native";
-import {Colors, FontFamily, Fonts, FontSize} from "@/constants/theme";
+import {View, StyleSheet, Text} from "react-native";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {useSelector} from 'react-redux';
-import {RootState} from '@/src/flux/store/store';
+import {RootState} from '@/src/flux/store';
 import {useTheme} from "@/hooks/useTheme";
 import {useMemo} from "react";
 import {useTranslation} from "react-i18next";
@@ -51,7 +50,7 @@ const getStyles = (colors: any) => StyleSheet.create({
         flexDirection: 'column',
     },
     user_info_text: {
-        fontSize: FontSize.medium,
+        fontSize: 18,
         margin: 6,
         fontWeight: "bold",
         color: colors.text,

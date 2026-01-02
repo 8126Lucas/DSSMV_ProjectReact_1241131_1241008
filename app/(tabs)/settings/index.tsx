@@ -3,19 +3,19 @@ import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
 import AppButton from "@/components/AppButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useState, useMemo} from "react";
 import * as Clipboard from "expo-clipboard";
 import {router} from "expo-router";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import exportUserData from "@/hooks/exportUserData";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
-import {setUser, logout} from "@/src/flux/store/userSlice";
-import {setTheme} from "@/src/flux/store/themeSlice";
+import {RootState} from "@/src/flux/store";
+import {setUser, logout} from "@/src/flux/userSlice";
+import {setTheme} from "@/src/flux/themeSlice";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import LanguageOverlay from "@/components/settings/LanguageOverlay";
+import {storage} from "@/constants/storage";
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -52,7 +52,7 @@ export default function SettingsScreen() {
             theme: new_theme,
         }));
         try {
-            await AsyncStorage.setItem('app_theme', new_theme);
+            storage.set('app_theme', new_theme);
             console.log(`Theme saved: ${new_theme}`);
         } catch (error) {
             console.log('Failed to save app theme:', error);
@@ -61,6 +61,7 @@ export default function SettingsScreen() {
 
      const logoutApp = () => {
         dispatch(logout());
+        storage.clearAll();
         router.replace('/login');
     }
 

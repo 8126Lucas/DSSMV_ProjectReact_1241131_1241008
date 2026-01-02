@@ -8,17 +8,17 @@ import {router, useLocalSearchParams} from "expo-router";
 import {calculateScore} from "@/hooks/calculateScore";
 import {REALTIME_POSTGRES_CHANGES_LISTEN_EVENT} from "@supabase/realtime-js";
 import {REALTIME_LISTEN_TYPES} from "@supabase/supabase-js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import QuestionPointsOverlay from "@/components/game/QuestionPointsOverlay";
 import GamePointsOverlay from "@/components/game/GamePointsOverlay";
 import updateUserRestDB from "@/hooks/updateUserRestDB";
 import uploadGameScore from "@/hooks/uploadGameScore";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/src/flux/store/store";
+import {RootState} from "@/src/flux/store";
 import {useTheme} from "@/hooks/useTheme";
-import {setUser} from "@/src/flux/store/userSlice";
+import {setUser} from "@/src/flux/userSlice";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
 import * as Haptics from 'expo-haptics';
+import {storage} from "@/constants/storage";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -224,7 +224,7 @@ export default function GameScreen() {
                 if(leaderboard_data[0].name === user.username) {await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);}
                 setIsSubmittingPoints(true);
                 try {
-                    const token = await AsyncStorage.getItem('user_token');
+                    const token = storage.getString('user_token');
                     if (token) {
                         const game_metadata: GameScoreMetadata = {
                             room_token: params.room_token.toString(),

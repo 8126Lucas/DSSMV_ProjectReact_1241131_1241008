@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import {Provider} from "react-redux";
-import {store} from "@/src/flux/store/store";
+import {store} from "@/src/flux/store";
 import "@/src/i18n";
 import AppInitializer from "@/components/AppInitializer";
 import * as QuickActions from "expo-quick-actions";

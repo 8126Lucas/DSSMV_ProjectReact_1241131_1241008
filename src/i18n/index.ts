@@ -2,7 +2,7 @@ import dict_en from './translations/en.json';
 import dict_pt from './translations/pt.json';
 import dict_es from './translations/es.json';
 import i18n from "i18next";
-import {store} from "@/src/flux/store/store";
+import {store} from "@/src/flux/store";
 import {initReactI18next} from "react-i18next";
 
 const dictionaries = {
