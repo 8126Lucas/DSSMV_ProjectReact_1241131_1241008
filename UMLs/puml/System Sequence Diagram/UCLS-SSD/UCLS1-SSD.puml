@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+participant "RestDB" as restdb
+
+note over client, restdb: The user is on the Leaderboard screen and wants to switch the view
+
+client -> ui: Toggles between "Global" and "User" view
+    ui -> ui: Checks internal cache (Redux)
+alt Cache Data Not Found
+     ui -> restdb: Requests leaderboard data (Global or User specific)
+    restdb --> ui: Returns list of scores
+else Cache Data Found
+    ui -> ui: Loads data from store
+end
+ui --> client: Updates the list displayed
+
+@enduml

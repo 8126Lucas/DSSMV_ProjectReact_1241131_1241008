@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "GameMetadataOverlay" as overlay
+participant "Expo Sharing" as expo
+
+note over client, expo: The user finishes a game and decides to share their score
+
+client -> overlay: Presses the "SHARE" button
+    overlay -> overlay: App takes a screenshot of the view (captureRef)
+    overlay -> expo: App shares the screenshot (shareAsync)
+    expo --> overlay
+overlay --> client: Returns to Overlay view
+@enduml

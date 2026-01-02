@@ -2,14 +2,14 @@
 'https://plantuml.com/sequence-diagram
 
 autonumber
+autoactivate on
 
-Actor "User" as user
-participant ":System" as sys
+Actor "Client" as client
+participant "UI" as ui
 
-user -> sys: Click Home Page navbar button
-user <-- sys: Show Home Page Screen
+note over client: The user selects the "JOIN" button, on the home page, and fills the required information
 
-user -> sys: Click in Join Button
-user <-- sys: User is sent to Join Room Overlay
+client -> ui: Presses the "JOIN" button
+ui --> client: Sends user to Waiting Room
 
 @enduml

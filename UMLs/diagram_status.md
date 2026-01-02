@@ -17,11 +17,11 @@
   - [] SS7
   - [] SS8
   - [] GS1
-- [] diagramas de sequência de sistema
-  - [] HPS1
+- [x] diagramas de sequência de sistema
+  - [X] HPS1
   - [x] HPS2
-  - [] LS1
-  - [] LS2
+  - [x] LS1
+  - [x] LS2
   - [x] SS1
   - [x] SS2
   - [x] SS3
@@ -30,5 +30,5 @@
   - [x] SS6
   - [x] SS7
   - [x] SS8
-  - [] GS1
+  - [x] GS1
 - [x] diagrama de casos de uso

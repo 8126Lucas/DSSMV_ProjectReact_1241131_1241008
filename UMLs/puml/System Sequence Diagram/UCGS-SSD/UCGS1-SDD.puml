@@ -1,0 +1,23 @@
+@startuml
+autonumber
+autoactivate on
+
+actor "Client" as client
+participant "UI" as ui
+participant "Supabase" as supabase
+
+note over client, ui: The user selects an answer
+
+client -> ui: Selects an answer option
+    ui -> ui: Stops timer and calculates score
+
+alt Correct Answer
+    ui -> ui: Updates local state (Score + Feedback Green)
+else Incorrect Answer
+    ui -> ui: Updates local state (Feedback Red)
+end
+    ui --> client: Shows Feedback Overlay
+    ui -> supabase: Submits answer
+    supabase --> ui
+
+@enduml
