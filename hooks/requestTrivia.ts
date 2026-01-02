@@ -1,5 +1,4 @@
 import {supabase_client} from "@/constants/supabaseClient";
-import {decode} from "html-entities";
 
 interface TriviaObject {
     type: string,

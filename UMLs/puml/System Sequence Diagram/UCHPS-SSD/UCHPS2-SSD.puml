@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+participant "Open Trivia DB" as trivia
+participant "Supabase" as supabase
+
+note over client, supabase: The user selects the "CREATE" button, on the home page, and fills the required information
+
+
+client -> ui: Presses the "CREATE" button
+    ui -> trivia: Request data fulfilling user's request
+    trivia --> ui: Requested trivia
+    ui -> supabase: Registers the game room
+    supabase --> ui
+ui --> client: Sends user to Waiting Room
+
+@enduml

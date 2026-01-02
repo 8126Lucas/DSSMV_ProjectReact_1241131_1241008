@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+!theme plain
+skinparam componentStyle uml2
+hide circles
+hide methods
+
+class User {
+    username
+    user_token
+    profile_picture
+    games_played
+    language
+}
+
+class GameScore {
+    _id
+    rank
+    game_date
+    score
+    time
+}
+
+class GameScoreMetadata {
+    room_token
+}
+
+class PlayerScore {
+    name
+    points
+}
+
+class Room {
+    id
+    room_token
+}
+
+class TriviaObject {
+    type
+    difficulty
+    category
+    question
+    correct_answer
+    incorrect_answers
+}
+
+User "1..8" -- "0..1" Room
+Room "1" -- "1..50" TriviaObject
+Room "1" -- "1" GameScoreMetadata
+User "1" -- "*" GameScore
+GameScore *-- "1" GameScoreMetadata
+GameScoreMetadata "1" -- "1..8" PlayerScore
+
+@enduml

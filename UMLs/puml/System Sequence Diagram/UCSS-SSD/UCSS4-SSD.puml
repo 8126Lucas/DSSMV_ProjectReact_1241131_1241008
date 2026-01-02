@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+
+note over client, ui: The user goes to the Settings screen and clicks the "THEME" button
+
+client -> ui: Clicks the "THEME" button
+    ui -> ui: Changes the app's theme
+    ui --> ui
+    ui -> ui: Changes the theme setting in memory storage
+    ui --> ui
+    ui -> ui: Changes the theme setting in persistent local storage
+    ui --> ui
+ui --> client
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+!theme plain
+skinparam componentStyle uml2
+
+
+package "app" {
+    package "(tabs)" {}
+    package "game" {}
+    package "login" {}
+    package "waiting_room" {}
+}
+
+package "assets" {}
+
+package "components" {
+    package "game" {}
+    package "homepage" {}
+    package "leaderboard" {}
+    package "settings" {}
+}
+
+package "constants" {}
+
+package "hooks" {}
+
+package "src" {
+    package "flux" {}
+    package "i18n" {
+        package "translations" {}
+    }
+    package "types" {}
+}
+
+app .left> assets
+app .up.> components
+app ..> constants
+app .down..> hooks
+app .right.> src
+
+components ..> constants
+components ..> hooks
+components ...> src
+
+hooks ..> constants
+hooks ....> src
+
+@enduml

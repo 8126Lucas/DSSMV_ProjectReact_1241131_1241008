@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+!theme plain
+skinparam componentStyle uml2
+
+package "Client (React Native)" {
+    [Android App] as android
+    [iOS App] as ios
+    [Web App] as web
+}
+
+package "Data Persistence" {
+    database "Supabase" as supabase {
+        [Realtime]
+        [Database]
+    }
+    database "restDB" as restdb
+}
+
+package "External APIs" {
+    [Open Trivia DB] as trivia
+}
+
+
+"Client (React Native)" .right.> supabase : HTTPS / WSS (Realtime)
+"Client (React Native)" .down.> restdb : HTTPS (GET/POST/PATCH JSON)
+"Client (React Native)" .left.> trivia : HTTPS (GET)
+
+@enduml

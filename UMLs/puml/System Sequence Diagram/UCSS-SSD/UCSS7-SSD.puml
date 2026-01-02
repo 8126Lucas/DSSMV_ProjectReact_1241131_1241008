@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+
+note over client, ui: The user goes to the Settings screen and clicks the "LOGOUT" button
+
+client -> ui: Clicks the "LOGOUT" button
+    ui -> ui: Deletes all user's settings in memory storage
+    ui --> ui
+    ui -> ui: Deletes all user's settings in persistent local storage
+    ui --> ui
+ui --> client: Shows login screen
+
+@enduml

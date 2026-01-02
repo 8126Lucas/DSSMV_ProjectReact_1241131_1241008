@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen, taps on the profile picture and chooses a new one
+
+client -> ui: Chooses a new profile picture
+    ui -> restdb: Finds the user in the database
+    restdb --> ui: User's id
+    ui -> restdb: Sends new profile picture (base64 format)
+        restdb -> restdb: Updates user information
+        restdb --> restdb
+    restdb --> ui
+ui --> client
+
+@enduml

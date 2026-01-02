@@ -1,27 +1,26 @@
 @startuml
 'https://plantuml.com/use-case-diagram
-left to right direction
-title Use Case Diagram
 
-actor "User" as usms
+!theme plain
+skinparam componentStyle uml2
+
+left to right direction
+
+actor "User" as user
 rectangle "Home Page Screen" {
     usecase "1. Join game session" as UCMS1
     usecase "2. Create game room" as UCMS2
-    usecase "3. Change user profile picture" as UCMS3
 }
-usms --> UCMS1
-usms --> UCMS2
-usms --> UCMS3
+user --> UCMS1
+user --> UCMS2
 
-actor "User" as uslb
 rectangle "Leaderboard Screen" {
     usecase "1. Change between user and global leaderboard" as UCLB1
     usecase "2. Share game result" as UCLB2
 }
-uslb --> UCLB1
-uslb --> UCLB2
+user --> UCLB1
+user --> UCLB2
 
-actor "User" as usss
 rectangle "Settings Screen" {
     usecase "1. Change profile picture" as UCSS1
     usecase "2. Change username" as UCSS2
@@ -30,14 +29,20 @@ rectangle "Settings Screen" {
     usecase "5. Change app language" as UCSS5
     usecase "6. Export user data" as UCSS6
     usecase "7. Logout" as UCSS7
+    usecase "8. Delete account" as UCSS8
 }
-usss --> UCSS1
-usss --> UCSS2
-usss --> UCSS3
-usss --> UCSS4
-usss --> UCSS5
-usss --> UCSS6
-usss --> UCSS7
+user --> UCSS1
+user --> UCSS2
+user --> UCSS3
+user --> UCSS4
+user --> UCSS5
+user --> UCSS6
+user --> UCSS7
+user --> UCSS8
 
+rectangle "Game Session" {
+    usecase "1. Answer question" as UCGM1
+}
+user --> UCGM1
 
 @enduml
