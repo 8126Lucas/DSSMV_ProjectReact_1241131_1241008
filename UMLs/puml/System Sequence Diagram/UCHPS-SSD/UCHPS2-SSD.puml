@@ -9,7 +9,7 @@ participant "UI" as ui
 participant "Open Trivia DB" as trivia
 participant "Supabase" as supabase
 
-note over client, supabase: The user selects the "CREATE" button, on the home page, and fills the required information
+note over client, supabase: The user selects the "CREATE" button, on the home page, inputs the fills the required information the "CREATE" button
 
 
 client -> ui: Presses the "CREATE" button

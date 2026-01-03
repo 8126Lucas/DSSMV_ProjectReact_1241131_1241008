@@ -1,0 +1,38 @@
+@startuml
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "UI" as ui
+participant "Redux Store" as store
+participant "fetchGameScores" as gamescores
+participant "RestDB" as restdb
+
+note over client, restdb: The user is on the Leaderboard screen and clicks on the title, to toggle leaderboard views
+
+client -> ui: Toggles between "Global" and "User" view
+    ui -> ui: setLeaderboardType(leaderboard_type === 'user' ? 'global' : 'user')
+    return
+
+    ui -> ui: useEffect()
+        alt Cache Data Not Found
+            ui -> ui: onRefresh()
+                ui -> gamescores: fetchGameScores()
+                    gamescores -> restdb: fetch(url)
+                    restdb --> gamescores
+                return
+
+                ui -> store: dispatch()
+                store --> ui
+
+                ui -> ui: setLeaderboardListData()
+                return
+            return
+        else Cache Data Found
+            ui -> ui: setLeaderboardListData(current_data)
+            return
+        end
+    return
+
+ui --> client: Updates List
+@enduml

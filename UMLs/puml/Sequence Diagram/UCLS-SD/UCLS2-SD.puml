@@ -1,0 +1,20 @@
+@startuml
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "GameMetadataOverlay" as UI
+
+note over client, UI: The user goes to the Leaderboard screen, clicks on a score and presses the "SHARE" button
+
+client -> UI: Presses "SHARE" button
+    UI -> UI: captureCard()
+        UI -> UI: captureRef(view_ref)
+        return
+
+        UI -> UI: shareAsync(result)
+        return
+    return
+
+UI --> client: Returns to Overlay view
+@enduml

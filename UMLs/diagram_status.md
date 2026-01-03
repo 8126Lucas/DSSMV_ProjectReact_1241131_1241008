@@ -5,9 +5,9 @@
 - [x] ~~diagrama de pacotes~~
 - [] diagramas de sequência
   - [x] HPS1
-  - [] HPS2
-  - [] LS1
-  - [] LS2
+  - [X] HPS2
+  - [X] LS1
+  - [X] LS2
   - [] SS1
   - [] SS2
   - [] SS3
