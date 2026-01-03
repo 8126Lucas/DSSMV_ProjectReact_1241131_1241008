@@ -1,1 +1,25 @@
-UCSS3-SD.puml
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "SettingsScreen" as ss
+participant "Hooks" as hooks
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen and presses the "EXPORT DATA" button
+
+client -> ss: Presses the "EXPORT DATA" button
+    ss -> hooks: exportUserData(user_token)
+        hooks -> restdb: fetch (GET)
+        restdb --> hooks: user_data
+        hooks -> restdb: fetch (GET)
+        restdb --> hooks: leaderboard_data
+        hooks -> hooks: file.write()
+        hooks --> hooks:
+    hooks --> ss
+ss --> client: Open intent to share the generated file
+
+@enduml

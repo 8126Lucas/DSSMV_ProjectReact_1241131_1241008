@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "SettingsScreen" as ss
+
+note over client, ss: The user goes to the Settings screen and presses the clipboard button
+
+client -> ss: Clicks on the clipboard button
+    ss -> ss: copyUserToken()
+    ss --> ss
+ss --> client
+@enduml

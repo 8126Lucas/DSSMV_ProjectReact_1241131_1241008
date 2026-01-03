@@ -1,1 +1,27 @@
-UCSS3-SD.puml
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "LanguageOverlay" as lo
+participant "Hooks" as hooks
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen, clicks on the "LANGUAGE" button and selects a language
+
+client -> lo: Selects a language
+    lo -> lo: dispatch(setUser())
+    lo --> lo
+    lo -> lo: i18n.changeLanguage(language)
+    lo --> lo
+    lo -> hooks: updateUserRestDB(user_token, 'language', language)
+        hooks -> restdb: fetch (GET)
+        restdb --> hooks: _id
+        hooks -> restdb: fetch (PATCH)
+        restdb --> hooks
+    hooks --> lo
+lo --> client
+
+@enduml

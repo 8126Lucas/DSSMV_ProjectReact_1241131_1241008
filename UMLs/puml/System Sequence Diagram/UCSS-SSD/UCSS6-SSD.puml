@@ -11,9 +11,11 @@ participant "restDB" as restdb
 note over client, restdb: The user goes to the Settings screen and presses the "EXPORT DATA" button
 
 client -> ui: Presses the "EXPORT DATA" button
-    ui -> restdb: Finds the user in the database
-    restdb --> ui: User's id
-    ui -> restdb: Requests user information from the database
+    ui -> restdb: Requests user's information
     restdb --> ui: User's information
+    ui -> restdb: Requests user's leaderboard information
+    restdb --> ui: User's leaderboard information
+    ui -> ui: Write all retrieved data in a JSON file
+    ui --> ui
 ui --> client: Open intent to share the generated file
 @enduml

@@ -1,34 +1,35 @@
 # Diagramas por fazer:
 
-- [x] ~~diagrama de componentes~~
-- [x] ~~modelo de domínio~~
-- [x] ~~diagrama de pacotes~~
-- [] diagramas de sequência
-  - [x] HPS1
-  - [X] HPS2
-  - [X] LS1
-  - [X] LS2
-  - [] SS1
-  - [] SS2
-  - [] SS3
-  - [] SS4
-  - [] SS5
-  - [] SS6
-  - [] SS7
-  - [] SS8
-  - [x] GS1
-- [x] ~~diagramas de sequência de sistema~~
-  - [X] HPS1
-  - [x] HPS2
-  - [x] LS1
-  - [x] LS2
-  - [x] SS1
-  - [x] SS2
-  - [x] SS3
-  - [x] SS4
-  - [x] SS5
-  - [x] SS6
-  - [x] SS7
-  - [x] SS8
-  - [x] GS1
-- [x] ~~diagrama de casos de uso~~
+1. [x] ~~diagrama de componentes~~
+2. [x] ~~modelo de domínio~~
+3. [x] ~~diagrama de pacotes~~
+4. [x] ~~diagramas de sequência~~
+   1. [x] HPS1
+   2. [X] HPS2
+   3. [X] LS1
+   4. [X] LS2
+   5. [x] SS1
+   6. [x] SS2
+   7. [x] SS3
+   8. [x] SS4
+   9. [x] SS5
+   10. [x] SS6
+   11. [x] SS7
+   12. [x] SS8
+   13. [x] GS1
+5. [x] ~~diagramas de sequência de sistema~~
+   1. [X] HPS1
+   2. [x] HPS2
+   3. [x] LS1
+   4. [x] LS2
+   5. [x] SS1
+   6. [x] SS2
+   7. [x] SS3
+   8. [x] SS4
+   9. [x] SS5
+   10. [x] SS6
+   11. [x] SS7
+   12. [x] SS8
+   13. [x] GS1
+6. [x] ~~diagrama de casos de uso~~
+7. [ ] RELATÓRIO

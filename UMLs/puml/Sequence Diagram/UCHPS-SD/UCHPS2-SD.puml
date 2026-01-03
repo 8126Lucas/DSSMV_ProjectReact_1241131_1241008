@@ -9,7 +9,7 @@ participant "CreateRoomOverlay" as CRO
 participant "Open Trivia DB" as trivia
 participant "Supabase" as supabase
 
-note over client, supabase: The user selects the "CREATE" button, on the home page, inputs the fills the required information the "CREATE" button
+note over client, supabase: The user selects the "CREATE" button, on the home page, inputs the fills the required information and presses the "CREATE" button
 
 client -> CRO: Presses the "CREATE" button
     CRO -> CRO: generateTriviaURL(question_number, question_category, question_difficulty, question_type)

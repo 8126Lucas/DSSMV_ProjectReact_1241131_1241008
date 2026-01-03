@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "ImagePicker" as IP
+participant "Hooks" as hooks
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen, taps on the profile picture and chooses a new one
+
+client -> IP: Chooses a new profile picture
+    IP -> IP: dispatch(setUser())
+    IP --> IP
+    IP -> hooks: updateUserRestDB(user_token, 'profile_picture', value);
+        hooks -> restdb: fetch (GET)
+        restdb --> hooks: _id
+        hooks -> restdb: fetch (PATCH)
+        restdb --> hooks
+    hooks --> IP
+IP --> client
+
+@enduml

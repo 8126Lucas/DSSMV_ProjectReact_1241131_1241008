@@ -11,6 +11,8 @@ participant "restDB" as restdb
 note over client, restdb: The user goes to the Settings screen, clicks on the "LANGUAGE" button and selects a language
 
 client -> ui: Selects a language
+    ui -> ui: Updates the language information in memory storage
+    ui --> ui
     ui -> restdb: Finds the user in the database
     restdb --> ui: User's id
     ui -> restdb: Sends new language preference

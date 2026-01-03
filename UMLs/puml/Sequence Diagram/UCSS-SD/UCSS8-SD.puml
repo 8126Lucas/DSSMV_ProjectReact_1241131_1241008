@@ -1,1 +1,25 @@
-UCSS3-SD.puml
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "SS" as ss
+participant "Hooks" as hooks
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen and clicks the "DELETE ACCOUNT" button
+
+client -> ss: Clicks the "DELETE ACCOUNT" button
+    ss -> hooks: deleteAccount(user_token)
+        hooks -> restdb: fetch (DELETE)
+        restdb --> hooks
+    hooks --> ss
+    ss -> ss: dispatch(logout())
+    ss --> ss
+    ss -> ss: storage.clearAll()
+    ss --> ss
+ss --> client: Sends to login screen
+
+@enduml

@@ -11,6 +11,8 @@ participant "restDB" as restdb
 note over client, restdb: The user goes to the Settings screen, taps on the profile picture and chooses a new one
 
 client -> ui: Chooses a new profile picture
+    ui -> ui: Updates in-memory profile picture
+    ui --> ui
     ui -> restdb: Finds the user in the database
     restdb --> ui: User's id
     ui -> restdb: Sends new profile picture (base64 format)

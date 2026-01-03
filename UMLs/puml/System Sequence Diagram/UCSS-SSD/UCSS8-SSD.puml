@@ -11,8 +11,6 @@ participant "restDB" as restdb
 note over client, restdb: The user goes to the Settings screen and clicks the "DELETE ACCOUNT" button
 
 client -> ui: Clicks the "DELETE ACCOUNT" button
-    ui -> restdb: Finds the user in the database
-    restdb --> ui: User's id
     ui -> restdb: Requests to delete user from database
         restdb -> restdb: Deletes user's database entry
         restdb --> restdb
@@ -22,4 +20,5 @@ client -> ui: Clicks the "DELETE ACCOUNT" button
     ui -> ui: Deletes all user's settings in persistent local storage
     ui --> ui
 ui --> client: Sends to login screen
+
 @enduml

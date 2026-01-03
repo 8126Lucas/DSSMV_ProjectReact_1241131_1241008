@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "SettingsScreen" as ss
+participant "Hooks" as hooks
+participant "restDB" as restdb
+
+note over client, restdb: The user goes to the Settings screen, selects the username input field and types
+
+client -> ss: Types the new username
+    ss -> ss: dispatch(setUser())
+    ss --> ss
+    ss -> hooks: updateUserRestDB(user_token, 'username', value);
+        hooks -> restdb: fetch (GET)
+        restdb --> hooks: _id
+        hooks -> restdb: fetch (PATCH)
+        restdb --> hooks
+    hooks --> ss
+ss --> client
+
+@enduml

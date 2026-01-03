@@ -11,6 +11,8 @@ participant "restDB" as restdb
 note over client, restdb: The user goes to the Settings screen, selects the username input field and types
 
 client -> ui: Types the new username
+    ui -> ui: Updates in-memory username
+    ui --> ui
     ui -> restdb: Finds the user in the database
     restdb --> ui: User's id
     ui -> restdb: Sends new username

@@ -1,1 +1,19 @@
-UCSS3-SD.puml
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "SettingsScreen" as ss
+
+note over client, ss: The user goes to the Settings screen and clicks the "THEME" button
+
+client -> ss: Clicks the "THEME" button
+    ss -> ss: dispatch(setTheme())
+    ss --> ss
+    ss -> ss: storage.set('app_theme', new_theme);
+    ss --> ss
+ss --> client
+
+@enduml
