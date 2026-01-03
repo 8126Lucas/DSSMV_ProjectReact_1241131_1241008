@@ -5,14 +5,12 @@ autonumber
 autoactivate on
 
 Actor "Client" as client
-participant "GameMetadataOverlay" as overlay
-participant "Expo Sharing" as expo
+participant "UI" as ui
 
-note over client, expo: The user finishes a game and decides to share their score
+note over client, ui: The user goes to the Leaderboard screen, clicks on a score and presses the "SHARE" button
 
-client -> overlay: Presses the "SHARE" button
-    overlay -> overlay: App takes a screenshot of the view (captureRef)
-    overlay -> expo: App shares the screenshot (shareAsync)
-    expo --> overlay
-overlay --> client: Returns to Overlay view
+client -> ui: Presses the "SHARE" button
+    ui -> ui: App takes a screenshot of the score's view
+    ui --> ui
+ui --> client: Intent to share the screenshot
 @enduml

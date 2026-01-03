@@ -1,10 +1,10 @@
 # Diagramas por fazer:
 
-- [x] diagrama de componentes
-- [x] modelo de domínio
-- [x] diagrama de pacotes
+- [x] ~~diagrama de componentes~~
+- [x] ~~modelo de domínio~~
+- [x] ~~diagrama de pacotes~~
 - [] diagramas de sequência
-  - [] HPS1
+  - [x] HPS1
   - [] HPS2
   - [] LS1
   - [] LS2
@@ -16,8 +16,8 @@
   - [] SS6
   - [] SS7
   - [] SS8
-  - [] GS1
-- [x] diagramas de sequência de sistema
+  - [x] GS1
+- [x] ~~diagramas de sequência de sistema~~
   - [X] HPS1
   - [x] HPS2
   - [x] LS1
@@ -31,4 +31,4 @@
   - [x] SS7
   - [x] SS8
   - [x] GS1
-- [x] diagrama de casos de uso
+- [x] ~~diagrama de casos de uso~~

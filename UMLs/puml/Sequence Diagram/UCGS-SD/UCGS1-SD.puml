@@ -1,0 +1,31 @@
+@startuml
+autonumber
+autoactivate on
+
+actor "Client" as client
+participant "BooleanQuestion / ChoiceQuestion" as question
+participant "GameScreen" as GS
+participant "Hooks" as hooks
+participant "Supabase" as supabase
+
+note over client, supabase: The user selects an answer option
+
+client -> question: Selects an answer option
+    question -> question: handleAnswer = (answer, time_left)
+        question -> GS: handleAnswer = useCallback(answer, time_left)
+            alt answer === correct_answer
+                GS -> GS: setIsCorrect(true)
+                GS --> GS
+                GS -> hooks: calculateScore(time_left, difficulty, type)
+                hooks --> GS: points
+            else answer !== correct_answer
+                GS -> GS: setIsCorrect(false)
+                GS --> GS
+            end
+            GS -> supabase: uploadAnswer(room_token, current_question, user_token, username, points)
+            supabase --> GS
+        GS --> question
+    question --> question
+question --> client: Shows Feedback Overlay
+
+@enduml

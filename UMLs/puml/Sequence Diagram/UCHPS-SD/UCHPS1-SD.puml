@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Actor "Client" as client
+participant "JoinRoomOverlay" as JRO
+
+note over client, JRO: The user selects the "JOIN" button, on the home page, inputs the room code and presses the "JOIN" button
+
+client -> JRO: Presses the "JOIN" button
+    JRO -> JRO: joinRoom(typed_token)
+        JRO -> JRO: router.navigate()
+        JRO --> JRO
+    JRO --> JRO
+JRO --> client: Sends user to Waiting Room
+
+@enduml

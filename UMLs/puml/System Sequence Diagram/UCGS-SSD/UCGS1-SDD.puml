@@ -6,18 +6,20 @@ actor "Client" as client
 participant "UI" as ui
 participant "Supabase" as supabase
 
-note over client, ui: The user selects an answer
+note over client, supabase: The user selects an answer option
 
 client -> ui: Selects an answer option
     ui -> ui: Stops timer and calculates score
-
+    ui --> ui
 alt Correct Answer
     ui -> ui: Updates local state (Score + Feedback Green)
+    ui --> ui
 else Incorrect Answer
     ui -> ui: Updates local state (Feedback Red)
+    ui --> ui
 end
-    ui --> client: Shows Feedback Overlay
     ui -> supabase: Submits answer
     supabase --> ui
+ui --> client: Shows Feedback Overlay
 
 @enduml

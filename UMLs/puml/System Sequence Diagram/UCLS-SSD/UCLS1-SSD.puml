@@ -8,15 +8,17 @@ Actor "Client" as client
 participant "UI" as ui
 participant "RestDB" as restdb
 
-note over client, restdb: The user is on the Leaderboard screen and wants to switch the view
+note over client, restdb: The user is on the Leaderboard screen and clicks on the title, to toggle leaderboard views
 
 client -> ui: Toggles between "Global" and "User" view
-    ui -> ui: Checks internal cache (Redux)
+    ui -> ui: Checks internal cache
+    ui --> ui
 alt Cache Data Not Found
      ui -> restdb: Requests leaderboard data (Global or User specific)
     restdb --> ui: Returns list of scores
 else Cache Data Found
     ui -> ui: Loads data from store
+    ui --> ui
 end
 ui --> client: Updates the list displayed
 

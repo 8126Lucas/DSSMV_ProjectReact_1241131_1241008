@@ -7,7 +7,7 @@ autoactivate on
 Actor "Client" as client
 participant "UI" as ui
 
-note over client: The user selects the "JOIN" button, on the home page, and fills the required information
+note over client, ui: The user selects the "JOIN" button, on the home page, inputs the room code and presses the "JOIN" button
 
 client -> ui: Presses the "JOIN" button
 ui --> client: Sends user to Waiting Room
