@@ -1,6 +1,6 @@
-import {Alert, StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ImagePicker from "@/components/homepage/ImagePicker";
-import {SafeAreaView} from "react-native-safe-area-context";
+import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
 import AppButton from "@/components/AppButton";
 import {useState, useMemo} from "react";
@@ -16,6 +16,7 @@ import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import LanguageOverlay from "@/components/settings/LanguageOverlay";
 import {storage} from "@/constants/storage";
+import {deleteAccount} from "@/hooks/deleteAccount";
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -25,6 +26,7 @@ export default function SettingsScreen() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
     const [loVisible, setLOVisible] = useState(false);
+    const insets = useSafeAreaInsets();
 
     const saveUsername = async (value: string) => {
         dispatch(setUser({
@@ -97,6 +99,12 @@ export default function SettingsScreen() {
                     }
                 }}/>
                 <AppButton title={t('LOGOUT')} color={colors.incorrect} onPress={logoutApp}/>
+                <Text style={[styles.bottom_text, {marginBottom: insets.bottom}]} onPress={async () => {
+                    if(user.user_token) {
+                        await deleteAccount(user.user_token);
+                        logoutApp();
+                    }
+                }}>{t("DELETE ACCOUNT")}</Text>
             </SafeAreaView>
         </View>
     );
@@ -139,4 +147,11 @@ const getStyles = (colors: any) => StyleSheet.create({
         width: 40,
         height: 40,
     },
+    bottom_text: {
+        color: colors.incorrect,
+        fontSize: 14,
+        justifyContent: "space-between",
+        marginTop: 26,
+        textDecorationLine: 'underline',
+    }
 });

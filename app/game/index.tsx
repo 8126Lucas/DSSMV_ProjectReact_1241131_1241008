@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from "react";
-import {TriviaResponse} from "@/hooks/requestTrivia";
 import ChoiceQuestion from "@/components/game/ChoiceQuestion";
 import BooleanQuestion from "@/components/game/BooleanQuestion";
 import {supabase_client} from "@/constants/supabaseClient";
@@ -19,6 +18,9 @@ import {setUser} from "@/src/flux/userSlice";
 import {GameScoreMetadata} from "@/src/types/GameScoreMetadata";
 import * as Haptics from 'expo-haptics';
 import {storage} from "@/constants/storage";
+import {TriviaResponse} from "@/src/types/TriviaResponse";
+import {TriviaObject} from "@/src/types/TriviaObject";
+import searchSupabase from "@/hooks/searchSupabase";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -45,24 +47,6 @@ async function uploadAnswer(room_token: string, question_index: number, player_u
             total_points: score,
         });
     if(error) {throw error;}
-}
-
-async function downloadTrivia(room_token: string, retries = 6): Promise<TriviaResponse | null> {
-    console.log("room_token: ", room_token);
-    for(let attempt = 0; attempt < retries; attempt++) {
-        const {data, error} = await supabase_client
-            .from('rooms')
-            .select('questions')
-            .eq('room', room_token);
-        if(error) {throw error;}
-        if(data && data.length > 0 && data[0]?.questions) {
-            return {data: data[0].questions} as TriviaResponse;
-        }
-        if(attempt < retries - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-        }
-    }
-    return null;
 }
 
 function shuffle(data: string[]): string[] {
@@ -92,6 +76,53 @@ export default function GameScreen() {
     const [leaderboard_data, setLeaderboardData] = useState<{name: string, points: number, user_token: string}[]>([]);
     const [leaderboard_overlay, setLeaderboardOverlay] = useState<boolean>(false);
     const [is_submitting_points, setIsSubmittingPoints] = useState(false);
+
+    const downloadTrivia  = async (room_token: string, retries = 6): Promise<TriviaResponse | null> => {
+        console.log("room_token: ", room_token);
+        for(let attempt = 0; attempt < retries; attempt++) {
+            const {data, error} = await supabase_client
+                .from('rooms')
+                .select('questions')
+                .eq('room', room_token);
+            if(error) {throw error;}
+            if(data && data.length > 0 && data[0]?.questions) {
+                if(user.language !== 'en') {
+                    let objects: TriviaObject[] = [];
+                    for(let question of data[0]?.questions) {
+                        const hash: string = question.question + question.correct_answer + question.incorrect_answers + question.difficulty;
+                        if(!(await searchSupabase(hash))) {
+                            if(user.language === 'es') {
+                                const {data, error} = await supabase_client
+                                    .from('question_translation_bank')
+                                    .select('es')
+                                    .eq('hash', hash);
+                                if (error) {throw error;}
+                                if (data && data.length > 0 && data[0]?.es) {objects.push(data[0]?.es);}
+                            }
+                            else if(user.language === 'pt') {
+                                const {data, error} = await supabase_client
+                                    .from('question_translation_bank')
+                                    .select('pt')
+                                    .eq('hash', hash);
+                                if(error) {throw error;}
+                                if (data && data.length > 0 && data[0]?.pt) {objects.push(data[0]?.pt);}
+                            }
+                        }
+                        else {
+                            objects.push(question);
+                        }
+                    }
+                    return {data: objects} as TriviaResponse;
+                }
+                return {data: data[0].questions} as TriviaResponse;
+            }
+            if(attempt < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        return null;
+    }
+
 
     const handleAnswer = useCallback(async (answer: string, time_left: number) => {
         setPointsOverlay(true);

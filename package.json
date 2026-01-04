@@ -11,7 +11,8 @@
     "web": "expo start --web",
     "export": "expo export --output-dir dist",
     "deploy": "npm run export && echo. > dist/.nojekyll && gh-pages -d dist --dotfiles",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "translate": "npx tsx --env-file=.env src/foreign/main.ts"
   },
   "dependencies": {
     "@charmy.tech/react-native-stroke-text": "^1.2.3",

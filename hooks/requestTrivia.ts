@@ -1,22 +1,7 @@
 import {supabase_client} from "@/constants/supabaseClient";
+import {TriviaResponse} from "@/src/types/TriviaResponse";
+import {APIResponse} from "@/src/types/APIResponse";
 
-interface TriviaObject {
-    type: string,
-    difficulty: string,
-    category: string,
-    question: string,
-    correct_answer: string,
-    incorrect_answers: string[],
-}
-
-export interface TriviaResponse {
-    data: TriviaObject[];
-}
-
-interface APIResponse {
-    response_code: number,
-    results: TriviaResponse
-}
 
 export async function requestTrivia(room_token: string, url: string): Promise<TriviaResponse | null> {
     try {
