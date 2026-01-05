@@ -6,8 +6,10 @@ import {TranslatedTrivia} from "@/src/types/TranslatedTrivia";
 import uploadSupabase from "@/src/foreign/uploadSupabase";
 import {TriviaResponse} from "@/src/types/TriviaResponse";
 
-async function main(count: number) {
-	for(let i: number = 0; i < count; i++) {
+async function main() {
+    let stop: boolean = false;
+    let zero_count = 0;
+	while(!stop) {
 	    let translated_count: number = 0;
 		console.log("-> fetchTrivia");
 		const trivia_response: TriviaResponse = await fetchTrivia();
@@ -28,7 +30,10 @@ async function main(count: number) {
 		console.log("translations:", translations);
 		await uploadSupabase(translations);
 		console.log(`Translated ${translated_count}/50 trivia objects!`);
+        if(translated_count === 0) {zero_count++;}
+        if(zero_count === 10) {stop = true;}
+        console.log("Zero Count:", zero_count);
 	}
 }
 
-main(40).catch((error) => console.error(error));
+main().catch((error) => console.error(error));
