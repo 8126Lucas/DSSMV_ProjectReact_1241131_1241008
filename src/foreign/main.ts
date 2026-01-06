@@ -6,6 +6,9 @@ import {TranslatedTrivia} from "@/src/types/TranslatedTrivia";
 import uploadSupabase from "@/src/foreign/uploadSupabase";
 import {TriviaResponse} from "@/src/types/TriviaResponse";
 
+// npx tsx --env-file=.env src/foreign/main.ts
+// Linux: export $(cat .env | xargs) && npx tsx src/foreign/main.ts
+
 async function main() {
     let stop: boolean = false;
     let zero_count = 0;
@@ -31,7 +34,7 @@ async function main() {
 		await uploadSupabase(translations);
 		console.log(`Translated ${translated_count}/50 trivia objects!`);
         if(translated_count === 0) {zero_count++;}
-        if(zero_count === 10) {stop = true;}
+        if(zero_count === 1000) {stop = true;}
         console.log("Zero Count:", zero_count);
 	}
 }

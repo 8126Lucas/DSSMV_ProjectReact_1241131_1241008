@@ -6,12 +6,14 @@ import {decode} from "html-entities";
 import {BooleanQuestionProps} from "@/src/types/BooleanQuestionProps";
 import {useTheme} from "@/hooks/useTheme";
 import Animated, {FadeIn} from "react-native-reanimated";
+import {useTranslation} from "react-i18next";
 
 
 
 export default function BooleanQuestion(props: BooleanQuestionProps) {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const {t} = useTranslation();
     const [time_left, setTimeLeft] = useState(30);
     const [answered, setAnswered] = useState(false);
     const [disable, setDisable] = useState(false);
@@ -43,7 +45,7 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
             <View style={styles.header}>
                 <Text style={styles.category_text}>{decode(props.category)}</Text>
                 <View style={styles.bottom_row}>
-                    <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
+                    <Text style={styles.questions_text}>{props.question_i}/{props.size} {t('Questions')}</Text>
                     <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
                 </View>
             </View>
@@ -56,14 +58,14 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
                 <TouchableOpacity
                     style={[styles.answer, {backgroundColor: colors.correct}]}
                     disabled={disable}
-                    onPress={() => handleAnswer('True', time_left)}>
+                    onPress={() => handleAnswer(t('True'), time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>True</Animated.Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.incorrect}]}
                     disabled={disable}
-                    onPress={() => handleAnswer('False', time_left)}>
+                    onPress={() => handleAnswer(t('False'), time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>False</Animated.Text>
                 </TouchableOpacity>
             </View>

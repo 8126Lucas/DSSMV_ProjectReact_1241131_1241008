@@ -6,10 +6,12 @@ import {decode} from "html-entities";
 import {ChoiceQuestionProps} from "@/src/types/ChoiceQuestionProps";
 import {useTheme} from "@/hooks/useTheme";
 import Animated, {FadeIn} from "react-native-reanimated";
+import {useTranslation} from "react-i18next";
 
 export default function ChoiceQuestion(props: ChoiceQuestionProps) {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const {t} = useTranslation();
     const [answered, setAnswered] = useState(false);
     const [time_left, setTimeLeft] = useState(30);
     const [color1, setColor1] = useState(colors.backgroundColor);
@@ -81,7 +83,7 @@ export default function ChoiceQuestion(props: ChoiceQuestionProps) {
                 <View style={styles.header}>
                     <Text style={styles.category_text}>{decode(props.category)}</Text>
                     <View style={styles.bottom_row}>
-                        <Text style={styles.questions_text}>{props.question_i}/{props.size} Questions</Text>
+                        <Text style={styles.questions_text}>{props.question_i}/{props.size} {t('Questions')}</Text>
                         <CountdownClock key={props.question_i} seconds={30} onTimeChange={handleTimer}/>
                     </View>
                 </View>

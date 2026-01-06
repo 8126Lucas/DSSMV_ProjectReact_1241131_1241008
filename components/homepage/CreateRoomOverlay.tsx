@@ -1,15 +1,14 @@
-import {View, StyleSheet, Modal, Text, Dimensions, Pressable, Alert} from "react-native";
+import {StyleSheet, Modal, Text, Dimensions, Pressable, Alert} from "react-native";
 import React, {useState, useEffect, useMemo} from "react";
-import {Colors} from "@/constants/theme";
 import InlineDropdown from "@/components/homepage/InlineDropdown";
 import {Item} from "react-native-picker-select";
 import AppButton from "@/components/AppButton";
 import {router} from "expo-router";
-import {createClient} from "@supabase/supabase-js";
-import {requestTrivia, TriviaResponse} from "@/hooks/requestTrivia";
+import {requestTrivia} from "@/hooks/requestTrivia";
 import {CreateRoomOverlayProps} from "@/src/types/CreateRoomOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
+import {TriviaResponse} from "@/src/types/TriviaResponse";
 
 const TRIVIA_API_URL = 'https://opentdb.com/api.php?';
 
@@ -29,42 +28,42 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         label: `${i + 1}`, value: `${i + 1}`
     }));
     const category_options: Item[] = [
-        {label: 'Any Category', value: '0'},
-        {label: 'General Knowledge', value: '9'},
-        {label: 'Entertainment: Books', value: '10'},
-        {label: 'Entertainment: Film', value: '11'},
-        {label: 'Entertainment: Music', value: '12'},
-        {label: 'Entertainment: Musicals & Theaters', value: '13'},
-        {label: 'Entertainment: Television', value: '14'},
-        {label: 'Entertainment: Video Games', value: '15'},
-        {label: 'Entertainment: Board Games', value: '16'},
-        {label: 'Science & Nature', value: '17'},
-        {label: 'Science: Computers', value: '18'},
-        {label: 'Science: Mathematics', value: '19'},
-        {label: 'Mythology', value: '20'},
-        {label: 'Sports', value: '21'},
-        {label: 'Geography', value: '22'},
-        {label: 'History', value: '23'},
-        {label: 'Politics', value: '24'},
-        {label: 'Art', value: '25'},
-        {label: 'Celebrities', value: '26'},
-        {label: 'Animals', value: '27'},
-        {label: 'Vehicles', value: '28'},
-        {label: 'Entertainment: Comics', value: '29'},
-        {label: 'Science: Gadgets', value: '30'},
-        {label: 'Entertainment: Japanese Anime & Manga', value: '31'},
-        {label: 'Entertainment: Cartoon & Animations', value: '32'},
+        {label: t('Any Category'), value: '0'},
+        {label: t('Animals'), value: '27'},
+        {label: t('Art'), value: '25'},
+        {label: t('Celebrities'), value: '26'},
+        {label: t('Entertainment: Board Games'), value: '16'},
+        {label: t('Entertainment: Books'), value: '10'},
+        {label: t('Entertainment: Cartoon & Animations'), value: '32'},
+        {label: t('Entertainment: Comics'), value: '29'},
+        {label: t('Entertainment: Film'), value: '11'},
+        {label: t('Entertainment: Japanese Anime & Manga'), value: '31'},
+        {label: t('Entertainment: Music'), value: '12'},
+        {label: t('Entertainment: Musicals & Theaters'), value: '13'},
+        {label: t('Entertainment: Television'), value: '14'},
+        {label: t('Entertainment: Video Games'), value: '15'},
+        {label: t('General Knowledge'), value: '9'},
+        {label: t('Geography'), value: '22'},
+        {label: t('History'), value: '23'},
+        {label: t('Mythology'), value: '20'},
+        {label: t('Politics'), value: '24'},
+        {label: t('Science & Nature'), value: '17'},
+        {label: t('Science: Computers'), value: '18'},
+        {label: t('Science: Gadgets'), value: '30'},
+        {label: t('Science: Mathematics'), value: '19'},
+        {label: t('Sports'), value: '21'},
+        {label: t('Vehicles'), value: '28'},
     ];
     const difficulty_options: Item[] = [
-        {label: 'Any Difficulty', value: '0'},
-        {label: 'Easy', value: 'easy'},
-        {label: 'Medium', value: 'medium'},
-        {label: 'Hard', value: 'hard'},
+        {label: t('Any Difficulty'), value: '0'},
+        {label: t('Easy'), value: 'easy'},
+        {label: t('Medium'), value: 'medium'},
+        {label: t('Hard'), value: 'hard'},
     ];
     const type_options: Item[] = [
-        {label: 'Any Type', value: '0'},
-        {label: 'Multiple Choice', value: 'multiple'},
-        {label: 'True/False', value: 'boolean'},
+        {label: t('Any Type'), value: '0'},
+        {label: t('Multiple Choice'), value: 'multiple'},
+        {label: t('True/False'), value: 'boolean'},
     ];
     const [number_of_players, setNumberOfPlayers] = useState<string | null>(null);
     const [question_number, setQuestionNumber] = useState<string | null>(null);
