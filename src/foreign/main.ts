@@ -24,6 +24,7 @@ async function main() {
 		for(let pre_object of pre_translated_trivia) {
 			console.log("-> searchSupabase:", pre_object.hash);
 			if(await searchSupabase(pre_object.hash)) {
+				zero_count = 0;
 				translated_count++;
 				console.log("-> parseTranslate")
 				const translated_trivia = await parseTranslate(pre_object);
