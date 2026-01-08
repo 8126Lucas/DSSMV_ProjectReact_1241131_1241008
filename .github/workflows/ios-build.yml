@@ -13,7 +13,7 @@ jobs:
       - name: Prebuild Expo Project
         run: npx expo prebuild --platform ios --non-interactive
       - name: Build iOS App
-        run: xcodebuild -workspace Challengers.xcworkspace -scheme Challengers -configuration Release -sdk iphoneos -derivedDataPath ios-build
+        run: xcodebuild -workspace ios/Challengers.xcworkspace -scheme Challengers -configuration Release -sdk iphoneos -derivedDataPath ios-build
       - name: Create "Payload" Directory
         run: mkdir Payload
       - name: Moving .app to Payload
