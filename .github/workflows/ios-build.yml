@@ -1,0 +1,27 @@
+name: ios-build.yml
+on:
+  workflow_dispatch:
+
+jobs:
+  ios-prod-build:
+    runs-on: macos-latest
+    steps:
+      - name: Pull GitHub Repository
+        uses: actions/checkout@v4
+      - name: Install Project Dependencies
+        run: npm ci
+      - name: Prebuild Expo Project
+        run: npx expo prebuild --platform ios --non-interactive
+      - name: Build iOS App
+        run: xcodebuild -workspace Challengers.xcworkspace -scheme Challengers -configuration Release -sdk iphoneos -derivedDataPath ios-build
+      - name: Create "Payload" Directory
+        run: mkdir Payload
+      - name: Moving .app to Payload
+        run: mv ios-build/Build/Products/Release-iphoneos/Challengers.app Payload/
+      - name: Compress Payload into IPA
+        run: zip -0 -y -r Challengers.ipa Payload/
+      - name: Save IPA File
+        uses: actions/upload-artifact@v4
+        with:
+          name: challengers-ios-release
+          path: Challengers.ipa
