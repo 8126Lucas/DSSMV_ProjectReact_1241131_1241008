@@ -46,7 +46,7 @@ export default function LoginScreen() {
                 }),
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-apikey': RESTDB_API_KEY,
+                    'x-apikey': RESTDB_API_KEY!,
                 }
             }).then(response => console.log(response));
             router.replace("/home");
@@ -63,7 +63,7 @@ export default function LoginScreen() {
                 method: "GET",
                 headers: {
                     'Content-Type': "application/json",
-                    'x-apikey': RESTDB_API_KEY,
+                    'x-apikey': RESTDB_API_KEY!,
                 }
             })
                 .then(response => {

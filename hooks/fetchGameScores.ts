@@ -13,7 +13,7 @@ export const fetchGameScores = async (user_token: string | null) => {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            'x-apikey': RESTDB_API_KEY,
+            'x-apikey': RESTDB_API_KEY!,
         },
     })
         .then(response => response.json())

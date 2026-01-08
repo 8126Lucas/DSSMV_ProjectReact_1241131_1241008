@@ -306,7 +306,7 @@ export default function GameScreen() {
     } else if(data.type === 'boolean') {
         return (
             <View style={{flex: 1}}>
-                <BooleanQuestion
+                    <BooleanQuestion
                     difficulty={data.difficulty}
                     category={data.category}
                     question={data.question}

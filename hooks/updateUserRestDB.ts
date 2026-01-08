@@ -7,7 +7,7 @@ export default async function updateUserRestDB(token: string, column: string, va
         method: "GET",
         headers: {
             'Content-Type': "application/json",
-            'x-apikey': RESTDB_API_KEY,
+            'x-apikey': RESTDB_API_KEY!,
         }
     })
         .then(response => response.json())
@@ -28,7 +28,7 @@ export default async function updateUserRestDB(token: string, column: string, va
                 }),
                 headers: {
                     "Content-Type": "application/json",
-                    'x-apikey': RESTDB_API_KEY,
+                    'x-apikey': RESTDB_API_KEY!,
                 },
             });
         });

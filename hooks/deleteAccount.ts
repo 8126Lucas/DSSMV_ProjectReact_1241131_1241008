@@ -7,7 +7,7 @@ export const deleteAccount = async (token: string) => {
         method: "DELETE",
         headers: {
             'Content-Type': "application/json",
-            'x-apikey': RESTDB_API_KEY,
+            'x-apikey': RESTDB_API_KEY!,
         }
     });
 }

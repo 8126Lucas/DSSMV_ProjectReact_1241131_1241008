@@ -16,7 +16,7 @@ export default async function uploadGameScore(token: string, final_score: number
         }),
         headers: {
             "Content-Type": "application/json",
-            'x-apikey': RESTDB_API_KEY,
+            'x-apikey': RESTDB_API_KEY!,
         },
     });
 }
