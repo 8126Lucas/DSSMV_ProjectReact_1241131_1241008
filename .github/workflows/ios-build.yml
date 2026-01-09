@@ -2,26 +2,50 @@ name: ios-build.yml
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   ios-prod-build:
     runs-on: macos-latest
     steps:
       - name: Pull GitHub Repository
         uses: actions/checkout@v4
+
       - name: Install Project Dependencies
         run: npm ci
+
       - name: Prebuild Expo Project
         run: npx expo prebuild --platform ios --non-interactive
+
       - name: Build iOS App
         run: xcodebuild -workspace ios/Challengers.xcworkspace -scheme Challengers -configuration Release -sdk iphoneos -derivedDataPath ios-build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+
       - name: Create "Payload" Directory
         run: mkdir Payload
+
       - name: Moving .app to Payload
         run: mv ios-build/Build/Products/Release-iphoneos/Challengers.app Payload/
+
+      - name: Get Current Date
+        id: date
+        run: echo "date=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+
       - name: Compress Payload into IPA
-        run: zip -0 -y -r Challengers.ipa Payload/
-      - name: Save IPA File
+        run: zip -0 -y -r Challengers-v${{ steps.date.outputs.date }}.ipa Payload/
+
+      - name: Upload IPA File
         uses: actions/upload-artifact@v4
         with:
-          name: challengers-ios-release
-          path: Challengers.ipa
+          name: challengers-ios-release-v${{ steps.date.outputs.date }}
+          path: Challengers-v${{ steps.date.outputs.date }}.ipa
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.date.outputs.date }}-ios
+          name: Version ${{ steps.date.outputs.date }} (iOS)
+          files: Challengers-v${{ steps.date.outputs.date }}.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,54 @@
+name: ios-build.yml
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  android-prod-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull GitHub Repository
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Prebuild Expo Project
+        run: npx expo prebuild --platform android --non-interactive
+
+      - name: Make Gradle Executable
+        run: chmod +x android/gradlew
+
+      - name: Build Project APK
+        run: cd android && ./gradlew assembleDebug
+
+      - name: Get Current Date
+        id: date
+        run: echo "date=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Upload APK File
+        uses: actions/upload-artifact@v4
+        with:
+          name: challengers-android-release-v${{ steps.date.outputs.date }}
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Rename APK File
+        run: mv android/app/build/outputs/apk/debug/app-debug.apk android/app/build/outputs/apk/debug/Challengers-v${{ steps.date.outputs.date }}.apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.date.outputs.date }}-android
+          name: Version ${{ steps.date.outputs.date }} (Android)
+          files: android/app/build/outputs/apk/debug/Challengers-v${{ steps.date.outputs.date }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
