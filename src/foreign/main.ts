@@ -10,13 +10,18 @@ import {TriviaResponse} from "@/src/types/TriviaResponse";
 // Linux: export $(cat .env | xargs) && npx tsx src/foreign/main.ts
 
 async function main() {
-    let stop: boolean = false;
     let zero_count = 0;
-	while(!stop) {
+	while(1) {
 	    let translated_count: number = 0;
 		console.log("-> fetchTrivia");
-		const trivia_response: TriviaResponse = await fetchTrivia();
+		let trivia_response: TriviaResponse = await fetchTrivia();
 		console.log("trivia_response:", trivia_response);
+		while(trivia_response === undefined) {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+			console.log("-> fetchTrivia");
+			trivia_response = await fetchTrivia();
+			console.log("trivia_response:", trivia_response);
+		}
 		console.log("-> parseTrivia");
 		const pre_translated_trivia: TranslatedTrivia[] = parseTrivia(trivia_response as any);
 		console.log("pre_translated_trivia:", pre_translated_trivia);
@@ -35,7 +40,6 @@ async function main() {
 		await uploadSupabase(translations);
 		console.log(`Translated ${translated_count}/50 trivia objects!`);
         if(translated_count === 0) {zero_count++;}
-        if(zero_count === 1000) {stop = true;}
         console.log("Zero Count:", zero_count);
 	}
 }
