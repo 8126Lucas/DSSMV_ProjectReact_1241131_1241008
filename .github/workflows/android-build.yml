@@ -1,4 +1,4 @@
-name: ios-build.yml
+name: android-build.yml
 on:
   workflow_dispatch:
 
