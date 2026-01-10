@@ -21,6 +21,10 @@ jobs:
 
       - name: Build iOS App
         run: xcodebuild -workspace ios/Challengers.xcworkspace -scheme Challengers -configuration Release -sdk iphoneos -derivedDataPath ios-build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        env:
+          EXPO_PUBLIC_RESTDB_API_MOBILE: ${{ secrets.EXPO_PUBLIC_RESTDB_API_MOBILE }}
+          EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_API: ${{ secrets.EXPO_PUBLIC_SUPABASE_API }}
 
       - name: Create "Payload" Directory
         run: mkdir Payload

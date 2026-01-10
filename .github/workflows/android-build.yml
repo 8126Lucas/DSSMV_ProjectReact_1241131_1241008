@@ -30,6 +30,10 @@ jobs:
 
       - name: Build Project APK
         run: cd android && ./gradlew assembleRelease
+        env:
+          EXPO_PUBLIC_RESTDB_API_MOBILE: ${{ secrets.EXPO_PUBLIC_RESTDB_API_MOBILE }}
+          EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_API: ${{ secrets.EXPO_PUBLIC_SUPABASE_API }}
 
       - name: Get Current Date
         id: date
@@ -39,16 +43,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: challengers-android-release-v${{ steps.date.outputs.date }}
-          path: android/app/build/outputs/apk/app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
       - name: Rename APK File
-        run: mv android/app/build/outputs/apk/app-release.apk android/app/build/outputs/apk/Challengers-v${{ steps.date.outputs.date }}.apk
+        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/Challengers-v${{ steps.date.outputs.date }}.apk
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.date.outputs.date }}-android
           name: Version ${{ steps.date.outputs.date }} (Android)
-          files: android/app/build/outputs/apk/Challengers-v${{ steps.date.outputs.date }}.apk
+          files: android/app/build/outputs/apk/release/Challengers-v${{ steps.date.outputs.date }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
