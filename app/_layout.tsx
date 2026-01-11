@@ -17,7 +17,7 @@ export default function RootLayout() {
         QuickActions.setItems([{
             id: "share_challengers",
             title: "Share Challengers",
-            icon: Platform.OS === "ios" ? "symbol:square.and.arrow.up" : null,
+            icon: Platform.OS === "ios" ? "symbol:square.and.arrow.up" : "share-challengers",
             params: { href: "/share" },
         },]);
     }, []);
@@ -26,7 +26,7 @@ export default function RootLayout() {
         if (quick_action?.id === "share_challengers") {
             setTimeout(() => {
                 Share.share({
-                    message: "Come play Challengers! Download the app: https://8126lucas.github.io/projects/Challengers",
+                    message: "Come play Challengers! Download the app: https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/releases",
                 });
             }, 500);
         }
