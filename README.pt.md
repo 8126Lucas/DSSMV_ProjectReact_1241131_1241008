@@ -1,0 +1,194 @@
+# Challengers 🏆
+
+<div align="center">
+<a href="#">Leia em Português</a> | <a href="README.md">Read in English</a>
+</div>
+<div align="center">
+<img src="assets/images/icon.png" width="160">
+</div>
+
+![GitHub License](https://img.shields.io/github/license/8126Lucas/DSSMV_ProjectReact_1241131_1241008)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![GitHub Actions Workflow Status (android-build)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fandroid-build.yml?label=android-build)
+![GitHub Actions Workflow Status (ios-build)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fios-build.yml?label=ios-build)
+![GitHub Actions Workflow Status (web-deploy)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fweb-deploy.yml?label=web-deploy)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![GitHub issues](https://img.shields.io/github/issues/8126Lucas/DSSMV_ProjectReact_1241131_1241008)
+![GitHub stars](https://img.shields.io/github/stars/8126Lucas/top_from_samsung-music)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/8126Lucas/DSSMV_ProjectReact_1241131_1241008/total)
+
+
+O **Challengers** é um jogo de **perguntas e respostas multi-jogador**, desenhado para maximizar o **conhecimento** enquanto te **divertes** com os teus amigos!
+
+Uma **solução completa** para divertimento sem procrastinação, disponível para Android, iOS e web. 
+
+
+## 📸 Screenshots
+
+| Login                                             | Página Inicial                                            | Definições                                              |
+|---------------------------------------------------|-----------------------------------------------------------|---------------------------------------------------------|
+| ![login](assets/screenshots/screenshot-login.jpg) | ![homescreen](assets/screenshots/screenshot-homepage.jpg) | ![settings](assets/screenshots/screenshot-settings.jpg) |
+
+| Tabela de Classificações                             | Criar Sala de Jogo                                  | Juntar a Sala de Jogo                                 |
+|------------------------------------------------------|-----------------------------------------------------|-------------------------------------------------------|
+| ![lb](assets/screenshots/screenshot-leaderboard.jpg) | ![create](assets/screenshots/screenshot-create.jpg) | ![join](assets/screenshots/screenshot-join.jpg)       |
+
+## 🚀 Funcionalidades
+
+- ✅ Jogo multi-jogador em tempo real
+- ✅ Dados de utilizador personalizáveis
+- ✅ Tabela de classificações específica do utilizador e global
+- ✅ Salas de jogo personalizáveis (número de jogadores, perguntas, categoria, dificuldade e tipo)
+- ✅ Junta-te numa sala com os teus amigos
+- ✅ Autenticação via token (UUID)
+- ✅ Exportação dos teus dados em formato JSON
+
+## 🔧 Tecnologias Utilizadas
+
+- **Expo SDK** - Plataforma principal
+- **React Native** - UI framework multi-plataforma
+- **expo-router** - Sistema de roteamento baseado em ficheiros
+- **Redux Toolkit** - Gestão do estado global da aplicação
+- **Supabase** - Sincronização em tempo real e persistênia de dados
+- **restDB** - Persistência de dados
+- **i18next** - Internacionalização dos ecrãs da aplicação
+- **TypeScript** - Linguagem de programação principal
+- **MMKV** - Persistência local de alta performance 
+- **expo-secure-store** - Armazenamento seguro de dados sensíveis
+- **React Native Reanimated** - Animações para elementos React Native
+- **GitHub Actions** - Linha de CI/CD
+- **react-native-view-shot** - Captura de imagem de componentes
+- **Open Trivia DB** - Base de dados fornecedora das perguntas e respostas
+- **LibreTranslate** - Tradução das perguntas e respostas da Open Trivia DB
+
+## ⚙️ Instalar a Aplicação
+
+### Android 💚
+1. Ir a "[Releases](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/releases)" na página oficial do GitHub
+2. Fazer download da versão mais recente (.apk)
+3. Instalar o Challengers a partir do download
+
+### iOS 🍎
+1. Ir a "[Releases](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/releases)" na página oficial do GitHub 
+2. Fazer download da versão mais recente (.ipa)
+3. Instalar o AltStore
+4. Instalar o Challengers a partir do AltStore
+
+## 💾 Auto-Hospedar o Challengers
+1. Clonar o repositório:
+```bash
+git clone https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008.git
+```
+2. Iniciar um projeto na restDB
+3. Iniciar um projeto no Supabase
+4. Criar as tabelas no Supabase (desativar RLS e ativar Realtime em todas as tabelas):
+```sql
+-- rooms
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+
+-- in_game_answer_state
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+
+-- question_translation_bank
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+```
+5. Criar uma chave de API CORS na restDB
+6. Criar o ficheiro `.env` no diretório raíz do projeto
+```bash
+EXPO_PUBLIC_SUPABASE_URL=...
+EXPO_PUBLIC_SUPABASE_API=...
+EXPO_PUBLIC_RESTDB_API_MOBILE=...
+EXPO_PUBLIC_RESTDB_API_WEB=...
+```
+7. Criar o ficheiro `env.d.ts` no mesmo diretório
+```ts
+declare namespace NodeJS {
+    interface ProcessEnv {
+        EXPO_PUBLIC_SUPABASE_URL: string;
+        EXPO_PUBLIC_SUPABASE_API: string;
+        EXPO_PUBLIC_RESTDB_API_MOBILE: string;
+        EXPO_PUBLIC_RESTDB_API_WEB: string;
+    }
+}
+```
+8. Agora está tudo pronto!
+
+## 📁 Estrutura do Projeto
+```bash
+DSSMV_ProjectReact_1241131_1241008/
+├── .github/workflows/
+├── app/
+│   ├── (tabs)/
+│   │   ├── home/
+│   │   ├── leaderboard/
+│   │   ├── settings/
+│   │   └── _layout.tsx
+│   ├── game/
+│   ├── login/
+│   ├── waiting_room/
+│   ├── _layout.tsx
+│   └── index.tsx
+├── components/
+│   ├── game/
+│   ├── homepage/
+│   ├── leaderboard/
+│   ├── settings/
+│   └── ...
+├── assets/
+│   ├── images/
+│   └── screenshots/
+├── constants/
+├── hooks/
+├── src/
+│   ├── flux/
+│   ├── foreign/
+│   ├── i18n/
+│   │   ├── translations/
+│   │   │   ├── en.json
+│   │   │   ├── es.json
+│   │   │   └── pt.json
+│   │   └── index.tsx
+│   └── types
+├── .env
+├── app.json
+├── env.d.ts
+└── package.json
+```
+
+## ⚠️ Problemas Conhecidos
+
+- O contexto das traduções da trivia não é o melhor
+
+## 🛠️ Resolução de Problemas
+
+Qualquer problema que encontres ao usar o Challengers, abre um [issue](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/issues) na página oficial do GitHub e nós tentaremos resolver até a próxima versão.
+
+## 👥 Autores
+- [**Lucas Santos**](https://github.com/8126Lucas) - Desenvolvimento integral da aplicação 
+- [**Miguel Silva**](https://github.com/miguelsiilva1) - Desenvolvimento integral da aplicação
+
+## 🤝 Como Contribuir
+
+1. Faz um fork do projeto
+2. Cria uma branch para a tua feature (`git checkout -b feature/nova-funcionalidade`)
+3. Commit das tuas mudanças (`git commit -am 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abre um Pull Request

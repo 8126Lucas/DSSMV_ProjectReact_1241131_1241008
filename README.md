@@ -1,52 +1,194 @@
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008)
+# Challengers 🏆
 
-# Welcome to your Expo app 👋
+<div align="center">
+<a href="README.pt.md">Leia em Português</a> | <a href="#">Read in English</a>
+</div>
+<div align="center">
+<img src="assets/images/icon.png" width="160">
+</div>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![GitHub License](https://img.shields.io/github/license/8126Lucas/DSSMV_ProjectReact_1241131_1241008)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![GitHub Actions Workflow Status (android-build)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fandroid-build.yml?label=android-build)
+![GitHub Actions Workflow Status (ios-build)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fios-build.yml?label=ios-build)
+![GitHub Actions Workflow Status (web-deploy)](https://img.shields.io/github/actions/workflow/status/8126Lucas/DSSMV_ProjectReact_1241131_1241008/.github%2Fworkflows%2Fweb-deploy.yml?label=web-deploy)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![GitHub issues](https://img.shields.io/github/issues/8126Lucas/DSSMV_ProjectReact_1241131_1241008)
+![GitHub stars](https://img.shields.io/github/stars/8126Lucas/top_from_samsung-music)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/8126Lucas/DSSMV_ProjectReact_1241131_1241008/total)
 
-## Get started
 
-1. Install dependencies
+**Challengers** is a **multiplayer quiz game** designed to maximize **knowledge** while you **have fun** with your friends!
 
-   ```bash
-   npm install
-   ```
+A **complete solution** for fun without procrastination, available for Android, iOS and web.
 
-2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+## 📸 Screenshots
 
-In the output, you'll find options to open the app in a
+| Login                                             | Homepage                                                  | Settings                                                |
+|---------------------------------------------------|-----------------------------------------------------------|---------------------------------------------------------|
+| ![login](assets/screenshots/screenshot-login.jpg) | ![homescreen](assets/screenshots/screenshot-homepage.jpg) | ![settings](assets/screenshots/screenshot-settings.jpg) |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| Leaderboard                                          | Create Game Room                                    | Join Game Room                                  |
+|------------------------------------------------------|-----------------------------------------------------|-------------------------------------------------|
+| ![lb](assets/screenshots/screenshot-leaderboard.jpg) | ![create](assets/screenshots/screenshot-create.jpg) | ![join](assets/screenshots/screenshot-join.jpg) |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Features
 
-## Get a fresh project
+- ✅ Realtime Multiplayer Game
+- ✅ Customizable user data
+- ✅ User-specific and global leaderboard
+- ✅ Customizable game rooms (number of players, questions, category, difficulty and type)
+- ✅ Join a room with your friends
+- ✅ Authentication via token (UUID)
+- ✅ Export your data in JSON format
 
-When you're ready, run:
+## 🔧 Technologies Used
 
+- **Expo SDK** - Main platform
+- **React Native** - Cross-platform UI framework
+- **expo-router** - File-based routing system
+- **Redux Toolkit** - Global application state management
+- **Supabase** - Real-time synchronization and data persistence
+- **restDB** - Data persistence
+- **i18next** - Internationalization of application screens
+- **TypeScript** - Main programming language
+- **MMKV** - High performance local persistence
+- **expo-secure-store** - Secure storage of sensitive data
+- **React Native Reanimated** - Animations for React Native elements
+- **GitHub Actions** - CI/CD pipeline
+- **react-native-view-shot** - Component image capture
+- **Open Trivia DB** - Database provider of questions and answers
+- **LibreTranslate** - Translation of questions and answers from Open Trivia DB
+
+## ⚙️ Install the Application
+
+### Android 💚
+1. Go to "[Releases](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/releases)" on the official GitHub page
+2. Download the latest version (.apk)
+3. Install Challengers from the download
+
+### iOS 🍎
+1. Go to "[Releases](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/releases)" on the official GitHub page
+2. Download the latest version (.ipa)
+3. Install AltStore
+4. Install Challengers from AltStore
+
+## 💾 Self-Host Challengers
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008.git
+```
+2. Start a project on restDB
+3. Start a project on Supabase
+4. Create the tables in Supabase (disable RLS and enable Realtime on all tables):
+```sql
+-- rooms
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+
+-- in_game_answer_state
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+
+-- question_translation_bank
+create table public.rooms (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  questions json null,
+  room text not null,
+  constraint rooms_pkey primary key (id)
+) TABLESPACE pg_default;
+```
+5. Create a CORS API key on restDB
+6. Create the `.env` file in the project root directory
+```bash
+EXPO_PUBLIC_SUPABASE_URL=...
+EXPO_PUBLIC_SUPABASE_API=...
+EXPO_PUBLIC_RESTDB_API_MOBILE=...
+EXPO_PUBLIC_RESTDB_API_WEB=...
+```
+7. Create the `env.d.ts` file in the same directory
+```ts
+declare namespace NodeJS {
+    interface ProcessEnv {
+        EXPO_PUBLIC_SUPABASE_URL: string;
+        EXPO_PUBLIC_SUPABASE_API: string;
+        EXPO_PUBLIC_RESTDB_API_MOBILE: string;
+        EXPO_PUBLIC_RESTDB_API_WEB: string;
+    }
+}
+```
+8. Now everything is ready!
+
+## 📁 Project Structure
+```bash
+DSSMV_ProjectReact_1241131_1241008/
+├── .github/workflows/
+├── app/
+│   ├── (tabs)/
+│   │   ├── home/
+│   │   ├── leaderboard/
+│   │   ├── settings/
+│   │   └── _layout.tsx
+│   ├── game/
+│   ├── login/
+│   ├── waiting_room/
+│   ├── _layout.tsx
+│   └── index.tsx
+├── components/
+│   ├── game/
+│   ├── homepage/
+│   ├── leaderboard/
+│   ├── settings/
+│   └── ...
+├── assets/
+│   ├── images/
+│   └── screenshots/
+├── constants/
+├── hooks/
+├── src/
+│   ├── flux/
+│   ├── foreign/
+│   ├── i18n/
+│   │   ├── translations/
+│   │   │   ├── en.json
+│   │   │   ├── es.json
+│   │   │   └── pt.json
+│   │   └── index.tsx
+│   └── types
+├── .env
+├── app.json
+├── env.d.ts
+└── package.json
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## ⚠️ Known Issues
 
-## Learn more
+- The context of the trivia translations isn't the best
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🛠️ Troubleshooting
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Any problem you encounter while using Challengers, open an [issue](https://github.com/8126Lucas/DSSMV_ProjectReact_1241131_1241008/issues) on the official GitHub page and we will try to solve it by the next version.
 
-## Join the community
+## 👥 Authors
+- [**Lucas Santos**](https://github.com/8126Lucas) - Full application development
+- [**Miguel Silva**](https://github.com/miguelsiilva1) - Full application development
 
-Join our community of developers creating universal apps.
+## 🤝 How to Contribute
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Open a Pull Request
