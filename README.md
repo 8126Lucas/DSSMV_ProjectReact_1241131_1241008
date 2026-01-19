@@ -3,7 +3,7 @@
 <div align="center">
 <a href="README.pt.md">Leia em Português</a> | <a href="#">Read in English</a>
 </div>
-<div align="center">
+<div align="center" style="margin: 20px;">
 <img src="assets/images/icon.png" width="160">
 </div>
 
@@ -151,6 +151,7 @@ DSSMV_ProjectReact_1241131_1241008/
 │   ├── homepage/
 │   ├── leaderboard/
 │   ├── settings/
+│   ├── special_rooms/
 │   └── ...
 ├── assets/
 │   ├── images/

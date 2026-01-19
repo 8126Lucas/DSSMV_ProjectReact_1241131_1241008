@@ -1,4 +1,4 @@
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {setTheme} from "@/src/flux/themeSlice";
 import {REST_DB_ENDPOINT_USER} from "@/constants/RestDBEndpoints";
@@ -6,22 +6,30 @@ import {setUser} from "@/src/flux/userSlice";
 import i18n from "i18next";
 import {ActivityIndicator, View} from "react-native";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
-import {setMaintenance} from "@/src/flux/appSlice";
+import {setMaintenance, setNoInternet} from "@/src/flux/appSlice";
 import {storage} from "@/constants/storage";
+import * as Network from "expo-network";
+import {NetworkStateType} from "expo-network";
+import {RootState} from "@/src/flux/store";
 
 export default function AppInitializer({children}: {children: React.ReactNode}) {
     const [has_token, setHasToken] = useState<boolean | null>(null);
+    const retry_trigger = useSelector((state: RootState) => state.app.retry_trigger);
     const dispatch = useDispatch();
 
     useEffect(() => {
         const loginStatus = async () => {
+            setHasToken(null);
             const saved_theme = storage.getString('app_theme');
             if(saved_theme === 'light' || saved_theme === 'dark') {
                 dispatch(setTheme({
                     theme: saved_theme,
                 }));
             }
-
+            const network_state = (await Network.getNetworkStateAsync()).type;
+            if(network_state === NetworkStateType.NONE) {
+                dispatch(setNoInternet());
+            }
             const user_token = storage.getString("user_token");
             if(user_token) {
                 const filter = {'user_token': user_token};
@@ -55,7 +63,7 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
             else {setHasToken(false);}
         };
         loginStatus();
-    }, []);
+    }, [retry_trigger]);
 
     if (has_token === null) {
         return (
