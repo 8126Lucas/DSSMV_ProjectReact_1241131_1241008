@@ -3,7 +3,7 @@
 <div align="center">
 <a href="#">Leia em Português</a> | <a href="README.md">Read in English</a>
 </div>
-<div align="center">
+<div align="center" style="margin: 20px;">
 <img src="assets/images/icon.png" width="160">
 </div>
 

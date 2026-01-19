@@ -4,20 +4,24 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import {InlineDropdownProps} from "@/src/types/InlineDropdownProps";
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
-const InlineDropdown = ({title, options, updateValue}: InlineDropdownProps) => {
+const InlineDropdown = ({title, mandatory, options, updateValue}: InlineDropdownProps) => {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const pickerSelectStyles = useMemo(() => getPickerSelectStyles(colors), [colors]);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{title}</Text>
+            <Text style={styles.text}>{title} {mandatory && <Text style={{color: colors.incorrect}}>*</Text>}
+            </Text>
             <RNPickerSelect
                 onValueChange={(value: string | null): void => updateValue(value)}
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
+                placeholder={{ label: t("Select an item..."), value: null }}
                 Icon={() => {return (Platform.OS !== 'web' ? <Ionicons name="chevron-down" size={24} color={colors.secondaryText}/> : null);}}/>
         </View>
     );

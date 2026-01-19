@@ -4,8 +4,10 @@ import RNPickerSelect, { Item } from 'react-native-picker-select';
 import {Ionicons} from '@expo/vector-icons';
 import {LanguageDropdownProps} from "@/src/types/LanguageDropdownProps"
 import {useTheme} from "@/hooks/useTheme";
+import {useTranslation} from "react-i18next";
 
 const LanguageDropdown = ({ title, options, updateValue, currentValue }: LanguageDropdownProps) => {
+    const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const pickerSelectStyles = useMemo(() => getPickerSelectStyles(colors), [colors]);
@@ -19,6 +21,7 @@ const LanguageDropdown = ({ title, options, updateValue, currentValue }: Languag
                 items={options}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
+                placeholder={{ label: t("Select an item..."), value: null }}
                 Icon={() => {return (Platform.OS !== 'web' ? <Ionicons name="chevron-down" size={24} color={colors.secondaryText}/> : null);}}
             />
         </View>
