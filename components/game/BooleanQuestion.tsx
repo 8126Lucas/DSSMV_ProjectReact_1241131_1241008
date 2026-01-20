@@ -58,14 +58,14 @@ export default function BooleanQuestion(props: BooleanQuestionProps) {
                 <TouchableOpacity
                     style={[styles.answer, {backgroundColor: colors.correct}]}
                     disabled={disable}
-                    onPress={() => handleAnswer('True', time_left)}>
+                    onPress={() => handleAnswer(t('True'), time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>{t('True')}</Animated.Text>
                 </TouchableOpacity>
                 <View style={styles.vertical_line}/>
                 <TouchableOpacity 
                     style={[styles.answer, {backgroundColor: colors.incorrect}]}
                     disabled={disable}
-                    onPress={() => handleAnswer('False', time_left)}>
+                    onPress={() => handleAnswer(t('False'), time_left)}>
                     <Animated.Text style={styles.answer_text} entering={FadeIn.duration(300)}>{t('False')}</Animated.Text>
                 </TouchableOpacity>
             </View>

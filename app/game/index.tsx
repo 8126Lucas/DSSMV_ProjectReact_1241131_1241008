@@ -21,6 +21,7 @@ import {storage} from "@/constants/storage";
 import {TriviaResponse} from "@/src/types/TriviaResponse";
 import {TriviaObject} from "@/src/types/TriviaObject";
 import searchSupabase from "@/hooks/searchSupabase";
+import {useAudioPlayer} from "expo-audio";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -66,6 +67,8 @@ export default function GameScreen() {
     const {colors} = useTheme();
     const params = useLocalSearchParams();
     const dispatch = useDispatch();
+    const audio_source = require('@/assets/audio/Correct_Choice.mp3');
+    const audio_player = useAudioPlayer(audio_source);
     const [trivia, setTrivia] = useState<TriviaResponse | null>(null);
     const [score, setScore] = useState(0);
     const [question_points, setQuestionPoints] = useState(0);
@@ -128,6 +131,8 @@ export default function GameScreen() {
         setPointsOverlay(true);
         let new_score = score;
         if (answer === data.correct_answer) {
+            await audio_player.seekTo(0);
+            audio_player.play();
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             setIsCorrect(true);
             const points = calculateScore(time_left, data.difficulty, data.type);

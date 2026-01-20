@@ -1,13 +1,13 @@
 import {Dimensions, Modal, StyleSheet, Text, View} from "react-native";
 import {useEffect, useMemo} from "react";
-import {Colors} from "@/constants/theme";
 import {GamePointsPerPlayerProps} from "@/src/types/GamePointsPerPlayerProps";
 import {GamePointsOverlayProps} from "@/src/types/GamePointsOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store";
 import Animated, {FadeInUp} from "react-native-reanimated";
 import {useTranslation} from "react-i18next";
+import { useAudioPlayer } from 'expo-audio';
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     const {colors} = useTheme();
@@ -29,8 +29,12 @@ const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
 const GamePointsOverlay = (props: GamePointsOverlayProps) => {
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const user = useSelector((state: RootState) => state.user);
     const player_scores = [...props.player_scores];
     const sorted_scores = player_scores.sort((a, b) => b.points - a.points);
+    const game_win: boolean = (sorted_scores.length > 1 && sorted_scores[0].user_token === user.user_token);
+    const audio_source = require('@/assets/audio/Win.mp3');
+    const audio_player = useAudioPlayer(audio_source);
 
     useEffect(() => {
         let timer: number;
@@ -53,7 +57,13 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
             navigationBarTranslucent={true}
             statusBarTranslucent={true}
             visible={props.isVisible}
-            onRequestClose={props.onClose}>
+            onRequestClose={props.onClose}
+            onShow={async () => {
+                if(game_win) {
+                    await audio_player.seekTo(0);
+                    audio_player.play();
+                }
+            }}>
             <View style={styles.root}>
                 {sorted_scores.map((item, index) => (
                     <Animated.View style={{width: '100%'}} key={index} entering={FadeInUp.delay(index * 100)}>
