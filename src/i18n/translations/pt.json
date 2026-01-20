@@ -89,6 +89,10 @@
   "EXPORT DATA" : "EXPORTAR DADOS",
   "LOGOUT": "SAIR",
   "DELETE ACCOUNT": "ELIMINAR CONTA",
+  "Delete Account": "Eliminar Conta",
+  "Are you sure you want to delete your Challengers account?": "Tens a certeza que queres apagar a tua conta do Challengers?",
+  "No": "Não",
+  "Yes, please": "Sim, por favor",
 
   "WAITING OTHER": "À ESPERA DE",
   "PLAYERS TO JOIN": "JOGADORES PARA ENTRAR",

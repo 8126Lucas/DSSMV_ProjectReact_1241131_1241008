@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ImagePicker from "@/components/homepage/ImagePicker";
 import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
 import {FontAwesome6} from "@expo/vector-icons";
@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 import LanguageOverlay from "@/components/settings/LanguageOverlay";
 import {storage} from "@/constants/storage";
 import {deleteAccount} from "@/hooks/deleteAccount";
+import {NAVBAR_HEIGHT} from "@/constants/NavbarHeight";
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -61,15 +62,17 @@ export default function SettingsScreen() {
         }
     };
 
-     const logoutApp = () => {
+    const logoutApp = () => {
         dispatch(logout());
         storage.clearAll();
         router.replace('/login');
     }
 
     return (
-        <View style={styles.wrapper}>
-            <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
+            <ScrollView contentContainerStyle={styles.container}
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={false}>
                 <LanguageOverlay lo_visible={loVisible} setLOVisible={setLOVisible} />
                 <ImagePicker width={200} height={200}/>
                 <View style={styles.user_token_container}>
@@ -100,13 +103,30 @@ export default function SettingsScreen() {
                 }}/>
                 <AppButton title={t('LOGOUT')} color={colors.incorrect} onPress={logoutApp}/>
                 <Text style={[styles.bottom_text, {marginBottom: insets.bottom}]} onPress={async () => {
-                    if(user.user_token) {
-                        await deleteAccount(user.user_token);
-                        logoutApp();
-                    }
+                    Alert.alert(t('Delete Account'), t('Are you sure you want to delete your Challengers account?'), [
+                        {
+                            text: t('No'),
+                            onPress: () => {},
+                            style: 'cancel',
+                        },
+                        {
+                            text: t('Yes, please'),
+                            onPress: async () => {
+                                if(user.user_token) {
+                                    await deleteAccount(user.user_token);
+                                    logoutApp();
+                                }
+                            },
+                            style: 'default',
+                        },
+                    ],
+                    {
+                        cancelable: true,
+                        onDismiss: () => {},
+                    });
                 }}>{t("DELETE ACCOUNT")}</Text>
-            </SafeAreaView>
-        </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -116,11 +136,12 @@ const getStyles = (colors: any) => StyleSheet.create({
         backgroundColor: colors.backgroundColor,
     },
     container: {
-        flex: 1,
+        flexGrow: 1,
         width: '100%',
         padding: 10,
         height: "auto",
         justifyContent: 'flex-start',
+        paddingBottom: NAVBAR_HEIGHT,
         alignItems: 'center',
         marginTop: 20,
     },

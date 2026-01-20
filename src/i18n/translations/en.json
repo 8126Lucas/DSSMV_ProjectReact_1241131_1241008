@@ -89,6 +89,10 @@
   "EXPORT DATA": "EXPORT DATA",
   "LOGOUT": "LOGOUT",
   "DELETE ACCOUNT": "DELETE ACCOUNT",
+  "Delete Account": "Delete Account",
+  "Are you sure you want to delete your Challengers account?": "Are you sure you want to delete your Challengers account?",
+  "No": "No",
+  "Yes, please": "Yes, please",
 
   "WAITING OTHER": "WAITING OTHER",
   "PLAYERS TO JOIN": "PLAYERS TO JOIN",

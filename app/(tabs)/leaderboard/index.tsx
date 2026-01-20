@@ -9,6 +9,7 @@ import {GameScore} from "@/src/types/GameScore";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import {fetchGameScores} from "@/hooks/fetchGameScores";
+import {NAVBAR_HEIGHT} from "@/constants/NavbarHeight";
 
 
 export default function LeaderboardScreen() {
@@ -72,7 +73,7 @@ export default function LeaderboardScreen() {
 
     return (
         <View style={styles.wrapper}>
-            <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
+            <SafeAreaView edges={['top', 'left', 'right', 'bottom']} style={styles.container}>
                 <TouchableOpacity style={styles.titleContainer} onPress={() => setLeaderboardType((leaderboard_type === 'user' ? 'global' : 'user'))}>
                     <Text style={styles.text}>🏆</Text>
                     <Text style={styles.text}>{`${(leaderboard_type === 'user' ? (user.username ? `${user.username}${t('\'s')}` : t("YOUR")) : t('GLOBAL'))}\n${t('LEADERBOARD')}`}</Text>
@@ -99,7 +100,8 @@ const getStyles = (colors: any) => StyleSheet.create({
     container: {
         flex: 1,
         margin: 10,
-        paddingBottom: 70, 
+        marginBottom: 0,
+        paddingBottom: NAVBAR_HEIGHT - 20,
     },
     titleContainer: {
         flexDirection: "row",
