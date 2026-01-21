@@ -22,6 +22,7 @@ import {TriviaResponse} from "@/src/types/TriviaResponse";
 import {TriviaObject} from "@/src/types/TriviaObject";
 import searchSupabase from "@/hooks/searchSupabase";
 import {useAudioPlayer} from "expo-audio";
+import {clearGameConfig} from "@/src/flux/gameSlice";
 
 async function checkAnswers(room_token: string, question_index: number): Promise<number> {
     const {data, error} = await supabase_client
@@ -64,6 +65,7 @@ function shuffle(data: string[]): string[] {
 
 export default function GameScreen() {
     const user = useSelector((state: RootState) => state.user);
+    const game_config = useSelector((state: RootState) => state.game);
     const {colors} = useTheme();
     const params = useLocalSearchParams();
     const dispatch = useDispatch();
@@ -264,6 +266,10 @@ export default function GameScreen() {
                     if (token) {
                         const game_metadata: GameScoreMetadata = {
                             room_token: params.room_token.toString(),
+                            category: game_config.category,
+                            difficulty: game_config.difficulty,
+                            type: game_config.type,
+                            number_of_questions: game_config.number_of_questions,
                             data: leaderboard_data,
                         }
                         await updateUserRestDB(token, "games_played", { "$inc": 1 });
@@ -279,6 +285,7 @@ export default function GameScreen() {
                 } catch (error) {
                     console.log(error);
                 } finally {
+                    dispatch(clearGameConfig());
                     setLeaderboardOverlay(false);
                     router.replace('/home');
                 }

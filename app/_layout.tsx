@@ -17,7 +17,7 @@ export default function RootLayout() {
         QuickActions.setItems([{
             id: "share_challengers",
             title: "Share Challengers",
-            icon: Platform.OS === "ios" ? "symbol:square.and.arrow.up" : "share-challengers",
+            icon: "share_challengers",
             params: { href: "/share" },
         },]);
     }, []);

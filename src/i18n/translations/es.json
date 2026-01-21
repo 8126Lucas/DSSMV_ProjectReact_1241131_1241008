@@ -109,5 +109,14 @@
   "HOPEFULLY, IT WILL END": "OJALÁ QUE ESTO TERMINE",
 
   "YOU ARE OFFLINE!": "¡ESTÁS DESCONECTADO!",
-  "THE APP REQUIRES AN INTERNET CONNECTION": "LA APLICACIÓN REQUIERE UNA CONEXIÓN A INTERNET"
+  "THE APP REQUIRES AN INTERNET CONNECTION": "LA APLICACIÓN REQUIERE UNA CONEXIÓN A INTERNET",
+
+  "Category": "Categoría",
+  "Difficulty": "Dificultad",
+  "Type": "Tipo",
+  "easy": "Fácil",
+  "medium": "Medio",
+  "hard": "Difícil",
+  "multiple": "Opción Múltiple",
+  "boolean": "Verdadero/Falso"
 }

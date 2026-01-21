@@ -40,13 +40,16 @@ const GameMetadataOverlay = (props: GameMetadataOverlayProps) => {
                 <Pressable style={styles.container} onPress={() => props.setMetadataVisible(true)}>
                     <View ref={view_ref} style={styles.subContainer} accessible={true}>
                         <Text style={styles.title}>{t('Room Code')}: #{props.metadata.room_token}</Text>
+                        <Text style={styles.metadataItem}>{t('Category')}: {props.metadata.category ? t(props.metadata.category) : "N/A"}</Text>
+                        <Text style={styles.metadataItem}>{t('Difficulty')}: {props.metadata.difficulty ? t(props.metadata.difficulty) : "N/A"}</Text>
+                        <Text style={styles.metadataItem}>{t('Type')}: {props.metadata.type ? t(props.metadata.type) : "N/A"}</Text>
                         <View style={styles.pointsContainer}>
                             {props.metadata.data.map((item, index) => (
                                 <View key={index} style={styles.singlePointContainer}>
                                     <Text style={styles.item}>
                                         {item.name}
                                     </Text>
-                                    <Text style={styles.item}>
+                                    <Text style={styles.pointsItem}>
                                         {item.points} pts
                                     </Text>
                                 </View>
@@ -115,6 +118,23 @@ const getStyles = (colors: any) => StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
         color: colors.text,
+    },
+    pointsItem: {
+        flex: 1,
+        padding: 6,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'right', 
+        color: colors.text,
+    },
+    metadataItem: {
+        width: '100%',
+        padding: 4,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: colors.text,
+        textTransform: 'capitalize',
     },
 });
 

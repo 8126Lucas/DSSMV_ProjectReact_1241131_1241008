@@ -9,6 +9,8 @@ import {CreateRoomOverlayProps} from "@/src/types/CreateRoomOverlayProps";
 import {useTheme} from "@/hooks/useTheme";
 import {useTranslation} from "react-i18next";
 import {TriviaResponse} from "@/src/types/TriviaResponse";
+import {useDispatch} from "react-redux";
+import {setGameConfig} from "@/src/flux/gameSlice";
 
 const TRIVIA_API_URL = 'https://opentdb.com/api.php?';
 
@@ -20,6 +22,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
     const {t} = useTranslation();
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
+    const dispatch = useDispatch();
 
     const player_options = Array.from({length: 8}, (_, i) => ({
         label: `${i + 1}`, value: `${i + 1}`
@@ -96,6 +99,13 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         if(number_of_players !== null) {
             trivia.then(trivia_data => {
                 if(trivia_data) {
+                    dispatch(setGameConfig({
+                        category: question_category,
+                        difficulty: question_difficulty,
+                        type: question_type,
+                        number_of_questions: question_number,
+                        room_token: room_token,
+                    }));
                     router.navigate({
                         pathname: '/waiting_room',
                         params: {

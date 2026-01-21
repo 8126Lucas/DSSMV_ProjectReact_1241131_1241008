@@ -109,5 +109,14 @@
   "HOPEFULLY, IT WILL END": "HOPEFULLY, IT WILL END",
 
   "YOU ARE OFFLINE!": "YOU ARE OFFLINE!",
-  "THE APP REQUIRES AN INTERNET CONNECTION": "THE APP REQUIRES AN INTERNET CONNECTION"
+  "THE APP REQUIRES AN INTERNET CONNECTION": "THE APP REQUIRES AN INTERNET CONNECTION",
+
+  "Category": "Category",
+  "Difficulty": "Difficulty",
+  "Type": "Type",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "multiple": "Multiple",
+  "boolean": "True/False"
 }

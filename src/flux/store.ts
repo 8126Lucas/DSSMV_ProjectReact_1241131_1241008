@@ -3,6 +3,7 @@ import userReducer from './userSlice';
 import leaderboardReducer from './leaderboardSlice';
 import themeReducer from './themeSlice';
 import appReducer from './appSlice';
+import gameReducer from './gameSlice'
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         leaderboard: leaderboardReducer,
         theme: themeReducer,
         app: appReducer,
+        game: gameReducer,
     },
 });
 
