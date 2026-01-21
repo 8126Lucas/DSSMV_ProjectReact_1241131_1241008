@@ -11,6 +11,7 @@ import {storage} from "@/constants/storage";
 import * as Network from "expo-network";
 import {NetworkStateType} from "expo-network";
 import {RootState} from "@/src/flux/store";
+import {SoundManager} from "@/src/SoundManager";
 
 export default function AppInitializer({children}: {children: React.ReactNode}) {
     const [has_token, setHasToken] = useState<boolean | null>(null);
@@ -50,9 +51,11 @@ export default function AppInitializer({children}: {children: React.ReactNode}) 
                             user_token: user_token,
                             games_played: data[0].games_played,
                             profile_picture: data[0].profile_picture,
+                            win_sound: data[0].win_sound,
                             language: data[0].language,
                         }));
                         await i18n.changeLanguage(data[0].language);
+                        if(data[0].win_sound != null) {await SoundManager.instance.loadWinSound(data[0].win_sound);}
                         setHasToken(true);
                     })
                     .catch((error) => {

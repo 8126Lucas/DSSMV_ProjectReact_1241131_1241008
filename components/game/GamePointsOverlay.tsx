@@ -7,7 +7,8 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/src/flux/store";
 import Animated, {FadeInUp} from "react-native-reanimated";
 import {useTranslation} from "react-i18next";
-import { useAudioPlayer } from 'expo-audio';
+import {AudioPlayer, useAudioPlayer} from 'expo-audio';
+import {SoundManager} from "@/src/SoundManager";
 
 const GamePointsPerPlayer = (props: GamePointsPerPlayerProps) => {
     const {colors} = useTheme();
@@ -33,8 +34,11 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
     const player_scores = [...props.player_scores];
     const sorted_scores = player_scores.sort((a, b) => b.points - a.points);
     const game_win: boolean = (sorted_scores.length > 1 && sorted_scores[0].user_token === user.user_token);
-    const audio_source = require('@/assets/audio/Win.mp3');
-    const audio_player = useAudioPlayer(audio_source);
+    const audio_source_win = require('@/assets/audio/Win.mp3');
+    const audio_source_loss = require('@/assets/audio/Game_Over.mp3');
+    const audio_player_win = useAudioPlayer(audio_source_win);
+    const audio_player_loss = useAudioPlayer(audio_source_loss);
+
 
     useEffect(() => {
         let timer: number;
@@ -60,8 +64,28 @@ const GamePointsOverlay = (props: GamePointsOverlayProps) => {
             onRequestClose={props.onClose}
             onShow={async () => {
                 if(game_win) {
-                    await audio_player.seekTo(0);
-                    audio_player.play();
+                    let played_custom = false;
+                    if (user.win_sound && user.win_sound.length > 0) {
+                        try {
+                            if (!SoundManager.instance.win_sound) {
+                                await SoundManager.instance.loadWinSound(user.win_sound);
+                            }
+                            if (SoundManager.instance.win_sound) {
+                                await SoundManager.instance.playWinSound();
+                                played_custom = true;
+                            }
+                        } catch (error) {
+                            console.log("Error while playing custom sound:", error);
+                        }
+                    }
+                    if (!played_custom) {
+                        await audio_player_win.seekTo(0);
+                        audio_player_win.play();
+                    }
+                }
+                else {
+                    await audio_player_loss.seekTo(0);
+                    audio_player_loss.play();
                 }
             }}>
             <View style={styles.root}>

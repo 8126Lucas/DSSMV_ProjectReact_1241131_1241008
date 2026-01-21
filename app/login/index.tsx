@@ -12,6 +12,9 @@ import {useTranslation} from "react-i18next";
 import {RESTDB_API_KEY} from "@/constants/RestDBChooseKey";
 import {storage} from "@/constants/storage";
 import {setMaintenance} from "@/src/flux/appSlice";
+import {base64ToAudio} from "@/hooks/base64ToAudio";
+import i18n from "i18next";
+import {SoundManager} from "@/src/SoundManager";
 
 export default function LoginScreen() {
     const {t} = useTranslation();
@@ -29,6 +32,7 @@ export default function LoginScreen() {
                 user_token: token,
                 games_played: 0,
                 profile_picture: '',
+                win_sound: null,
                 language: 'en',
             }));
             dispatch(setTheme({
@@ -42,6 +46,7 @@ export default function LoginScreen() {
                     username: '',
                     games_played: 0,
                     profile_picture: '',
+                    win_sound: null,
                     language: 'en',
                 }),
                 headers: {
@@ -89,8 +94,11 @@ export default function LoginScreen() {
                             user_token: token,
                             games_played: data[0].games_played,
                             profile_picture: data[0].profile_picture,
+                            win_sound: data[0].win_sound,
                             language: data[0].language,
                         }));
+                        await i18n.changeLanguage(data[0].language);
+                        if(data[0].win_sound != null) {await SoundManager.instance.loadWinSound(data[0].win_sound);}
                         dispatch(setTheme({
                             theme: 'light',
                         }));

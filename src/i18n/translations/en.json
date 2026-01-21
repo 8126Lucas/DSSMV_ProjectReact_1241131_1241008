@@ -94,6 +94,14 @@
   "No": "No",
   "Yes, please": "Yes, please",
 
+  "SOUND EFFECTS STUDIO": "SOUND EFFECTS STUDIO",
+  "STOP": "STOP",
+  "START": "START",
+  "New Sound Effect": "New Sound Effect",
+  "Your new sound effect has been saved and linked to your account!": "Your new sound effect has been saved and linked to your account!",
+  "Permission to access microphone was denied!": "Permission to access microphone was denied!",
+  "MAX DURATION OF 5 SECONDS": "MAX DURATION OF 5 SECONDS",
+
   "WAITING OTHER": "WAITING OTHER",
   "PLAYERS TO JOIN": "PLAYERS TO JOIN",
   "ROOM CODE": "ROOM CODE",

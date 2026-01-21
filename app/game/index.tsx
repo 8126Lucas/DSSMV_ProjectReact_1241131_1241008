@@ -279,6 +279,7 @@ export default function GameScreen() {
                             user_token: user.user_token,
                             games_played: user.games_played! + 1,
                             profile_picture: user.profile_picture,
+                            win_sound: user.win_sound,
                             language: user.language,
                         }));
                     }

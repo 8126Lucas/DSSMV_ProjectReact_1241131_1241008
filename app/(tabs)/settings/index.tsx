@@ -18,6 +18,7 @@ import LanguageOverlay from "@/components/settings/LanguageOverlay";
 import {storage} from "@/constants/storage";
 import {deleteAccount} from "@/hooks/deleteAccount";
 import {NAVBAR_HEIGHT} from "@/constants/NavbarHeight";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function SettingsScreen() {
     const user = useSelector((state: RootState) => state.user);
@@ -35,6 +36,7 @@ export default function SettingsScreen() {
             user_token: (user.user_token ? user.user_token : ''),
             games_played: (user.games_played ? user.games_played : 0),
             profile_picture: (user.profile_picture ? user.profile_picture : ''),
+            win_sound: (user.win_sound ? user.win_sound : null),
             language: (user.language ? user.language : 'en'),
         }));
         if(user.user_token) {
@@ -74,6 +76,9 @@ export default function SettingsScreen() {
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={false}>
                 <LanguageOverlay lo_visible={loVisible} setLOVisible={setLOVisible} />
+                <TouchableOpacity style={styles.music_icon} onPress={() => router.navigate('/sound_recording')} >
+                    <MaterialCommunityIcons name="music-box" size={46} color={colors.primaryAction2}/>
+                </TouchableOpacity>
                 <ImagePicker width={200} height={200}/>
                 <View style={styles.user_token_container}>
                     <TextInput
@@ -174,5 +179,12 @@ const getStyles = (colors: any) => StyleSheet.create({
         justifyContent: "space-between",
         marginTop: 26,
         textDecorationLine: 'underline',
+    },
+    music_icon: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        marginTop: -10,
+        marginRight: 10,
     }
 });

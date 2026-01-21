@@ -23,6 +23,7 @@ export default function ImagePicker({width, height}: ImagePickerProps) {
             user_token: (user.user_token ? user.user_token : ''),
             games_played: (user.games_played ? user.games_played : 0),
             profile_picture: value,
+            win_sound: user.win_sound,
             language: (user.language ? user.language : 'en'),
         }));
         if(user.user_token) {

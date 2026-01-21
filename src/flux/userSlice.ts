@@ -1,10 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { AudioPlayer } from 'expo-audio';
 
 interface UserState {
     username: string | null;
     user_token: string | null;
     games_played: number | null;
     profile_picture: string | null;
+    win_sound: string | null;
     language: string | null;
 }
 
@@ -13,6 +15,7 @@ const initial_state: UserState = {
     user_token: null,
     games_played: null,
     profile_picture: null,
+    win_sound: null,
     language: null,
 };
 
@@ -25,6 +28,7 @@ const userSlice = createSlice({
             state.user_token = action.payload.user_token;
             state.games_played = action.payload.games_played;
             state.profile_picture = action.payload.profile_picture;
+            state.win_sound = action.payload.win_sound;
             state.language = action.payload.language;
         },
         logout: (state: UserState) => {
@@ -32,6 +36,7 @@ const userSlice = createSlice({
             state.user_token = null;
             state.games_played = null;
             state.profile_picture = null;
+            state.win_sound = null;
             state.language = null;
         }
     }

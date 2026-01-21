@@ -31,6 +31,7 @@ const LanguageOverlay = ({ lo_visible, setLOVisible }: LanguageOverlayProps) => 
                 user_token: (user.user_token ? user.user_token : ''),
                 games_played: (user.games_played ? user.games_played : 0),
                 profile_picture: (user.profile_picture ? user.profile_picture : ''),
+                win_sound: user.win_sound,
                 language: language,
             }));
             await i18n.changeLanguage(language);
