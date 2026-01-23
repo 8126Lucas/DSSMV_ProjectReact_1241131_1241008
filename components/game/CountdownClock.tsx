@@ -1,10 +1,8 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import {CountdownClockProps} from "@/src/types/CountdownClockProps";
 import {useTheme} from "@/hooks/useTheme";
-
-
 
 function decreaseValue(value: number) {
     return --value;
@@ -25,22 +23,26 @@ const CountdownClock = (props: CountdownClockProps) => {
 
     useEffect(() => {
         setCountdown(props.seconds);
-
-        const decreaseCountdown = setInterval(() => {
-            setCountdown(previous_countdown => {
-                const next_countdown = decreaseValue(previous_countdown);
-                if (next_countdown >= 0) {
-                    return next_countdown;
-                }
-                return 0;
-            });
-        }, 1000);
-        return () => clearInterval(decreaseCountdown);
     }, [props.seconds]);
+
+    useEffect(() => {
+        if(countdown !== 0) {
+            const id_countdown = setInterval(() => {
+                setCountdown(previous_countdown => {
+                    const next_countdown = decreaseValue(previous_countdown);
+                    if (next_countdown >= 0) {
+                        return next_countdown;
+                    }
+                    return 0;
+                });
+            }, 1000);
+            return () => clearInterval(id_countdown);
+        }
+    }, [countdown]);
+
     useEffect(() => {
         props.onTimeChange(countdown);
-
-        if (countdown <= 10) {
+        if (countdown <= 10 && countdown > 0) {
             setTextColor(colors.incorrect);
             scale.value = withSpring(1.2, {
                 damping: 2,
@@ -48,6 +50,7 @@ const CountdownClock = (props: CountdownClockProps) => {
             });
         }
     }, [countdown]);
+
     return (
         <View style={styles.clock_container}>
             <Animated.Text style={[{color: text_color}, styles.countdown_text, animated_final_countdown]}>{countdown}</Animated.Text>

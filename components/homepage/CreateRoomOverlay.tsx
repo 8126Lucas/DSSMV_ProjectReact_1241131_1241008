@@ -23,6 +23,7 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
     const {colors} = useTheme();
     const styles = useMemo(() => getStyles(colors), [colors]);
     const dispatch = useDispatch();
+    const [is_creating_room, setCreatingRoom] = useState(false);
 
     const player_options = Array.from({length: 8}, (_, i) => ({
         label: `${i + 1}`, value: `${i + 1}`
@@ -91,39 +92,35 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
         }
         else {
             Alert.alert(t("INVALID NUMBER OF QUESTIONS"), t("To create a game room, please insert a valid number of questions."));
+            return null;
         }
         return api_url;
     }
 
-     const createRoom = async (room_token: string, number_of_players: string | null, trivia: Promise<TriviaResponse | null>): Promise<void> => {
-        if(number_of_players !== null) {
-            trivia.then(trivia_data => {
-                if(trivia_data) {
-                    dispatch(setGameConfig({
-                        category: question_category,
-                        difficulty: question_difficulty,
-                        type: question_type,
-                        number_of_questions: question_number,
+     const createRoom = async (room_token: string, number_of_players: string, trivia: Promise<TriviaResponse | null>): Promise<void> => {
+        await trivia.then(trivia_data => {
+            if(trivia_data) {
+                dispatch(setGameConfig({
+                    category: question_category,
+                    difficulty: question_difficulty,
+                    type: question_type,
+                    number_of_questions: question_number,
+                    room_token: room_token,
+                }));
+                router.navigate({
+                    pathname: '/waiting_room',
+                    params: {
                         room_token: room_token,
-                    }));
-                    router.navigate({
-                        pathname: '/waiting_room',
-                        params: {
-                            room_token: room_token,
-                            number_of_players: +number_of_players,
-                            user_type: 'host',
-                        },
-                    });
-                } else {
-                    console.error('No trivia data available');
-                }
-            }).catch(error => {
-                console.error('Error fetching trivia:', error);
-            });
-        }
-        else {
-            Alert.alert(t("INVALID NUMBER OF PLAYERS"), t("To create a game room, please insert a valid number of players."));
-        }
+                        number_of_players: +number_of_players,
+                        user_type: 'host',
+                    },
+                });
+            } else {
+                console.error('No trivia data available');
+            }
+        }).catch(error => {
+            console.error('Error fetching trivia:', error);
+        });
     }
 
     useEffect(() => {
@@ -146,12 +143,22 @@ const CreateRoomOverlay = ({cr_visible, setCRVisible}: CreateRoomOverlayProps) =
                     <InlineDropdown title={`${t('Select Difficulty')}:`} options={difficulty_options} mandatory={false} updateValue={(value: string | null) => setQuestionDifficulty(value)}/>
                     <InlineDropdown title={`${t('Select Type')}:`} options={type_options} mandatory={false} updateValue={(value: string | null) => setQuestionType(value)}/>
                     <Text style={{alignSelf: "flex-start", color: colors.secondaryText, fontSize: 12}}>{<Text style={{color: colors.incorrect}}>*</Text>}  -  {t("Mandatory")}</Text>
-                    <AppButton title={t("CREATE")} color={colors.primaryAction1} onPress={() => {
-                        setCRVisible(false);
-                        let trivia_url: string | null = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
-                        if(trivia_url !== (TRIVIA_API_URL && null)) {
-                            let trivia = requestTrivia(room_token, trivia_url);
-                            createRoom(room_token, number_of_players, trivia);
+                    <AppButton title={(is_creating_room) ? t("CREATING...") : t("CREATE")} color={colors.primaryAction1} onPress={() => {
+                        if(!is_creating_room) {
+                            if(number_of_players !== null) {
+                                let trivia_url: string | null = generateTriviaURL(question_number, question_category, question_difficulty, question_type);
+                                if(trivia_url !== null) {
+                                    setCreatingRoom(true);
+                                    let trivia = requestTrivia(room_token, trivia_url);
+                                    createRoom(room_token, number_of_players, trivia).then(() => {
+                                        setCreatingRoom(false);
+                                        setCRVisible(false);
+                                    });
+                                }
+                            }
+                            else {
+                                Alert.alert(t("INVALID NUMBER OF PLAYERS"), t("To create a game room, please insert a valid number of players."));
+                            }
                         }
                     }}/>
                 </Pressable>

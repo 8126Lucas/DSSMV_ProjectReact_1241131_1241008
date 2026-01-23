@@ -21,6 +21,7 @@
   "LAST 3 GAMES": "LAST 3 GAMES",
   "JOIN": "JOIN",
   "CREATE": "CREATE",
+  "CREATING...": "CREATING...",
   "JOIN ROOM": "JOIN ROOM",
   "ENTER ROOM CODE": "ENTER ROOM CODE",
   "Room Code":  "Room Code",
